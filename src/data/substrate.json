@@ -1,0 +1,1147 @@
+{
+	"syncedAt": "2026-08-26T09:10:38.930Z",
+	"source": {
+		"repo": "https://github.com/AuroraEnergyResearch/aurora-ui",
+		"package": "@aurora-ui/components-v2",
+		"version": "0.0.1",
+		"registry": "https://aer-shared-services-730335338013.d.codeartifact.eu-west-2.amazonaws.com/npm/aer-software-development-managed-repository/"
+	},
+	"primitives": [
+		{
+			"name": "Accordion",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/accordion.tsx",
+			"importName": "Accordion",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-layout-accordion--docs",
+			"storyTitle": "Primitives/Layout/Accordion"
+		},
+		{
+			"name": "AlertDialog",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/alert-dialog.tsx",
+			"importName": "AlertDialog",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-overlays-alertdialog--docs",
+			"storyTitle": "Primitives/Overlays/AlertDialog"
+		},
+		{
+			"name": "Alert",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/alert.tsx",
+			"importName": "Alert",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-feedback-alert--docs",
+			"storyTitle": "Primitives/Feedback/Alert"
+		},
+		{
+			"name": "AspectRatio",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/aspect-ratio.tsx",
+			"importName": "AspectRatio",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-layout-aspectratio--docs",
+			"storyTitle": "Primitives/Layout/AspectRatio"
+		},
+		{
+			"name": "Avatar",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/avatar.tsx",
+			"importName": "Avatar",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-data-display-avatar--docs",
+			"storyTitle": "Primitives/Data Display/Avatar"
+		},
+		{
+			"name": "Badge",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/badge.tsx",
+			"importName": "Badge",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-feedback-badge--docs",
+			"storyTitle": "Primitives/Feedback/Badge"
+		},
+		{
+			"name": "Breadcrumb",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/breadcrumb.tsx",
+			"importName": "Breadcrumb",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-navigation-breadcrumb--docs",
+			"storyTitle": "Primitives/Navigation/Breadcrumb"
+		},
+		{
+			"name": "ButtonGroup",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/button-group.tsx",
+			"importName": "ButtonGroup",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-actions-buttongroup--docs",
+			"storyTitle": "Primitives/Actions/ButtonGroup"
+		},
+		{
+			"name": "Button",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/button.tsx",
+			"importName": "Button",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-actions-button--docs",
+			"storyTitle": "Primitives/Actions/Button"
+		},
+		{
+			"name": "Calendar",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/calendar.tsx",
+			"importName": "Calendar",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-forms-calendar--docs",
+			"storyTitle": "Primitives/Forms/Calendar"
+		},
+		{
+			"name": "Card",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/card.tsx",
+			"importName": "Card",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-layout-card--docs",
+			"storyTitle": "Primitives/Layout/Card"
+		},
+		{
+			"name": "Checkbox",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/checkbox.tsx",
+			"importName": "Checkbox",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-forms-checkbox--docs",
+			"storyTitle": "Primitives/Forms/Checkbox"
+		},
+		{
+			"name": "Collapsible",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/collapsible.tsx",
+			"importName": "Collapsible",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-layout-collapsible--docs",
+			"storyTitle": "Primitives/Layout/Collapsible"
+		},
+		{
+			"name": "Combobox",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/combobox.tsx",
+			"importName": "Combobox",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-forms-combobox--docs",
+			"storyTitle": "Primitives/Forms/Combobox"
+		},
+		{
+			"name": "ContextMenu",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/context-menu.tsx",
+			"importName": "ContextMenu",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-navigation-contextmenu--docs",
+			"storyTitle": "Primitives/Navigation/ContextMenu"
+		},
+		{
+			"name": "Dialog",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/dialog.tsx",
+			"importName": "Dialog",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-overlays-dialog--docs",
+			"storyTitle": "Primitives/Overlays/Dialog"
+		},
+		{
+			"name": "DropdownMenu",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/dropdown-menu.tsx",
+			"importName": "DropdownMenu",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-navigation-dropdownmenu--docs",
+			"storyTitle": "Primitives/Navigation/DropdownMenu"
+		},
+		{
+			"name": "Empty",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/empty.tsx",
+			"importName": "Empty",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-feedback-empty--docs",
+			"storyTitle": "Primitives/Feedback/Empty"
+		},
+		{
+			"name": "Field",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/field.tsx",
+			"importName": "Field",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-forms-field--docs",
+			"storyTitle": "Primitives/Forms/Field"
+		},
+		{
+			"name": "Heading",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/heading.tsx",
+			"importName": "Heading",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-typography-heading--docs",
+			"storyTitle": "Primitives/Typography/Heading"
+		},
+		{
+			"name": "HoverCard",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/hover-card.tsx",
+			"importName": "HoverCard",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-overlays-hovercard--docs",
+			"storyTitle": "Primitives/Overlays/HoverCard"
+		},
+		{
+			"name": "InputGroup",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/input-group.tsx",
+			"importName": "InputGroup",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-forms-inputgroup--docs",
+			"storyTitle": "Primitives/Forms/InputGroup"
+		},
+		{
+			"name": "Input",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/input.tsx",
+			"importName": "Input",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-forms-input--docs",
+			"storyTitle": "Primitives/Forms/Input"
+		},
+		{
+			"name": "Item",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/item.tsx",
+			"importName": "Item",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-data-display-item--docs",
+			"storyTitle": "Primitives/Data Display/Item"
+		},
+		{
+			"name": "Label",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/label.tsx",
+			"importName": "Label",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-forms-label--docs",
+			"storyTitle": "Primitives/Forms/Label"
+		},
+		{
+			"name": "Marker",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/marker.tsx",
+			"importName": "Marker",
+			"status": "stable",
+			"storybook": null,
+			"storyTitle": null
+		},
+		{
+			"name": "Menubar",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/menubar.tsx",
+			"importName": "Menubar",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-navigation-menubar--docs",
+			"storyTitle": "Primitives/Navigation/Menubar"
+		},
+		{
+			"name": "Pagination",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/pagination.tsx",
+			"importName": "Pagination",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-navigation-pagination--docs",
+			"storyTitle": "Primitives/Navigation/Pagination"
+		},
+		{
+			"name": "Popover",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/popover.tsx",
+			"importName": "Popover",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-overlays-popover--docs",
+			"storyTitle": "Primitives/Overlays/Popover"
+		},
+		{
+			"name": "Progress",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/progress.tsx",
+			"importName": "Progress",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-feedback-progress--docs",
+			"storyTitle": "Primitives/Feedback/Progress"
+		},
+		{
+			"name": "RadioGroup",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/radio-group.tsx",
+			"importName": "RadioGroup",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-forms-radiogroup--docs",
+			"storyTitle": "Primitives/Forms/RadioGroup"
+		},
+		{
+			"name": "Resizable",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/resizable.tsx",
+			"importName": "Resizable",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-layout-resizable--docs",
+			"storyTitle": "Primitives/Layout/Resizable"
+		},
+		{
+			"name": "ScrollArea",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/scroll-area.tsx",
+			"importName": "ScrollArea",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-layout-scrollarea--docs",
+			"storyTitle": "Primitives/Layout/ScrollArea"
+		},
+		{
+			"name": "Select",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/select.tsx",
+			"importName": "Select",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-forms-select--docs",
+			"storyTitle": "Primitives/Forms/Select"
+		},
+		{
+			"name": "Separator",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/separator.tsx",
+			"importName": "Separator",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-layout-separator--docs",
+			"storyTitle": "Primitives/Layout/Separator"
+		},
+		{
+			"name": "Sheet",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/sheet.tsx",
+			"importName": "Sheet",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-overlays-sheet--docs",
+			"storyTitle": "Primitives/Overlays/Sheet"
+		},
+		{
+			"name": "Sidebar",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/sidebar.tsx",
+			"importName": "Sidebar",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-navigation-sidebar--docs",
+			"storyTitle": "Primitives/Navigation/Sidebar"
+		},
+		{
+			"name": "Skeleton",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/skeleton.tsx",
+			"importName": "Skeleton",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-feedback-skeleton--docs",
+			"storyTitle": "Primitives/Feedback/Skeleton"
+		},
+		{
+			"name": "Slider",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/slider.tsx",
+			"importName": "Slider",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-forms-slider--docs",
+			"storyTitle": "Primitives/Forms/Slider"
+		},
+		{
+			"name": "Sonner",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/sonner.tsx",
+			"importName": "Sonner",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-feedback-sonner--docs",
+			"storyTitle": "Primitives/Feedback/Sonner"
+		},
+		{
+			"name": "Spinner",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/spinner.tsx",
+			"importName": "Spinner",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-feedback-spinner--docs",
+			"storyTitle": "Primitives/Feedback/Spinner"
+		},
+		{
+			"name": "Switch",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/switch.tsx",
+			"importName": "Switch",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-forms-switch--docs",
+			"storyTitle": "Primitives/Forms/Switch"
+		},
+		{
+			"name": "Table",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/table.tsx",
+			"importName": "Table",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-data-display-table--docs",
+			"storyTitle": "Primitives/Data Display/Table"
+		},
+		{
+			"name": "Tabs",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/tabs.tsx",
+			"importName": "Tabs",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-navigation-tabs--docs",
+			"storyTitle": "Primitives/Navigation/Tabs"
+		},
+		{
+			"name": "Text",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/text.tsx",
+			"importName": "Text",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-typography-text--docs",
+			"storyTitle": "Primitives/Typography/Text"
+		},
+		{
+			"name": "Textarea",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/textarea.tsx",
+			"importName": "Textarea",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-forms-textarea--docs",
+			"storyTitle": "Primitives/Forms/Textarea"
+		},
+		{
+			"name": "ToggleGroup",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/toggle-group.tsx",
+			"importName": "ToggleGroup",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-actions-togglegroup--docs",
+			"storyTitle": "Primitives/Actions/ToggleGroup"
+		},
+		{
+			"name": "Toggle",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/toggle.tsx",
+			"importName": "Toggle",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-actions-toggle--docs",
+			"storyTitle": "Primitives/Actions/Toggle"
+		},
+		{
+			"name": "Tooltip",
+			"layer": "primitive",
+			"source": "packages/components-v2/src/ui/tooltip.tsx",
+			"importName": "Tooltip",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-overlays-tooltip--docs",
+			"storyTitle": "Primitives/Overlays/Tooltip"
+		}
+	],
+	"composites": [
+		{
+			"name": "ChartToolbar",
+			"layer": "composite",
+			"source": "packages/components-v2/src/components/chart-toolbar.tsx",
+			"importName": "ChartToolbar",
+			"status": "stable",
+			"storybook": "/?path=/docs/patterns-charttoolbar--docs",
+			"storyTitle": "Patterns/ChartToolbar",
+			"dir": false
+		},
+		{
+			"name": "CMS",
+			"layer": "composite",
+			"source": "packages/components-v2/src/components/cms",
+			"importName": "CMSContentBlocks",
+			"status": "stable",
+			"storybook": null,
+			"storyTitle": null,
+			"dir": true
+		},
+		{
+			"name": "DataTable",
+			"layer": "composite",
+			"source": "packages/components-v2/src/components/data-table",
+			"importName": "DataTable",
+			"status": "stable",
+			"storybook": "/?path=/docs/primitives-data-display-data-table--docs",
+			"storyTitle": "Primitives/Data Display/Data Table",
+			"dir": true
+		},
+		{
+			"name": "InvestmentCaseSelectionCard",
+			"layer": "composite",
+			"source": "packages/components-v2/src/components/investment-case-selection-card.tsx",
+			"importName": "InvestmentCaseSelectionCard",
+			"status": "stable",
+			"storybook": "/?path=/docs/patterns-investmentcaseselectioncard--docs",
+			"storyTitle": "Patterns/InvestmentCaseSelectionCard",
+			"dir": false
+		},
+		{
+			"name": "ModeActivatorToggleGroup",
+			"layer": "composite",
+			"source": "packages/components-v2/src/components/mode-activator-toggle-group.tsx",
+			"importName": "ModeActivatorToggleGroup",
+			"status": "stable",
+			"storybook": "/?path=/docs/patterns-modeactivatortogglegroup--docs",
+			"storyTitle": "Patterns/ModeActivatorToggleGroup",
+			"dir": false
+		},
+		{
+			"name": "SurfacePanel",
+			"layer": "composite",
+			"source": "packages/components-v2/src/components/surface-panel.tsx",
+			"importName": "SurfacePanel",
+			"status": "stable",
+			"storybook": "/?path=/docs/patterns-surfacepanel--docs",
+			"storyTitle": "Patterns/SurfacePanel",
+			"dir": false
+		},
+		{
+			"name": "SurfaceToolbar",
+			"layer": "composite",
+			"source": "packages/components-v2/src/components/surface-toolbar.tsx",
+			"importName": "SurfaceToolbar",
+			"status": "stable",
+			"storybook": "/?path=/docs/patterns-surfacetoolbar--docs",
+			"storyTitle": "Patterns/SurfaceToolbar",
+			"dir": false
+		},
+		{
+			"name": "TimeRangeSelector",
+			"layer": "composite",
+			"source": "packages/components-v2/src/components/time-range-selector",
+			"importName": "TimeRangeSelector",
+			"status": "stable",
+			"storybook": "/?path=/docs/patterns-timerangeselector--docs",
+			"storyTitle": "Patterns/TimeRangeSelector",
+			"dir": true
+		},
+		{
+			"name": "TimelineScrubber",
+			"layer": "composite",
+			"source": "packages/components-v2/src/components/timeline-scrubber",
+			"importName": "TimelineScrubber",
+			"status": "stable",
+			"storybook": null,
+			"storyTitle": null,
+			"dir": true
+		}
+	],
+	"experimental": [
+		{
+			"name": "Components",
+			"track": "ux-intent",
+			"source": "packages/components-v2/src/experimental/ux-intent/components"
+		},
+		{
+			"name": "Lib",
+			"track": "ux-intent",
+			"source": "packages/components-v2/src/experimental/ux-intent/lib"
+		},
+		{
+			"name": "Surfaces",
+			"track": "ux-intent",
+			"source": "packages/components-v2/src/experimental/ux-intent/surfaces"
+		}
+	],
+	"forms": {
+		"chapters": [
+			"AccessibilityAndTesting",
+			"DataEntry",
+			"FieldsHelpAndValidation",
+			"FutureDirection",
+			"Overview",
+			"SourcesDecisionsAndGaps",
+			"StructureAndLayout",
+			"SubmissionAndSensitiveFlows"
+		],
+		"examples": [
+			"StructureExample",
+			"FieldCompositionExample",
+			"LongFieldHelpExample",
+			"ResponsiveLongFieldGuidanceExample",
+			"LongGuidanceAnatomyExample",
+			"GroupedFieldDisclosuresExample",
+			"MotionAndReflowExample",
+			"InterdependentFieldsExample",
+			"RepresentativeFieldErrorsExample",
+			"ErrorSummaryExample",
+			"ValidationExample",
+			"DataEntryExample",
+			"SubmissionExample",
+			"DestructiveExample",
+			"CompactErrorSummaryExample",
+			"LongErrorSummaryOverflowExample"
+		],
+		"tags": [
+			"!autodocs",
+			"!stable",
+			"proposed"
+		],
+		"storyTitle": "Patterns/Forms/Examples",
+		"storybook": "/?path=/docs/patterns-forms-overview--docs"
+	},
+	"history": [
+		{
+			"hash": "d372ed7f17",
+			"date": "2026-08-24T16:28:17+01:00",
+			"subject": "fix(DS-59): preserve app fonts across cascade layers",
+			"type": "fix",
+			"scope": "DS-59",
+			"breaking": false,
+			"summary": "preserve app fonts across cascade layers"
+		},
+		{
+			"hash": "e53b87f742",
+			"date": "2026-08-24T15:12:26+01:00",
+			"subject": "fix(DS-59): establish CSS cascade layer contract for design system borders",
+			"type": "fix",
+			"scope": "DS-59",
+			"breaking": false,
+			"summary": "establish CSS cascade layer contract for design system borders"
+		},
+		{
+			"hash": "e9746dc64d",
+			"date": "2026-08-21T09:53:44+01:00",
+			"subject": "fix(ds-59): fix modal separator border colour and button ordering",
+			"type": "fix",
+			"scope": "ds-59",
+			"breaking": false,
+			"summary": "fix modal separator border colour and button ordering"
+		},
+		{
+			"hash": "6dcf2d3900",
+			"date": "2026-08-20T15:47:30+01:00",
+			"subject": "[DS-48] Document form patterns (#6957)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[DS-48] Document form patterns (#6957)"
+		},
+		{
+			"hash": "62d840f358",
+			"date": "2026-08-20T14:00:11+01:00",
+			"subject": "Merge pull request #6954 from AuroraEnergyResearch/fix/DS-55-selection-hover-states-calendar",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "Merge pull request #6954 from AuroraEnergyResearch/fix/DS-55-selection-hover-states-calendar"
+		},
+		{
+			"hash": "d57c64c202",
+			"date": "2026-08-20T11:55:23+01:00",
+			"subject": "fix: register highcharts-more to enable waterfall series type",
+			"type": "fix",
+			"scope": null,
+			"breaking": false,
+			"summary": "register highcharts-more to enable waterfall series type"
+		},
+		{
+			"hash": "fb68732f4d",
+			"date": "2026-08-20T11:46:52+01:00",
+			"subject": "fix: register Highcharts waterfall module",
+			"type": "fix",
+			"scope": null,
+			"breaking": false,
+			"summary": "register Highcharts waterfall module"
+		},
+		{
+			"hash": "2bd9a5158d",
+			"date": "2026-08-20T10:06:40+01:00",
+			"subject": "style: making range selection round",
+			"type": "style",
+			"scope": null,
+			"breaking": false,
+			"summary": "making range selection round"
+		},
+		{
+			"hash": "0f4ec507e1",
+			"date": "2026-08-20T09:09:28+01:00",
+			"subject": "fix: updating range selection to strip instead of individual highlight",
+			"type": "fix",
+			"scope": null,
+			"breaking": false,
+			"summary": "updating range selection to strip instead of individual highlight"
+		},
+		{
+			"hash": "a2f0b5d763",
+			"date": "2026-08-20T09:02:53+01:00",
+			"subject": "[EOS-3697] Redesign report reading as a continuous long-form article",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[EOS-3697] Redesign report reading as a continuous long-form article"
+		},
+		{
+			"hash": "295fd44d46",
+			"date": "2026-08-19T11:54:30+01:00",
+			"subject": "fix: adding new token used in range selection",
+			"type": "fix",
+			"scope": null,
+			"breaking": false,
+			"summary": "adding new token used in range selection"
+		},
+		{
+			"hash": "9f5dc53659",
+			"date": "2026-08-19T11:29:48+01:00",
+			"subject": "fix: adding gap between days for full hover state effect + fixing selected start and end days hover state",
+			"type": "fix",
+			"scope": null,
+			"breaking": false,
+			"summary": "adding gap between days for full hover state effect + fixing selected start and end days hover state"
+		},
+		{
+			"hash": "08364e0dd3",
+			"date": "2026-08-17T00:02:30+05:30",
+			"subject": "[EOS-3678] Rename South Korea to Korea in all user-facing display strings",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[EOS-3678] Rename South Korea to Korea in all user-facing display strings"
+		},
+		{
+			"hash": "f82fd7c92b",
+			"date": "2026-08-12T13:46:25+01:00",
+			"subject": "fix(report): correct locked block subtitle to 'non-subscribers' [EOS-3672]",
+			"type": "fix",
+			"scope": "report",
+			"breaking": false,
+			"summary": "correct locked block subtitle to 'non-subscribers' [EOS-3672]"
+		},
+		{
+			"hash": "a8c2936425",
+			"date": "2026-08-12T12:49:14+01:00",
+			"subject": "feat(report): locked card shows real content peeking around frosted panel [EOS-3672]",
+			"type": "feat",
+			"scope": "report",
+			"breaking": false,
+			"summary": "locked card shows real content peeking around frosted panel [EOS-3672]"
+		},
+		{
+			"hash": "cd44b732d8",
+			"date": "2026-08-12T12:45:23+01:00",
+			"subject": "feat(report): redesign LockedBlock card with floating lock panel [EOS-3672]",
+			"type": "feat",
+			"scope": "report",
+			"breaking": false,
+			"summary": "redesign LockedBlock card with floating lock panel [EOS-3672]"
+		},
+		{
+			"hash": "54ad296813",
+			"date": "2026-08-12T12:29:36+01:00",
+			"subject": "feat(report): i18n locked-block text, full-bleed silhouettes, taller card [EOS-3672]",
+			"type": "feat",
+			"scope": "report",
+			"breaking": false,
+			"summary": "i18n locked-block text, full-bleed silhouettes, taller card [EOS-3672]"
+		},
+		{
+			"hash": "d5b764c22f",
+			"date": "2026-08-12T12:17:54+01:00",
+			"subject": "feat(report): add contextual silhouettes to LockedBlock placeholder [EOS-3672]",
+			"type": "feat",
+			"scope": "report",
+			"breaking": false,
+			"summary": "add contextual silhouettes to LockedBlock placeholder [EOS-3672]"
+		},
+		{
+			"hash": "b2d4569849",
+			"date": "2026-08-12T12:09:58+01:00",
+			"subject": "fix(report): use lucide-react Lock icon in components-v2 LockedBlock [EOS-3672]",
+			"type": "fix",
+			"scope": "report",
+			"breaking": false,
+			"summary": "use lucide-react Lock icon in components-v2 LockedBlock [EOS-3672]"
+		},
+		{
+			"hash": "96bd3f5f0e",
+			"date": "2026-08-12T11:15:10+01:00",
+			"subject": "feat(report): add LockedBlock placeholder renderer [EOS-3672]",
+			"type": "feat",
+			"scope": "report",
+			"breaking": false,
+			"summary": "add LockedBlock placeholder renderer [EOS-3672]"
+		},
+		{
+			"hash": "7b7ecc0b16",
+			"date": "2026-08-12T11:10:27+01:00",
+			"subject": "feat(report): add LockedBlockData to CMSContentBlockUnion [EOS-3672]",
+			"type": "feat",
+			"scope": "report",
+			"breaking": false,
+			"summary": "add LockedBlockData to CMSContentBlockUnion [EOS-3672]"
+		},
+		{
+			"hash": "6d6a41b6a4",
+			"date": "2026-08-12T10:50:41+01:00",
+			"subject": "chore: remove ChartBlockData and CMSChartSeries from package re-exports [EOS-3672]",
+			"type": "chore",
+			"scope": null,
+			"breaking": false,
+			"summary": "remove ChartBlockData and CMSChartSeries from package re-exports [EOS-3672]"
+		},
+		{
+			"hash": "44e2a390c8",
+			"date": "2026-08-12T10:45:31+01:00",
+			"subject": "chore: remove deprecated chart.chart-block renderer [EOS-3672]",
+			"type": "chore",
+			"scope": null,
+			"breaking": false,
+			"summary": "remove deprecated chart.chart-block renderer [EOS-3672]"
+		},
+		{
+			"hash": "d95db139f6",
+			"date": "2026-08-10T10:50:07+01:00",
+			"subject": "[EOS-3661] Mark timeline scrubber component as Beta (#6892)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[EOS-3661] Mark timeline scrubber component as Beta (#6892)"
+		},
+		{
+			"hash": "f057c9ef99",
+			"date": "2026-08-07T16:59:19+01:00",
+			"subject": "Harden TimelineScrubber range handling (#6888)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "Harden TimelineScrubber range handling (#6888)"
+		},
+		{
+			"hash": "1902c083cf",
+			"date": "2026-08-07T12:58:32+01:00",
+			"subject": "Add basic docs and guidance to primitives on storybook (#6885)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "Add basic docs and guidance to primitives on storybook (#6885)"
+		},
+		{
+			"hash": "c93c1155d5",
+			"date": "2026-07-30T10:46:48+01:00",
+			"subject": "[EOS-3415] docs(storybook): TimelineScrubber line chart integration story (#6835)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[EOS-3415] docs(storybook): TimelineScrubber line chart integration story (#6835)"
+		},
+		{
+			"hash": "baac625045",
+			"date": "2026-07-29T14:27:52+01:00",
+			"subject": "[EOS-3415] Timeline scrubber UX fixes and promotion to candidate (#6829)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[EOS-3415] Timeline scrubber UX fixes and promotion to candidate (#6829)"
+		},
+		{
+			"hash": "cea0fd2c50",
+			"date": "2026-07-29T13:50:45+01:00",
+			"subject": "[FLE-661][Patch] Remove useTransition from flex-explorer and add min-height to flex-explorer charts (#6825)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[FLE-661][Patch] Remove useTransition from flex-explorer and add min-height to flex-explorer charts (#6825)"
+		},
+		{
+			"hash": "ba2ad71b7b",
+			"date": "2026-07-29T08:43:47+01:00",
+			"subject": "[EOS-3606] Add candidate maturity level for components (#6824)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[EOS-3606] Add candidate maturity level for components (#6824)"
+		},
+		{
+			"hash": "6627d614fc",
+			"date": "2026-07-29T08:16:57+01:00",
+			"subject": "[FLE-661] Remove `useTransition` from flex-explorer and add min-height to flex-explorer charts (#6819)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[FLE-661] Remove `useTransition` from flex-explorer and add min-height to flex-explorer charts (#6819)"
+		},
+		{
+			"hash": "636587b847",
+			"date": "2026-07-28T18:06:34+01:00",
+			"subject": "[Experimental] Add timeline scrubber component (#6539)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[Experimental] Add timeline scrubber component (#6539)"
+		},
+		{
+			"hash": "4ef0483ee2",
+			"date": "2026-07-28T09:17:52+01:00",
+			"subject": "fix(cms): defensively preserve pasted newlines in quote blocks [EOS-3605]",
+			"type": "fix",
+			"scope": "cms",
+			"breaking": false,
+			"summary": "defensively preserve pasted newlines in quote blocks [EOS-3605]"
+		},
+		{
+			"hash": "70bc2eb1bd",
+			"date": "2026-07-27T14:08:39+01:00",
+			"subject": "Merge branch 'release' into fix/EOS-3605-preserve-cms-line-breaks",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "Merge branch 'release' into fix/EOS-3605-preserve-cms-line-breaks"
+		},
+		{
+			"hash": "5434120737",
+			"date": "2026-07-27T14:01:43+01:00",
+			"subject": "fix(cms): preserve author line breaks in EOS content blocks [EOS-3605]",
+			"type": "fix",
+			"scope": "cms",
+			"breaking": false,
+			"summary": "preserve author line breaks in EOS content blocks [EOS-3605]"
+		},
+		{
+			"hash": "cdf5a22480",
+			"date": "2026-07-27T12:26:06+01:00",
+			"subject": "[FLE-614] Improve loading states & chart scaling & Feature-specific user permissions & redirect states",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[FLE-614] Improve loading states & chart scaling & Feature-specific user permissions & redirect states"
+		},
+		{
+			"hash": "2967cc4ad1",
+			"date": "2026-07-27T12:06:57+01:00",
+			"subject": "Merge branch 'release' into feature/EOS-3588-accordion-block",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "Merge branch 'release' into feature/EOS-3588-accordion-block"
+		},
+		{
+			"hash": "db430839d1",
+			"date": "2026-07-27T12:05:58+01:00",
+			"subject": "style(cms): polish accordion block and fix TOC heading levels [EOS-3588]",
+			"type": "style",
+			"scope": "cms",
+			"breaking": false,
+			"summary": "polish accordion block and fix TOC heading levels [EOS-3588]"
+		},
+		{
+			"hash": "133ecf5e57",
+			"date": "2026-07-23T14:59:23+01:00",
+			"subject": "Add components-v2 UX intent workflows and snapshots (#6795)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "Add components-v2 UX intent workflows and snapshots (#6795)"
+		},
+		{
+			"hash": "25ac2147e9",
+			"date": "2026-07-22T16:59:28+01:00",
+			"subject": "feat(cms): add accordion block renderer [EOS-3588]",
+			"type": "feat",
+			"scope": "cms",
+			"breaking": false,
+			"summary": "add accordion block renderer [EOS-3588]"
+		},
+		{
+			"hash": "bf11710aa4",
+			"date": "2026-07-21T10:42:38+01:00",
+			"subject": "feat(cms-charts): cap tooltip/data-label decimals to match CMS editor [EOS-3520]",
+			"type": "feat",
+			"scope": "cms-charts",
+			"breaking": false,
+			"summary": "cap tooltip/data-label decimals to match CMS editor [EOS-3520]"
+		},
+		{
+			"hash": "11a5bb423c",
+			"date": "2026-07-20T13:07:29+01:00",
+			"subject": "[FLE-641] Chronos Comapre QOL Improvements & Tests (#6732)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[FLE-641] Chronos Comapre QOL Improvements & Tests (#6732)"
+		},
+		{
+			"hash": "780b91f7dc",
+			"date": "2026-07-14T13:31:10+01:00",
+			"subject": "[EOS-3352] Fix build error caused by types on data table component (#6722)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[EOS-3352] Fix build error caused by types on data table component (#6722)"
+		},
+		{
+			"hash": "3d6f3b9c05",
+			"date": "2026-07-14T12:49:04+01:00",
+			"subject": "[EOS-3552] Fix build error caused by inline type imports in components (#6721)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[EOS-3552] Fix build error caused by inline type imports in components (#6721)"
+		},
+		{
+			"hash": "0a90707c91",
+			"date": "2026-07-14T09:18:58+01:00",
+			"subject": "[EOS-3493] Add missing Shadcn components (#6715)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[EOS-3493] Add missing Shadcn components (#6715)"
+		},
+		{
+			"hash": "b84d25c5ce",
+			"date": "2026-07-13T16:23:40+01:00",
+			"subject": "Merge pull request #6693 from AuroraEnergyResearch/worktree-faq-redesign",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "Merge pull request #6693 from AuroraEnergyResearch/worktree-faq-redesign"
+		},
+		{
+			"hash": "f97c34f8f0",
+			"date": "2026-07-13T15:44:31+01:00",
+			"subject": "fix(faq): match content-surface reference design, simplify duplication",
+			"type": "fix",
+			"scope": "faq",
+			"breaking": false,
+			"summary": "match content-surface reference design, simplify duplication"
+		},
+		{
+			"hash": "6879aadae2",
+			"date": "2026-07-13T11:46:53+01:00",
+			"subject": "[EOS-3520] Fix user-guide list rendering and JA locale strings",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[EOS-3520] Fix user-guide list rendering and JA locale strings"
+		},
+		{
+			"hash": "6bc47af8f7",
+			"date": "2026-07-13T10:46:52+01:00",
+			"subject": "feat(faq): port Marker separator, adopt shared ContentPageHeader, fix scrollbar styling",
+			"type": "feat",
+			"scope": "faq",
+			"breaking": false,
+			"summary": "port Marker separator, adopt shared ContentPageHeader, fix scrollbar styling"
+		},
+		{
+			"hash": "c3a7a106ba",
+			"date": "2026-07-10T13:34:24+01:00",
+			"subject": "[FLE-384][Part 2][Attempt 2] Chronos Comparison Overhaul (#6672)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[FLE-384][Part 2][Attempt 2] Chronos Comparison Overhaul (#6672)"
+		},
+		{
+			"hash": "707505e7ee",
+			"date": "2026-07-09T10:28:43+01:00",
+			"subject": "[EOS-3389] Update typography tokens and add to storybook (#6692)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[EOS-3389] Update typography tokens and add to storybook (#6692)"
+		},
+		{
+			"hash": "c4d75d7c43",
+			"date": "2026-07-08T15:54:49+01:00",
+			"subject": "refactor(components-v2): CMS-prefix ambiguous chart/table types, use cn for class merging [EOS-3541]",
+			"type": "refactor",
+			"scope": "components-v2",
+			"breaking": false,
+			"summary": "CMS-prefix ambiguous chart/table types, use cn for class merging [EOS-3541]"
+		},
+		{
+			"hash": "ba0e5c8004",
+			"date": "2026-07-08T14:23:39+01:00",
+			"subject": "Merge branch 'release' into feature/EOS-3541-cms-renderers",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "Merge branch 'release' into feature/EOS-3541-cms-renderers"
+		},
+		{
+			"hash": "ea6a05a283",
+			"date": "2026-07-08T14:07:56+01:00",
+			"subject": "refactor(components-v2): dedupe heading logic, fix link reusability [EOS-3541]",
+			"type": "refactor",
+			"scope": "components-v2",
+			"breaking": false,
+			"summary": "dedupe heading logic, fix link reusability [EOS-3541]"
+		},
+		{
+			"hash": "592188ad94",
+			"date": "2026-07-08T13:41:18+01:00",
+			"subject": "refactor(components-v2): apply CMS review fixes [EOS-3541]",
+			"type": "refactor",
+			"scope": "components-v2",
+			"breaking": false,
+			"summary": "apply CMS review fixes [EOS-3541]"
+		},
+		{
+			"hash": "3a15c1a3b9",
+			"date": "2026-07-08T09:40:30+01:00",
+			"subject": "refactor(components-v2): rename CMS file/exports for consistency [EOS-3541]",
+			"type": "refactor",
+			"scope": "components-v2",
+			"breaking": false,
+			"summary": "rename CMS file/exports for consistency [EOS-3541]"
+		},
+		{
+			"hash": "fa3c94a09b",
+			"date": "2026-07-07T18:25:20+01:00",
+			"subject": "[EOS-3540] Clean up design tokens - Part 3 (#6684)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[EOS-3540] Clean up design tokens - Part 3 (#6684)"
+		},
+		{
+			"hash": "eab321ef0f",
+			"date": "2026-07-07T16:55:22+01:00",
+			"subject": "refactor(content-explorer): extract CMS renderers to components-v2 [EOS-3541]",
+			"type": "refactor",
+			"scope": "content-explorer",
+			"breaking": false,
+			"summary": "extract CMS renderers to components-v2 [EOS-3541]"
+		},
+		{
+			"hash": "4a2257ebc6",
+			"date": "2026-07-07T15:45:15+01:00",
+			"subject": "Fix storybook documentation theme (#6681)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "Fix storybook documentation theme (#6681)"
+		},
+		{
+			"hash": "53d197e418",
+			"date": "2026-07-07T14:06:58+01:00",
+			"subject": " [EOS-3540] Clean up design tokens - Part 2 (#6676)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": " [EOS-3540] Clean up design tokens - Part 2 (#6676)"
+		}
+	],
+	"counts": {
+		"primitives": 49,
+		"composites": 9,
+		"experimental": 3,
+		"stable": 58,
+		"proposed": 0
+	}
+}

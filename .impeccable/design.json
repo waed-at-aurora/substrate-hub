@@ -1,0 +1,147 @@
+{
+	"schemaVersion": 2,
+	"generatedAt": "2026-08-26T00:00:00Z",
+	"title": "Design System: Substrate Hub",
+	"extensions": {
+		"colorMeta": {
+			"paper": { "role": "neutral", "displayName": "Paper", "canonical": "#09090b", "tonalRamp": ["#09090b", "#0f0f12", "#131317", "#1b1b20", "#26262b", "#52525b", "#9c9ca6", "#f4f4f5"] },
+			"ink": { "role": "neutral", "displayName": "Ink", "canonical": "#f4f4f5", "tonalRamp": ["#09090b", "#1b1b20", "#26262b", "#52525b", "#9c9ca6", "#c9c9cf", "#e4e4e7", "#f4f4f5"] },
+			"yellow": { "role": "primary", "displayName": "Aurora Yellow", "canonical": "#ffcc00", "tonalRamp": ["#332900", "#664f00", "#997a00", "#cca300", "#ffcc00", "#ffd633", "#ffe580", "#fff5cc"] },
+			"live": { "role": "secondary", "displayName": "Live Cyan", "canonical": "#00d3f2", "tonalRamp": ["#00272e", "#004e5c", "#00758a", "#009cb8", "#00d3f2", "#53eafd", "#99f2fe", "#ccf9ff"] },
+			"amber": { "role": "tertiary", "displayName": "Provisional Amber", "canonical": "#d9a514", "tonalRamp": ["#2b2104", "#574208", "#82630c", "#ae8410", "#d9a514", "#e1b743", "#ecd08a", "#f6e8c8"] },
+			"ok": { "role": "tertiary", "displayName": "OK Green", "canonical": "#05df72", "tonalRamp": ["#012d17", "#025a2e", "#038745", "#04b35b", "#05df72", "#37e58e", "#82efb9", "#c1f7dc"] }
+		},
+		"typographyMeta": {
+			"display": { "displayName": "Display (stage wordmark)", "purpose": "The viewport-cropping SUBSTRATE wordmark only; variable wght/opsz is the animation material." },
+			"headline": { "displayName": "Headline (cover h1)", "purpose": "Inner-page cover titles, max 18ch." },
+			"title": { "displayName": "Title (exhibit h2)", "purpose": "Exhibit headings, max 30ch." },
+			"body": { "displayName": "Body", "purpose": "Archivo prose; paragraphs cap at 72ch, ledes at 62ch." },
+			"label": { "displayName": "Label / Mono caption", "purpose": "Exhibit captions, table headers, datelines, feed types, counts; uppercase, wide-tracked, tabular-nums." }
+		},
+		"shadows": [
+			{ "name": "action-hover", "value": "0 3px 14px -6px rgba(0, 0, 0, 0.8)", "purpose": "Secondary action lift on hover; the system is otherwise flat." },
+			{ "name": "primary-glow", "value": "0 5px 22px -6px rgba(255, 204, 0, 0.45)", "purpose": "Yellow primary action hover glow." },
+			{ "name": "tick-glow", "value": "0 0 14px rgba(83, 234, 253, 0.55)", "purpose": "text-shadow for the cyan recalc flash, decaying over 700ms." }
+		],
+		"motion": [
+			{ "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "The only easing; all micro-transitions run 120-160ms on it." },
+			{ "name": "word-settle", "value": "1100ms ease-out both; font-variation-settings 'wght' 240 'opsz' 14 → 'wght' 760 'opsz' 96, opacity 0.2 → 1", "purpose": "One-time wordmark settle on the hero stage. Disabled under prefers-reduced-motion." },
+			{ "name": "ghost-drift", "value": "30s ease-in-out infinite alternate; translateX(0) → translateX(-9%)", "purpose": "The outline ghost twin drifting behind the wordmark. Hidden at <=52rem; disabled under prefers-reduced-motion." },
+			{ "name": "tickflash", "value": "700ms ease-out; color #53eafd + cyan text-glow → #00d3f2", "purpose": "The playground recalc tick on every option change. Disabled under prefers-reduced-motion." }
+		],
+		"breakpoints": [
+			{ "name": "collapse-figures", "value": "64rem", "purpose": "Playground, pyramid, roadmap, and resources drop to one column." },
+			{ "name": "single-column", "value": "52rem", "purpose": "Frame goes single-column; rail flattens horizontal; ghost and masthead subtitle hidden; feed sheds type/hash." }
+		]
+	},
+	"components": [
+		{
+			"name": "Primary Action",
+			"kind": "button",
+			"refersTo": "action-primary",
+			"description": "The one yellow action per surface (Yellow Law).",
+			"html": "<a class=\"ds-action ds-action-primary\" href=\"#\">Install Substrate</a>",
+			"css": ".ds-action { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.72rem 1.3rem; font-family: Archivo, system-ui, sans-serif; font-size: 0.92rem; font-weight: 600; letter-spacing: 0.01em; text-decoration: none; border: 1px solid var(--rule, #26262b); border-radius: 2px; background: var(--paper-raised, #0f0f12); color: var(--ink, #f4f4f5); transition: background 150ms cubic-bezier(0.16,1,0.3,1), border-color 150ms cubic-bezier(0.16,1,0.3,1), transform 150ms cubic-bezier(0.16,1,0.3,1), box-shadow 150ms cubic-bezier(0.16,1,0.3,1); } .ds-action:active { transform: translateY(1px); } .ds-action-primary { background: var(--yellow, #ffcc00); border-color: var(--yellow, #ffcc00); color: var(--on-yellow, #131316); } .ds-action-primary:hover { background: #ffd633; border-color: #ffd633; box-shadow: 0 5px 22px -6px rgba(255, 204, 0, 0.45); }"
+		},
+		{
+			"name": "Secondary Action",
+			"kind": "button",
+			"refersTo": "action",
+			"description": "Quiet bordered action; lifts with a soft shadow on hover.",
+			"html": "<a class=\"ds-action2\" href=\"#\">Explore patterns</a>",
+			"css": ".ds-action2 { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.72rem 1.3rem; font-family: Archivo, system-ui, sans-serif; font-size: 0.92rem; font-weight: 600; letter-spacing: 0.01em; text-decoration: none; border: 1px solid var(--rule, #26262b); border-radius: 2px; background: var(--paper-raised, #0f0f12); color: var(--ink, #f4f4f5); transition: background 150ms cubic-bezier(0.16,1,0.3,1), border-color 150ms cubic-bezier(0.16,1,0.3,1), box-shadow 150ms cubic-bezier(0.16,1,0.3,1); } .ds-action2:hover { background: var(--surface, #131317); border-color: var(--muted, #9c9ca6); box-shadow: 0 3px 14px -6px rgba(0,0,0,0.8); } .ds-action2:active { transform: translateY(1px); }"
+		},
+		{
+			"name": "New Signal",
+			"kind": "chip",
+			"refersTo": "new-signal",
+			"description": "Tiny yellow chip marking the newest item only.",
+			"html": "<span class=\"ds-new-signal\">new</span>",
+			"css": ".ds-new-signal { display: inline-block; background: var(--yellow, #ffcc00); color: var(--on-yellow, #131316); font-family: 'Spline Sans Mono', monospace; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.1rem 0.4rem; border-radius: 2px; }"
+		},
+		{
+			"name": "Install Line",
+			"kind": "input",
+			"refersTo": "install-line",
+			"description": "Compact one-line copyable command; the stage's quiet workhorse.",
+			"html": "<div class=\"ds-install\"><span class=\"ds-install-prompt\">$</span><code>npm install @aurora-ui/components-v2</code><button class=\"ds-copy\" type=\"button\">copy</button></div>",
+			"css": ".ds-install { display: inline-flex; align-items: center; gap: 0.9rem; border: 1px solid var(--rule, #26262b); border-radius: 3px; background: rgba(15, 15, 18, 0.8); padding: 0.5rem 0.55rem 0.5rem 0.9rem; font-family: 'Spline Sans Mono', monospace; font-size: 0.8rem; color: var(--ink-2, #c9c9cf); white-space: nowrap; } .ds-install-prompt { color: var(--muted, #9c9ca6); user-select: none; } .ds-copy { font-family: 'Spline Sans Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3rem 0.6rem; border: 1px solid var(--rule, #26262b); border-radius: 2px; background: var(--paper, #09090b); color: var(--ink-2, #c9c9cf); cursor: pointer; transition: border-color 140ms cubic-bezier(0.16,1,0.3,1), color 140ms cubic-bezier(0.16,1,0.3,1); } .ds-copy:hover { border-color: var(--ink, #f4f4f5); color: var(--ink, #f4f4f5); } .ds-copy[data-copied='true'] { border-color: var(--ok, #05df72); color: var(--ok, #05df72); }"
+		},
+		{
+			"name": "Provisional Mark",
+			"kind": "chip",
+			"refersTo": "provisional",
+			"description": "Amber dashed chip for a value awaiting its real replacement.",
+			"html": "<span class=\"ds-provisional\">provisional · confirm channel</span>",
+			"css": ".ds-provisional { display: inline-flex; align-items: baseline; gap: 0.4rem; font-family: 'Spline Sans Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber, #d9a514); border: 1px dashed rgba(217, 165, 20, 0.45); border-radius: 2px; padding: 0.05rem 0.4rem; white-space: nowrap; }"
+		},
+		{
+			"name": "Status Marks",
+			"kind": "custom",
+			"description": "Physical status marks: solid=stable, dotted=proposed, half=experimental, hollow=planned, hatched=deprecated.",
+			"html": "<div class=\"ds-status-row\"><span class=\"ds-status\"><svg width=\"9\" height=\"9\" viewBox=\"0 0 10 10\" aria-hidden=\"true\"><rect x=\"1.5\" y=\"1.5\" width=\"7\" height=\"7\" fill=\"currentColor\"/></svg>stable</span><span class=\"ds-status\"><svg width=\"9\" height=\"9\" viewBox=\"0 0 10 10\" aria-hidden=\"true\"><rect x=\"1.5\" y=\"1.5\" width=\"7\" height=\"7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.4\" stroke-dasharray=\"1.6 1.4\"/></svg>proposed</span><span class=\"ds-status\"><svg width=\"9\" height=\"9\" viewBox=\"0 0 10 10\" aria-hidden=\"true\"><rect x=\"1.5\" y=\"1.5\" width=\"7\" height=\"7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.2\"/><path d=\"M1.5 8.5 L8.5 1.5 L8.5 8.5 Z\" fill=\"currentColor\"/></svg>experimental</span><span class=\"ds-status\"><svg width=\"9\" height=\"9\" viewBox=\"0 0 10 10\" aria-hidden=\"true\"><rect x=\"1.5\" y=\"1.5\" width=\"7\" height=\"7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.2\"/></svg>planned</span><span class=\"ds-status\"><svg width=\"9\" height=\"9\" viewBox=\"0 0 10 10\" aria-hidden=\"true\"><rect x=\"1.5\" y=\"1.5\" width=\"7\" height=\"7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.2\"/><path d=\"M1.5 1.5 L8.5 8.5 M1.5 8.5 L8.5 1.5\" stroke=\"currentColor\" stroke-width=\"1\"/></svg>deprecated</span></div>",
+			"css": ".ds-status-row { display: flex; gap: 1.2rem; flex-wrap: wrap; } .ds-status { display: inline-flex; align-items: center; gap: 0.45rem; font-family: 'Spline Sans Mono', monospace; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2, #c9c9cf); white-space: nowrap; } .ds-status svg { flex: none; }"
+		},
+		{
+			"name": "Contents Rail Item",
+			"kind": "nav",
+			"refersTo": "rail-item-active",
+			"description": "Numbered rail rows; the current page inverts ink-on-paper.",
+			"html": "<ol class=\"ds-rail\"><li><a href=\"#\"><span class=\"ds-rail-num\">01</span><span>Overview</span></a></li><li><a href=\"#\" aria-current=\"page\"><span class=\"ds-rail-num\">02</span><span>Get started</span></a></li><li><a href=\"#\"><span class=\"ds-rail-num\">03</span><span>Components</span></a></li></ol>",
+			"css": ".ds-rail { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; width: 15.5rem; font-family: Archivo, system-ui, sans-serif; } .ds-rail a { display: grid; grid-template-columns: 2.1rem 1fr; align-items: baseline; padding: 0.42rem 0.6rem 0.42rem 0; text-decoration: none; border-top: 1px solid var(--rule-soft, #1b1b20); font-size: 0.9rem; color: var(--ink, #f4f4f5); transition: background 140ms cubic-bezier(0.16,1,0.3,1); } .ds-rail li:last-child a { border-bottom: 1px solid var(--rule-soft, #1b1b20); } .ds-rail a:hover { background: var(--surface, #131317); } .ds-rail a[aria-current='page'] { background: var(--ink, #f4f4f5); color: var(--paper, #09090b); padding-left: 0.6rem; } .ds-rail-num { font-family: 'Spline Sans Mono', monospace; font-size: 0.7rem; color: var(--muted, #9c9ca6); font-variant-numeric: tabular-nums; } .ds-rail a[aria-current='page'] .ds-rail-num { color: rgba(9, 9, 11, 0.6); }"
+		},
+		{
+			"name": "Exhibit Caption",
+			"kind": "custom",
+			"description": "The ruled exhibit opening: hairline top, mono FIG. caption, cyan live dot when live.",
+			"html": "<div class=\"ds-exhibit\"><div class=\"ds-exhibit-caption\"><strong><span class=\"ds-live-dot\">● </span>Fig. 2 — live render · Button</strong><span>rendered by the installed package, not a screenshot</span></div></div>",
+			"css": ".ds-exhibit { border-top: 1px solid var(--rule, #26262b); padding: 0.65rem 0 1rem; min-width: 24rem; } .ds-exhibit-caption { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; font-family: 'Spline Sans Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted, #9c9ca6); } .ds-exhibit-caption strong { color: var(--ink, #f4f4f5); font-weight: 500; } .ds-live-dot { color: var(--live, #00d3f2); }"
+		},
+		{
+			"name": "Filter Group",
+			"kind": "chip",
+			"description": "Segmented mono filter; the pressed segment inverts.",
+			"html": "<div class=\"ds-filters\"><button type=\"button\" aria-pressed=\"true\">all</button><button type=\"button\">composite</button><button type=\"button\">primitive</button></div>",
+			"css": ".ds-filters { display: inline-flex; border: 1px solid var(--rule, #26262b); border-radius: 2px; overflow: hidden; } .ds-filters button { border: 0; background: var(--paper-raised, #0f0f12); padding: 0.45rem 0.8rem; font-size: 0.78rem; font-family: 'Spline Sans Mono', monospace; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted, #9c9ca6); border-left: 1px solid var(--rule-soft, #1b1b20); cursor: pointer; transition: background 130ms cubic-bezier(0.16,1,0.3,1), color 130ms cubic-bezier(0.16,1,0.3,1); } .ds-filters button:first-child { border-left: 0; } .ds-filters button:hover { color: var(--ink, #f4f4f5); } .ds-filters button[aria-pressed='true'] { background: var(--ink, #f4f4f5); color: var(--paper, #09090b); }"
+		}
+	],
+	"narrative": {
+		"northStar": "The Night Portal",
+		"overview": "Substrate Hub is a night-edition design-system portal: dark-first, minimalist, editorial, slightly experimental. It keeps the grammar of a printed technical report — one hairline rule grid carries every page, exhibits are captioned FIG. / TABLE in uppercase mono, numbers set in tabular figures — but prints it on a near-black canvas (--paper, #09090b, the same dark canvas the Substrate design system itself uses) with near-white ink. The display voice is Bricolage Grotesque, a variable face whose weight and optical size are themselves design material (the wordmark literally settles from thin to heavy on load); everything else stays restrained: Archivo for UI and body, Spline Sans Mono for captions, code, and data.\n\nColor is rationed by law. Aurora yellow (#ffcc00) appears exactly twice in the hub's own chrome: the one primary action on a surface, and the tiny new signal. Cyan (#00d3f2) appears only where something is genuinely live — a rendered-by-the-real-package figure, a recalc tick, a feat line in the feed. Everything else is drawn in a zinc ramp of inks, muteds, and hairlines. Status is never a colored badge: it is a small drawn mark (solid, dotted, half-filled, hollow, hatched) plus the word. Emphasis is achieved by inversion — active nav items, active filters, selection, and the Substrate layer of the pyramid all flip to ink-on-paper — not by adding color.",
+		"keyCharacteristics": [
+			"Dark-first (color-scheme: dark, html carries .dark); no light theme exists.",
+			"One hairline rule grid; borders do the structural work, not shadows or fills.",
+			"Editorial exhibit grammar: mono uppercase captions, ruled sections, numbered contents rail with keyboard direct address (1–8).",
+			"Variable-font display voice; type animation is an authored moment, not decoration.",
+			"Accent color is law-bound (yellow = primary action + new; cyan = live; amber = provisional).",
+			"Real components rendered live from @aurora-ui/components-v2 are content and follow the DS's own palette, not the hub's laws."
+		],
+		"rules": [
+			{ "name": "The Yellow Law", "body": "In hub chrome, #ffcc00 may appear only on the one primary action of a surface and on the new signal. Content rendered by @aurora-ui/components-v2 (e.g. the eos Button variant) is content, not chrome — its yellow is exempt.", "section": "colors" },
+			{ "name": "The Cyan-Live Rule", "body": "Cyan marks things that are genuinely live or newly landed (live render dot, recalc tick, feat feed type). Never use it decoratively.", "section": "colors" },
+			{ "name": "The Inversion Rule", "body": "Emphasis and selection flip ink and paper (::selection, aria-current rail item, aria-pressed filter, the Substrate pyramid layer) rather than introducing a new color.", "section": "colors" },
+			{ "name": "The Mono Caption Rule", "body": "Anything that names, numbers, or timestamps an exhibit is uppercase Spline Sans Mono at ~0.7rem with wide tracking and muted color. Data (versions, dates, counts, hashes) is always tabular-nums.", "section": "typography" },
+			{ "name": "The Variable Weight Rule", "body": "Display weights are font-variation-settings steps (620–760), keeping the wordmark-settle animation possible; the masthead title runs 'wght' 700 at 1.02rem with +0.16em uppercase tracking.", "section": "typography" },
+			{ "name": "The Flat-By-Default Rule", "body": "Surfaces are flat at rest; a shadow only ever answers a hover, and it is always soft, dark or accent-tinted, never an offset hard shadow.", "section": "elevation" },
+			{ "name": "The Mark-Not-Tint Rule", "body": "Status and link affordances are drawn marks in currentColor, never glyph-font icons, emoji, or color-coded badge pills.", "section": "shapes" },
+			{ "name": "The Three Moments Rule", "body": "No new keyframe animation enters the hub without the same justification these three have (identity, atmosphere, liveness). Under prefers-reduced-motion all three are disabled, smooth scroll turns off, and every transition collapses to 0.01ms.", "section": "components" }
+		],
+		"dos": [
+			"Do start every content section as an Exhibit: 1px Rule top border, mono uppercase caption with designation left and meta right.",
+			"Do keep exactly one yellow action per surface and reserve the new-signal chip for the newest item only.",
+			"Do set all captions, datelines, table headers, hashes, and counts in Spline Sans Mono, uppercase, wide-tracked, tabular-nums.",
+			"Do express state by inversion (Ink fill, Paper text) for active nav, pressed filters, and selection.",
+			"Do use the five physical status marks plus the status word; deprecated rows also strike through.",
+			"Do render DS components live from @aurora-ui/components-v2 and label their provenance in the readout/caption.",
+			"Do mark every unconfirmed value with the amber Provisional chip and a matching replacement-list entry."
+		],
+		"donts": [
+			"Don't introduce a light theme or per-component background overrides; #09090b is the only ground.",
+			"Don't use yellow, cyan, amber, or green outside their laws (primary/new, live, provisional, copied).",
+			"Don't tint status with color, use glyph-font icons or emoji, or replace drawn SVG marks with badges.",
+			"Don't add shadows at rest, radii above 4px, or borders heavier than 1px (the strong table rule stays 1px Ink).",
+			"Don't author new keyframe animation outside the three moments, or ship any motion that survives prefers-reduced-motion: reduce.",
+			"Don't restyle DS-rendered content to hub chrome laws, and don't move hub CSS into cascade layers (unlayered hub CSS deliberately wins ties over the DS's layered styles)."
+		]
+	}
+}
