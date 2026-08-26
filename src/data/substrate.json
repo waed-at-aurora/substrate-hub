@@ -3,7 +3,7 @@
 	"source": {
 		"repo": "https://github.com/AuroraEnergyResearch/aurora-ui",
 		"package": "@aurora-ui/components-v2",
-		"version": "0.0.1",
+		"version": "1.0.20",
 		"registry": "https://aer-shared-services-730335338013.d.codeartifact.eu-west-2.amazonaws.com/npm/aer-software-development-managed-repository/"
 	},
 	"primitives": [
