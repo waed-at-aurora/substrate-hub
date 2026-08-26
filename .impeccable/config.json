@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font-size",
+        "value": "16.5rem",
+        "createdAt": "2026-08-26T14:44:26.471Z",
+        "reason": "Documented /overview stage display maximum in DESIGN.md; established user-approved Night Portal scale"
+      }
+    ]
+  }
+}

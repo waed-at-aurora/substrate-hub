@@ -53,13 +53,22 @@ export default function Tools() {
 								<strong>AI skills</strong>
 							</td>
 							<td className="dim">
-								<code className="mono">substrate skill install</code> gives coding agents the CLI
-								skill; Aurora&rsquo;s atlas CLI materializes the wider skill/context set into repos
-								(aurora-ui carries <code className="mono">atlas.config.json</code>).
+								Run <code className="mono">substrate skill install</code> once and Claude-compatible
+								agents (Claude Code, opencode) auto-discover the CLI skill in any project — ask the
+								agent to raise Substrate feedback and it drives the CLI non-interactively. For a
+								one-off session, point an agent at the repo&rsquo;s{' '}
+								<code className="mono">SKILL.md</code> directly. Aurora&rsquo;s atlas CLI materializes
+								the wider skill/context set into repos (aurora-ui carries{' '}
+								<code className="mono">atlas.config.json</code>).
 							</td>
 							<td>
-								<a className="ext" href={site.atlasUrl} target="_blank" rel="noreferrer">
-									atlas
+								<a
+									className="ext"
+									href={`${site.cliUrl}/blob/main/SKILL.md`}
+									target="_blank"
+									rel="noreferrer"
+								>
+									SKILL.md
 									<ExtArrow />
 								</a>
 							</td>
@@ -78,15 +87,6 @@ export default function Tools() {
 									open
 									<ExtArrow />
 								</a>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<strong>Design libraries</strong>
-							</td>
-							<td className="dim">Shared design source for tokens and components.</td>
-							<td>
-								<Provisional what="add Figma library link" />
 							</td>
 						</tr>
 						<tr>

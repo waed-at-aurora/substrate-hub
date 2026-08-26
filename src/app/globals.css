@@ -222,12 +222,44 @@ button {
 	background: var(--surface);
 }
 .rail-item a[aria-current='page'] {
-	background: var(--ink);
-	color: var(--paper);
+	background: var(--surface);
+	color: var(--ink);
 	padding-left: 0.6rem;
 }
+.rail-item a[aria-current='page'] > span:last-child {
+	font-weight: 650;
+	animation: rail-title-in 210ms var(--ease-out) backwards;
+}
 .rail-item a[aria-current='page'] .rail-num {
-	color: color-mix(in srgb, var(--paper) 55%, var(--ink));
+	background: var(--yellow);
+	color: var(--on-yellow);
+	padding: 0 0.25rem;
+	margin-right: 0.3rem;
+	border-radius: 2px;
+	font-weight: 600;
+	animation: rail-num-in 196ms var(--ease-out) backwards;
+}
+
+/* navigation feedback: the newly current rail item announces itself */
+@keyframes rail-num-in {
+	from {
+		transform: translateX(-0.5rem);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+@keyframes rail-title-in {
+	from {
+		transform: translateX(0.3rem);
+		color: var(--muted);
+	}
+	to {
+		transform: translateX(0);
+		color: var(--ink);
+	}
 }
 
 .rail-num {
@@ -305,6 +337,15 @@ button {
 	margin: 1.8rem 0 0.5rem;
 }
 
+.exhibit h2.statement {
+	font-size: clamp(2.1rem, 3.6vw, 3.3rem);
+	font-variation-settings: 'wght' 700;
+	letter-spacing: -0.022em;
+	line-height: 1.05;
+	max-width: 20ch;
+	margin-bottom: 1.3rem;
+}
+
 .lede {
 	font-size: 1.08rem;
 	color: var(--ink-2);
@@ -325,9 +366,26 @@ button {
 	border: 1px solid var(--rule);
 	border-radius: 4px;
 	background:
-		radial-gradient(120% 90% at 72% -10%, #17171d 0%, #0c0c0f 52%, var(--paper) 100%);
+		radial-gradient(140% 130% at 26% -4%, transparent 55%, rgba(0, 0, 0, 0.52) 100%),
+		radial-gradient(95% 80% at 26% -6%, #262633 0%, #0d0d12 50%, #08080a 100%);
 	margin-top: 0.4rem;
-	padding: 1.1rem 0 2.4rem;
+	min-height: min(86svh, 56rem);
+	display: flex;
+	flex-direction: column;
+}
+
+/* the drafting grid lives in the lamp's light: masked to fade with distance */
+.stage::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background:
+		linear-gradient(#454553 1px, transparent 1px) 0 0 / 100% 2.6rem,
+		linear-gradient(90deg, #454553 1px, transparent 1px) 0 0 / 2.6rem 100%;
+	opacity: 0.56;
+	-webkit-mask-image: radial-gradient(120% 105% at 26% 0%, #000 0%, rgba(0, 0, 0, 0.3) 55%, transparent 92%);
+	mask-image: radial-gradient(120% 105% at 26% 0%, #000 0%, rgba(0, 0, 0, 0.3) 55%, transparent 92%);
 }
 
 .stage-dateline {
@@ -336,7 +394,8 @@ button {
 	justify-content: space-between;
 	gap: 1rem;
 	flex-wrap: wrap;
-	padding: 0.2rem 1.6rem 0;
+	padding: 0.85rem 1.6rem;
+	border-bottom: 1px solid var(--rule-soft);
 	font-family: var(--font-mono), monospace;
 	font-size: 0.7rem;
 	letter-spacing: 0.13em;
@@ -350,7 +409,7 @@ button {
 .stage-word,
 .stage-ghost {
 	font-family: var(--font-display), sans-serif;
-	font-size: clamp(4.2rem, 13.6vw, 12.5rem);
+	font-size: clamp(4.6rem, 16vw, 16.5rem);
 	line-height: 0.92;
 	letter-spacing: -0.03em;
 	white-space: nowrap;
@@ -361,22 +420,23 @@ button {
 .stage-word {
 	position: relative;
 	z-index: 1;
-	margin: 0.6rem 0 0;
-	padding-left: 1.2rem;
+	margin: 1.4rem 0 0;
+	padding-left: 1.4rem;
 	font-variation-settings: 'wght' 760, 'opsz' 96;
 	animation: word-settle 1100ms var(--ease-out) both;
 }
 
 .stage-ghost {
 	position: absolute;
-	top: 3.4rem;
-	left: 42%;
+	top: 10rem;
+	left: 26%;
 	z-index: 0;
-	color: transparent;
-	-webkit-text-stroke: 1px #202027;
+	color: color-mix(in srgb, var(--ink) 3%, transparent);
+	-webkit-text-stroke: 1px color-mix(in srgb, var(--ink) 26%, transparent);
 	font-variation-settings: 'wght' 300, 'opsz' 96;
 	pointer-events: none;
-	animation: ghost-drift 30s ease-in-out infinite alternate;
+	/* negative delay: the drift is already underway on first paint */
+	animation: ghost-drift 18s ease-in-out -6s infinite alternate;
 }
 
 @keyframes word-settle {
@@ -402,23 +462,25 @@ button {
 .stage-body {
 	position: relative;
 	z-index: 2;
-	padding: 1.6rem 1.6rem 0;
-	max-width: 46rem;
+	margin-top: auto;
+	border-top: 1px solid var(--rule-soft);
+	padding: 1.7rem 1.6rem 2.1rem;
+	max-width: none;
 }
 
 .stage-position {
 	font-family: var(--font-display), sans-serif;
-	font-size: clamp(1.35rem, 2.3vw, 1.9rem);
+	font-size: clamp(1.5rem, 2.7vw, 2.3rem);
 	font-variation-settings: 'wght' 620;
-	letter-spacing: -0.015em;
-	line-height: 1.2;
+	letter-spacing: -0.018em;
+	line-height: 1.15;
 	text-wrap: balance;
 	max-width: 24ch;
 }
 
 .stage-copy {
-	margin-top: 0.9rem;
-	font-size: 1.02rem;
+	margin-top: 1rem;
+	font-size: 1.05rem;
 	color: var(--ink-2);
 	max-width: 54ch;
 }
@@ -435,9 +497,10 @@ button {
 	align-items: center;
 	gap: 0.9rem;
 	margin-top: 1.1rem;
-	border: 1px solid var(--rule);
+	border: 1px solid color-mix(in srgb, var(--yellow) 40%, var(--rule));
 	border-radius: 3px;
-	background: color-mix(in srgb, var(--paper-raised) 80%, transparent);
+	/* the code-block yellow wash, kept translucent so the stage ground shows through */
+	background: color-mix(in srgb, color-mix(in srgb, var(--yellow) 10%, var(--paper)) 80%, transparent);
 	padding: 0.5rem 0.55rem 0.5rem 0.9rem;
 	font-family: var(--font-mono), monospace;
 	font-size: 0.8rem;
@@ -446,9 +509,235 @@ button {
 	overflow-x: auto;
 	white-space: nowrap;
 }
+.install-line code {
+	color: var(--ink);
+}
 .install-line .prompt {
 	color: var(--muted);
 	user-select: none;
+}
+
+/* ── landing: the stage grown to the whole viewport ─────────── */
+
+.landing {
+	--lx: 30%;
+	--ly: 24%;
+	--pnx: -0.2;
+	--pny: -0.26;
+	position: relative;
+	height: 100svh;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	background:
+		radial-gradient(150% 130% at var(--lx) var(--ly), transparent 52%, rgba(0, 0, 0, 0.55) 100%),
+		radial-gradient(90% 75% at var(--lx) var(--ly), #262633 0%, #0d0d12 52%, #08080a 100%);
+}
+
+/* the drafting grid lives only where the lamp reaches */
+.landing-grid {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background:
+		linear-gradient(#454553 1px, transparent 1px) 0 0 / 100% 2.6rem,
+		linear-gradient(90deg, #454553 1px, transparent 1px) 0 0 / 2.6rem 100%;
+	opacity: 0.5;
+	-webkit-mask-image: radial-gradient(120% 100% at var(--lx) var(--ly), #000 0%, rgba(0, 0, 0, 0.25) 45%, transparent 80%);
+	mask-image: radial-gradient(120% 100% at var(--lx) var(--ly), #000 0%, rgba(0, 0, 0, 0.25) 45%, transparent 80%);
+}
+
+.landing-dust {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+
+.landing-dateline {
+	max-width: none;
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	flex-wrap: wrap;
+	padding: 0.85rem var(--gutter);
+	border-bottom: 1px solid var(--rule-soft);
+	font-family: var(--font-mono), monospace;
+	font-size: 0.7rem;
+	letter-spacing: 0.13em;
+	text-transform: uppercase;
+	color: var(--muted);
+	font-variant-numeric: tabular-nums;
+	position: relative;
+	z-index: 2;
+}
+
+.landing-word-wrap {
+	position: relative;
+	flex: 1;
+	display: flex;
+	align-items: center;
+	padding: 0 var(--gutter);
+	min-height: 0;
+	z-index: 1;
+}
+
+.landing-word,
+.landing-ghost {
+	font-family: var(--font-display), sans-serif;
+	font-size: clamp(3.1rem, 12.4vw, 13.5rem);
+	line-height: 0.92;
+	letter-spacing: -0.03em;
+	white-space: nowrap;
+	text-transform: uppercase;
+	user-select: none;
+	margin: 0;
+}
+
+.landing-word {
+	position: relative;
+	font-variation-settings: 'wght' 760, 'opsz' 96;
+}
+
+.landing-l {
+	display: inline-block;
+	font-variation-settings: 'wght' 760, 'opsz' 96;
+	animation: word-settle 1100ms var(--ease-out) backwards;
+}
+
+.landing-ghost {
+	position: absolute;
+	left: calc(var(--gutter) + 8%);
+	top: 18%;
+	color: transparent;
+	-webkit-text-stroke: 1px color-mix(in srgb, var(--ink) 22%, transparent);
+	font-variation-settings: 'wght' 300, 'opsz' 96;
+	pointer-events: none;
+	/* parallax: the ghost slides against the lamp */
+	transform: translate3d(calc(var(--pnx) * -44px), calc(var(--pny) * -26px), 0);
+}
+
+.landing-body {
+	position: relative;
+	z-index: 2;
+	border-top: 1px solid var(--rule-soft);
+	padding: 1.6rem var(--gutter) 2rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	gap: 2rem;
+	flex-wrap: wrap;
+}
+
+.landing-pitch {
+	min-width: 0;
+	max-width: 100%;
+}
+
+.landing-position {
+	font-family: var(--font-display), sans-serif;
+	font-size: clamp(1.4rem, 2.4vw, 2.1rem);
+	font-variation-settings: 'wght' 620;
+	letter-spacing: -0.018em;
+	line-height: 1.15;
+	text-wrap: balance;
+	max-width: 26ch;
+}
+
+.landing-copy {
+	margin-top: 0.8rem;
+	font-size: 1rem;
+	color: var(--ink-2);
+	max-width: 52ch;
+}
+
+.landing-actions {
+	display: flex;
+	gap: 0.75rem;
+	flex-wrap: wrap;
+	margin-top: 1.5rem;
+}
+
+.landing-readout {
+	color: var(--muted);
+	font-size: 0.66rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+.landing-readout-live {
+	color: var(--live);
+}
+
+@media (max-width: 52rem) {
+	.landing {
+		height: auto;
+		min-height: 100svh;
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+	.landing-dateline {
+		align-items: flex-start;
+		flex-direction: column;
+		gap: 0.35rem;
+		padding-block: 0.75rem;
+		font-size: 0.62rem;
+		letter-spacing: 0.1em;
+	}
+	.landing-word-wrap {
+		flex: 0 0 clamp(18rem, 43svh, 25rem);
+		padding-block: 1.5rem;
+	}
+	.landing-word {
+		font-size: clamp(2.65rem, 13vw, 4.5rem);
+	}
+	.landing-ghost {
+		display: none;
+	}
+	.landing-readout {
+		display: none;
+	}
+	.landing-body {
+		padding-block: 1.25rem 1.4rem;
+		gap: 1rem;
+	}
+	.landing-position {
+		font-size: clamp(1.35rem, 6.2vw, 1.8rem);
+		max-width: 24ch;
+	}
+	.landing-copy {
+		font-size: 0.93rem;
+		line-height: 1.55;
+	}
+	.landing-actions {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: 0.65rem;
+		width: 100%;
+	}
+	.landing-actions .action {
+		justify-content: center;
+		padding-inline: 0.8rem;
+		font-size: 0.84rem;
+		white-space: nowrap;
+	}
+	.landing-actions .action-primary {
+		grid-column: 1 / -1;
+	}
+	.landing .install-line {
+		display: flex;
+		width: 100%;
+	}
+	.landing .install-line code {
+		min-width: 0;
+		overflow-x: auto;
+		scrollbar-width: thin;
+	}
+	.landing .install-line .copy-btn {
+		flex: none;
+	}
 }
 
 /* ── page covers (inner sections) ───────────────────────────── */
@@ -629,8 +918,8 @@ tr.is-deprecated td:not(.status-cell) {
 
 .codeblock {
 	position: relative;
-	background: var(--paper-raised);
-	border: 1px solid var(--rule);
+	background: color-mix(in srgb, var(--yellow) 10%, var(--paper));
+	border: 1px solid color-mix(in srgb, var(--yellow) 40%, var(--rule));
 	border-radius: 3px;
 	margin: 0.9rem 0 0;
 	max-width: 46rem;
@@ -642,7 +931,7 @@ tr.is-deprecated td:not(.status-cell) {
 	overflow-x: auto;
 	font-size: 0.82rem;
 	line-height: 1.65;
-	color: var(--ink-2);
+	color: var(--ink);
 }
 
 .codeblock-label {
@@ -650,7 +939,7 @@ tr.is-deprecated td:not(.status-cell) {
 	font-size: 0.7rem;
 	letter-spacing: 0.12em;
 	text-transform: uppercase;
-	color: var(--muted);
+	color: color-mix(in srgb, var(--yellow) 80%, var(--muted));
 	padding: 0.5rem 1rem 0;
 	display: block;
 }
@@ -681,6 +970,13 @@ tr.is-deprecated td:not(.status-cell) {
 
 .copy-btn--inline {
 	position: static;
+}
+
+/* inside the yellow-washed code plate the copy button picks up the tint */
+.codeblock .copy-btn {
+	background: color-mix(in srgb, var(--yellow) 8%, var(--paper));
+	border-color: color-mix(in srgb, var(--yellow) 45%, var(--rule));
+	color: var(--ink-2);
 }
 
 /* ── provisional marks ──────────────────────────────────────── */
@@ -714,7 +1010,7 @@ tr.is-deprecated td:not(.status-cell) {
 .playground-stage {
 	position: relative;
 	border-right: 1px solid var(--rule-soft);
-	min-height: 21rem;
+	min-height: 23rem;
 	display: flex;
 	flex-direction: column;
 }
@@ -726,6 +1022,7 @@ tr.is-deprecated td:not(.status-cell) {
 	padding: 2rem;
 	background:
 		linear-gradient(var(--rule-soft) 1px, transparent 1px) 0 0 / 100% 2.2rem,
+		linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px) 0 0 / 2.2rem 100%,
 		var(--paper-raised);
 }
 
@@ -797,8 +1094,21 @@ tr.is-deprecated td:not(.status-cell) {
 }
 
 .playground-code {
-	border-top: 1px solid var(--rule-soft);
+	background: color-mix(in srgb, var(--yellow) 6%, var(--paper));
+	border: 1px solid color-mix(in srgb, var(--yellow) 30%, var(--rule));
+	border-radius: 3px;
+	padding: 0.15rem 0.9rem 0.9rem;
 	margin-top: 0.2rem;
+}
+
+/* DS-rendered form controls carry the yellow family site-wide — borders and
+   rings only, fills stay DS-dark (user-accepted 2026-08-26; deliberate
+   exception to the DS-content rule, applied via the unlayered-CSS contract) */
+input[data-slot='input'],
+[data-slot='select-trigger'],
+[data-slot='checkbox'] {
+	border-color: color-mix(in srgb, var(--yellow) 30%, var(--rule));
+	box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--yellow) 15%, transparent);
 }
 .playground-code pre {
 	margin: 0.55rem 0 0;
@@ -838,6 +1148,55 @@ tr.is-deprecated td:not(.status-cell) {
 .pyramid-note p {
 	font-size: 0.88rem;
 	color: var(--ink-2);
+}
+
+/* interactive pyramid: each layer is a button; the notes act as an accordion.
+   Selection is client state (no hash, no scroll jump); Substrate opens by default. */
+.pyr-btn {
+	cursor: pointer;
+	text-decoration: none;
+}
+.pyr-btn:hover path {
+	filter: brightness(1.3);
+}
+.pyr-btn:focus-visible {
+	outline: 2px solid var(--ink);
+	outline-offset: 2px;
+}
+/* accordion timing: the old note closes first, the new one opens after a 120ms handoff */
+.pyramid-note.acc {
+	display: grid;
+	grid-template-rows: auto 0fr;
+	transition: grid-template-rows 380ms var(--ease-out);
+}
+.pyramid-note.acc p {
+	min-height: 0;
+	opacity: 0;
+	overflow: hidden;
+	transition: opacity 240ms var(--ease-out);
+}
+.pyramid-note.acc[data-open='true'] {
+	grid-template-rows: auto 1fr;
+	transition-duration: 550ms;
+	transition-delay: 120ms;
+}
+.pyramid-note.acc[data-open='true'] p {
+	opacity: 1;
+	transition-duration: 450ms;
+	transition-delay: 200ms;
+}
+.pyramid-note.acc > .mono {
+	margin-left: -0.3rem;
+	padding: 0 0.3rem;
+	width: fit-content;
+	transition: background 260ms var(--ease-out), color 260ms var(--ease-out);
+}
+.acc[data-open='true'] > .mono {
+	background: var(--ink);
+	color: var(--paper);
+}
+.pyr-btn[aria-pressed='true'] path {
+	stroke-width: 2.3;
 }
 
 /* ── feed / releases ────────────────────────────────────────── */
@@ -1030,7 +1389,8 @@ tr.is-deprecated td:not(.status-cell) {
 
 @media (max-width: 64rem) {
 	.playground {
-		grid-template-columns: 1fr;
+		/* minmax(0, 1fr): a plain 1fr's auto minimum lets the import snippet force overflow */
+		grid-template-columns: minmax(0, 1fr);
 	}
 	.playground-stage {
 		border-right: 0;
@@ -1091,8 +1451,18 @@ tr.is-deprecated td:not(.status-cell) {
 		flex-direction: column;
 		gap: 0.35rem;
 	}
+	.stage {
+		min-height: min(72svh, 44rem);
+	}
+	.stage-word {
+		margin-top: 1rem;
+		padding-left: 1.1rem;
+	}
 	.stage-body {
-		padding-top: 1.1rem;
+		padding: 1.3rem 1.1rem 1.7rem;
+	}
+	.stage-dateline {
+		padding: 0.7rem 1.1rem;
 	}
 }
 
@@ -1106,6 +1476,16 @@ tr.is-deprecated td:not(.status-cell) {
 	}
 	.playground-readout .tick[data-flash='true'] {
 		animation: none;
+	}
+	.rail-item a[aria-current='page'] .rail-num,
+	.rail-item a[aria-current='page'] > span:last-child {
+		animation: none;
+	}
+	.landing-l {
+		animation: none;
+	}
+	.landing-ghost {
+		transform: none;
 	}
 	* {
 		transition-duration: 0.01ms !important;

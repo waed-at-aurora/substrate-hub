@@ -16,7 +16,7 @@ Chosen direction (user-pinned, 2026-08-26, supersedes seed 564a1789's light Mark
 
 Hero (user-pinned requirements): self-contained stage framed by rules; SUBSTRATE wordmark at viewport-cropping scale with a one-time variable-weight settle and a slow-drifting outline ghost (both disabled under prefers-reduced-motion); positioning line "The shared layer behind consistent EOS experiences."; supporting copy on composite components + interaction patterns; three actions (yellow Install leading, Open Storybook, Explore patterns); compact copyable `npm install @aurora-ui/components-v2` line.
 
-Memorable moment: the stage itself, plus FIG. 2 — the live Button playground rendering the real installed package with a cyan recalc tick per option change.
+Memorable moment: the stage itself, plus FIG. 2 — the live InvestmentCaseSelectionCard playground (active state by default) rendering the real installed package with a cyan recalc tick per option change.
 
 Content order below the stage (user-pinned earlier): system pyramid → quick start → coverage → what's happening → resources; all data synced from the real aurora-ui repo (`npm run sync`).
 

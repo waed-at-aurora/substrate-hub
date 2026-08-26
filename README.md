@@ -26,6 +26,6 @@ Marked visibly in the UI with a `provisional` tag; all live in
 
 - **Support channel** — currently `#design-system`.
 - **Authoritative planning source** — roadmap Next/Later items await confirmation.
-- **Design library (Figma) link** — tools page.
+- ~~Design library (Figma) link — tools page.~~ Row removed at the user's request (2026-08-26).
 - **Events feed** — home + tools pages state none exist yet.
 - **Published changelog** — releases page reports from source history until semantic-release publishes notes.

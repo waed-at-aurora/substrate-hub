@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export const sections = [
-	{ num: '01', title: 'Overview', href: '/' },
+	{ num: '01', title: 'Overview', href: '/overview' },
 	{ num: '02', title: 'Get started', href: '/get-started' },
 	{ num: '03', title: 'Components', href: '/components' },
 	{ num: '04', title: 'Patterns', href: '/patterns' },
@@ -32,8 +32,7 @@ export function ContentsRail() {
 		return () => window.removeEventListener('keydown', onKey);
 	}, [router]);
 
-	const isActive = (href: string) =>
-		href === '/' ? pathname === '/' : pathname.startsWith(href);
+	const isActive = (href: string) => pathname.startsWith(href);
 
 	return (
 		<nav className="rail" aria-label="Contents">
