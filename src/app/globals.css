@@ -16,6 +16,7 @@
 	--rule: #26262b;
 	--rule-soft: #1b1b20;
 	--yellow: #ffcc00;
+	--yellow-hover: #ffd633;
 	--on-yellow: #131316;
 	--amber: #d9a514;
 	--live: #00d3f2;
@@ -524,6 +525,7 @@ button {
 	--ly: 24%;
 	--pnx: -0.2;
 	--pny: -0.26;
+	--enter-y: 75%;
 	position: relative;
 	height: 100svh;
 	overflow: hidden;
@@ -553,6 +555,80 @@ button {
 	overflow: hidden;
 	pointer-events: none;
 	z-index: 0;
+}
+/* The clicked CTA sends one feathered drafting-grid wave across the stage. */
+.landing-enter-wave {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	overflow: hidden;
+	pointer-events: none;
+}
+.landing-enter-wave::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background:
+		radial-gradient(
+			ellipse 58% 62% at 50% var(--enter-y),
+			color-mix(in srgb, var(--ink) 14%, transparent) 0%,
+			color-mix(in srgb, var(--ink) 6%, transparent) 46%,
+			transparent 76%
+		),
+		linear-gradient(color-mix(in srgb, var(--ink) 28%, transparent) 1px, transparent 1px) 0 0 /
+			100% 2.6rem,
+		linear-gradient(90deg, color-mix(in srgb, var(--ink) 28%, transparent) 1px, transparent 1px) 0 0 /
+			2.6rem 100%;
+	-webkit-mask-image: linear-gradient(
+		90deg,
+		transparent 0%,
+		rgba(0, 0, 0, 0.16) 20%,
+		#000 46%,
+		#000 54%,
+		rgba(0, 0, 0, 0.16) 80%,
+		transparent 100%
+	);
+	mask-image: linear-gradient(
+		90deg,
+		transparent 0%,
+		rgba(0, 0, 0, 0.16) 20%,
+		#000 46%,
+		#000 54%,
+		rgba(0, 0, 0, 0.16) 80%,
+		transparent 100%
+	);
+	opacity: 0;
+	transform: translate3d(-100%, 0, 0);
+}
+.landing[data-entering='true'] .landing-enter-wave::before {
+	will-change: transform, opacity;
+	animation:
+		landing-enter-wave-travel 640ms linear both,
+		landing-enter-wave-opacity 640ms var(--ease-out) both;
+}
+
+@keyframes landing-enter-wave-travel {
+	from {
+		transform: translate3d(-100%, 0, 0);
+	}
+	to {
+		transform: translate3d(100%, 0, 0);
+	}
+}
+
+@keyframes landing-enter-wave-opacity {
+	0% {
+		opacity: 0;
+	}
+	12% {
+		opacity: 0.58;
+	}
+	72% {
+		opacity: 0.5;
+	}
+	100% {
+		opacity: 0;
+	}
 }
 
 .landing-dateline {
@@ -685,9 +761,16 @@ button {
 		font-size: 0.62rem;
 		letter-spacing: 0.1em;
 	}
+	.landing-last-change {
+		display: none;
+	}
 	.landing-word-wrap {
-		flex: 0 0 clamp(18rem, 43svh, 25rem);
+		flex: 0 0 clamp(14rem, 28svh, 19rem);
 		padding-block: 1.5rem;
+	}
+	.landing-starburst {
+		bottom: auto;
+		height: calc(clamp(14rem, 28svh, 19rem) + 4rem);
 	}
 	.landing-word {
 		font-size: clamp(2.65rem, 13vw, 4.5rem);
@@ -736,6 +819,7 @@ button {
 	}
 	.landing .install-line .copy-btn {
 		flex: none;
+		min-block-size: 2.75rem;
 	}
 }
 
@@ -814,11 +898,21 @@ button {
 	color: var(--on-yellow);
 }
 .action-primary:hover {
-	background: #ffd633;
-	border-color: #ffd633;
+	background: var(--yellow-hover);
+	border-color: var(--yellow-hover);
 	box-shadow: 0 5px 22px -6px rgba(255, 204, 0, 0.45);
 }
-
+.landing .action,
+.landing .copy-btn {
+	animation: none;
+	transition: none;
+}
+.landing .action:hover {
+	box-shadow: none;
+}
+.landing .action:active {
+	transform: none;
+}
 .new-signal {
 	display: inline-block;
 	background: var(--yellow);

@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { type MouseEvent, useEffect, useRef, useState } from 'react';
 import StarBurst from '@/components/star-burst';
 import { InstallLine } from '@/components/install-line';
 
@@ -9,6 +10,7 @@ const WORD = 'Substrate'.split('');
 const BASE_WGHT = 760;
 const SWELL_WGHT = 900;
 const SWELL_RADIUS = 220; // px — how far the light "presses" the letterforms
+const ENTER_DURATION_MS = 640;
 
 /**
  * The landing is the stage grown to the whole viewport. One pointer-driven
@@ -30,9 +32,51 @@ export function LandingStage({
 	composites: number;
 	primitives: number;
 }) {
+	const router = useRouter();
+	const [isEntering, setIsEntering] = useState(false);
+	const enteringRef = useRef(false);
+	const enterTimerRef = useRef<number | null>(null);
 	const rootRef = useRef<HTMLElement | null>(null);
 	const wordRef = useRef<HTMLHeadingElement | null>(null);
 	const readoutRef = useRef<HTMLSpanElement | null>(null);
+
+	useEffect(
+		() => () => {
+			if (enterTimerRef.current !== null) window.clearTimeout(enterTimerRef.current);
+		},
+		[],
+	);
+
+	const enterHub = (event: MouseEvent<HTMLAnchorElement>) => {
+		if (
+			event.defaultPrevented ||
+			event.button !== 0 ||
+			event.metaKey ||
+			event.ctrlKey ||
+			event.shiftKey ||
+			event.altKey
+		) {
+			return;
+		}
+
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+		event.preventDefault();
+		if (enteringRef.current) return;
+		const root = rootRef.current;
+		if (root) {
+			const rootRect = root.getBoundingClientRect();
+			const buttonRect = event.currentTarget.getBoundingClientRect();
+			root.style.setProperty('--enter-y', `${buttonRect.top - rootRect.top + buttonRect.height / 2}px`);
+		}
+
+		enteringRef.current = true;
+		setIsEntering(true);
+		enterTimerRef.current = window.setTimeout(() => {
+			enterTimerRef.current = null;
+			router.push('/overview');
+		}, ENTER_DURATION_MS);
+	};
 
 	useEffect(() => {
 		const root = rootRef.current;
@@ -136,14 +180,21 @@ export function LandingStage({
 	}, []);
 
 	return (
-		<section className="landing" ref={rootRef} aria-label="Substrate — the EOS design system">
+		<section
+			className="landing"
+			ref={rootRef}
+			aria-label="Substrate — the EOS design system"
+			data-entering={isEntering}
+		>
 			<StarBurst className="landing-starburst" />
 			<div className="landing-grid" aria-hidden="true" />
+			<div className="landing-enter-wave" aria-hidden="true" />
 
 			<p className="landing-dateline">
 				<span>Substrate Hub · internal edition</span>
 				<span>
-					{pkg} v{version} · last change {lastChange}
+					{pkg} v{version}
+					<span className="landing-last-change"> · last change {lastChange}</span>
 				</span>
 			</p>
 
@@ -168,7 +219,7 @@ export function LandingStage({
 						{primitives} primitives, one shared system with room to differ above it.
 					</p>
 					<div className="landing-actions">
-						<Link className="action action-primary" href="/overview">
+						<Link className="action action-primary" href="/overview" onClick={enterHub}>
 							Enter the hub
 						</Link>
 						<Link className="action" href="/get-started">

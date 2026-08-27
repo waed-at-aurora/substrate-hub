@@ -4,6 +4,7 @@ import { Exhibit } from '@/components/exhibit';
 import { InstallLine } from '@/components/install-line';
 import { ExtArrow } from '@/components/marks';
 import { Playground } from '@/components/islands';
+import { OverviewMotion } from '@/components/overview-motion';
 import { PyramidFigure } from '@/components/pyramid-figure';
 import { Provisional } from '@/components/provisional';
 import { site, storybookHref } from '@/config/site';
@@ -16,8 +17,9 @@ export default function Home() {
 
 	return (
 		<>
+			<OverviewMotion />
 			{/* 1+2 — the stage: positioning, wordmark, actions, install */}
-			<section className="stage" aria-label="Substrate">
+			<section className="stage" aria-label="Substrate" data-overview-stage>
 				<p className="stage-dateline">
 					<span>Substrate Hub · internal edition</span>
 					<span>

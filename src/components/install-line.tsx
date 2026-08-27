@@ -7,6 +7,8 @@ export function InstallLine({ command }: { command: string }) {
 	const [status, setStatus] = useState<'idle' | 'copied' | 'selected'>('idle');
 	const code = useRef<HTMLElement | null>(null);
 	const timer = useRef<number | undefined>(undefined);
+	const shortcut =
+		typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘C' : 'Ctrl+C';
 
 	useEffect(() => {
 		return () => {
@@ -16,6 +18,7 @@ export function InstallLine({ command }: { command: string }) {
 
 	const copy = async () => {
 		clearTimeout(timer.current);
+		let resetDelay = 1600;
 
 		try {
 			await navigator.clipboard.writeText(command);
@@ -28,10 +31,11 @@ export function InstallLine({ command }: { command: string }) {
 				selection.removeAllRanges();
 				selection.addRange(range);
 				setStatus('selected');
+				resetDelay = 5000;
 			}
 		}
 
-		timer.current = window.setTimeout(() => setStatus('idle'), 1600);
+		timer.current = window.setTimeout(() => setStatus('idle'), resetDelay);
 	};
 
 	return (
@@ -44,10 +48,17 @@ export function InstallLine({ command }: { command: string }) {
 				type="button"
 				className="copy-btn copy-btn--inline"
 				data-copied={status === 'copied'}
+				aria-label={
+					status === 'copied'
+						? 'Install command copied'
+						: status === 'selected'
+							? `Command selected — press ${shortcut} to copy`
+							: 'Copy install command'
+				}
 				aria-live="polite"
 				onClick={copy}
 			>
-				{status === 'copied' ? 'copied' : status === 'selected' ? 'selected' : 'copy'}
+				{status === 'copied' ? 'copied' : status === 'selected' ? `press ${shortcut}` : 'copy'}
 			</button>
 		</div>
 	);
