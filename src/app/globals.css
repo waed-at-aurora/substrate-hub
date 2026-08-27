@@ -530,8 +530,8 @@ button {
 	display: flex;
 	flex-direction: column;
 	background:
-		radial-gradient(140% 120% at var(--lx) var(--ly), transparent 46%, rgba(0, 0, 0, 0.62) 100%),
-		radial-gradient(82% 68% at var(--lx) var(--ly), color-mix(in srgb, var(--rule) 88%, var(--ink)) 0%, color-mix(in srgb, var(--paper) 88%, var(--rule)) 54%, var(--paper) 100%);
+		radial-gradient(circle clamp(32rem, 72vw, 72rem) at var(--lx) var(--ly), transparent 44%, rgba(0, 0, 0, 0.68) 100%),
+		radial-gradient(circle clamp(20rem, 42vw, 40rem) at var(--lx) var(--ly), color-mix(in srgb, var(--rule) 84%, var(--ink)) 0%, color-mix(in srgb, var(--rule) 92%, var(--ink)) 34%, color-mix(in srgb, var(--paper) 84%, var(--rule)) 68%, var(--paper) 100%);
 }
 
 /* the drafting grid lives only where the lamp reaches */
@@ -543,8 +543,8 @@ button {
 		linear-gradient(#454553 1px, transparent 1px) 0 0 / 100% 2.6rem,
 		linear-gradient(90deg, #454553 1px, transparent 1px) 0 0 / 2.6rem 100%;
 	opacity: 0.5;
-	-webkit-mask-image: radial-gradient(120% 100% at var(--lx) var(--ly), #000 0%, rgba(0, 0, 0, 0.25) 45%, transparent 80%);
-	mask-image: radial-gradient(120% 100% at var(--lx) var(--ly), #000 0%, rgba(0, 0, 0, 0.25) 45%, transparent 80%);
+	-webkit-mask-image: radial-gradient(circle clamp(18rem, 38vw, 36rem) at var(--lx) var(--ly), #000 0%, rgba(0, 0, 0, 0.32) 58%, transparent 100%);
+	mask-image: radial-gradient(circle clamp(18rem, 38vw, 36rem) at var(--lx) var(--ly), #000 0%, rgba(0, 0, 0, 0.32) 58%, transparent 100%);
 }
 
 .landing-starburst {
