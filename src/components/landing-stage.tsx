@@ -80,7 +80,7 @@ export function LandingStage({
 		resize();
 		window.addEventListener('resize', resize);
 
-		const N = 64;
+		const N = 112;
 		const dust = Array.from({ length: N }, (_, i) => ({
 			x: ((i * 379) % 1000) / 1000,
 			y: ((i * 613) % 1000) / 1000,
