@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
+const isGitHubPages = process.env.GITHUB_PAGES === 'true';
+
 const nextConfig = {
+	output: isGitHubPages ? 'export' : undefined,
+	basePath: isGitHubPages ? '/substrate-hub' : undefined,
+	trailingSlash: isGitHubPages,
 	outputFileTracingRoot: process.cwd(),
 	webpack: (config) => {
 		// The DS is a file:-linked package; resolve its peer deps (react, etc.)

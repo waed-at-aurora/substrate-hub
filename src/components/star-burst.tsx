@@ -17,7 +17,7 @@ type StarBurstProps = {
 };
 
 const DEFAULTS = {
-	speed: 2,
+	speed: 1.5,
 	starCount: 28,
 	color: '#f4f4f5',
 	centerX: 100,
