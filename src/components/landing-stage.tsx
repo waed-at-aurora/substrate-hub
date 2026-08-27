@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
+import auroraSymbol from '@/assets/aurora-symbol.png';
 import StarBurst from '@/components/star-burst';
 import { ExtArrow } from '@/components/marks';
 import { InstallLine } from '@/components/install-line';
@@ -14,8 +15,8 @@ const SWELL_RADIUS = 220; // px — how far the light "presses" the letterforms
 /**
  * The landing is the stage grown to the whole viewport. One pointer-driven
  * moment, orchestrated: the lamp follows the cursor across the drafting grid,
- * a star burst radiates beneath it, and the wordmark's variable weight answers
- * the light per letter. On touch (no hover) the lamp autopilots a slow path.
+ * a star burst and projected Aurora mark radiate beneath it, while the
+ * wordmark's variable weight answers the light. On touch the lamp autopilots.
  * Everything settles to a static, legible stage under prefers-reduced-motion.
  */
 export function LandingStage({
@@ -116,6 +117,14 @@ export function LandingStage({
 	return (
 		<section className="landing" ref={rootRef} aria-label="Substrate — the EOS design system">
 			<StarBurst className="landing-starburst" />
+			<div
+				className="landing-signal"
+				aria-hidden="true"
+				style={{
+					WebkitMaskImage: `url(${auroraSymbol.src})`,
+					maskImage: `url(${auroraSymbol.src})`,
+				}}
+			/>
 			<div className="landing-grid" aria-hidden="true" />
 
 			<p className="landing-dateline">
