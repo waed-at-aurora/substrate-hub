@@ -103,7 +103,7 @@ components:
 
 Substrate Hub is a night-edition design-system portal: dark-first, minimalist, editorial, slightly experimental. It keeps the grammar of a printed technical report — one hairline rule grid carries the hub, exhibits are captioned `FIG.` / `TABLE` in uppercase mono, numbers set in tabular figures — but prints it on a near-black canvas (`--paper`, #09090b, the same dark canvas the Substrate design system itself uses) with near-white ink. The display voice is Bricolage Grotesque, a variable face whose weight and optical size are themselves design material; everything else stays restrained: Archivo for UI and body, Spline Sans Mono for captions, code, and data.
 
-The root route is the portal before the document: one full-viewport, pointer-responsive stage containing the dateline, monumental SUBSTRATE wordmark, positioning, three actions led by yellow `Enter the hub`, and the install line. Its moving lamp, revealed grid, dust, ghost parallax, and per-letter weight response form one authored invitation into `/overview`; they are a landing-only behavior, not a template for the numbered hub pages.
+The root route is the portal before the document: one full-viewport, pointer-responsive stage containing the dateline, monumental SUBSTRATE wordmark, positioning, three actions led by yellow `Enter the hub`, and the install line. Its moving lamp, revealed grid, lower-right Star Burst, ghost parallax, and per-letter weight response form one authored invitation into `/overview`; they are a landing-only behavior, not a template for the numbered hub pages.
 
 Color is rationed by law. Aurora yellow (#ffcc00) appears exactly three times in the hub's own chrome: the one primary action on a surface, the tiny `new` signal, and the active section's number chip in the contents rail (user-extended 2026-08-26). Cyan (#00d3f2) appears only where something is genuinely live — a rendered-by-the-real-package figure, a recalc tick, a `feat` line in the feed. Everything else is drawn in a zinc ramp of inks, muteds, and hairlines. Status is never a colored badge: it is a small drawn mark (solid, dotted, half-filled, hollow, hatched) plus the word. Emphasis is achieved by inversion — active filters, selection, and the Substrate layer of the pyramid flip to ink-on-paper — not by adding color; the one sanctioned color emphasis is the rail's yellow active-number chip.
 
@@ -209,9 +209,9 @@ Near-square geometry: radii run 2px (actions, chips, copy buttons, filter groups
 - **Composition:** no masthead, rail, or document frame. A `100svh` Paper stage carries the ruled dateline, the flexible wordmark field, and a ruled body band. The body presents positioning, concise composite-layer copy, `Enter the hub` / `Install Substrate` / `Explore patterns`, then the real CLI install command.
 - **Lamp and grid:** two radial gradients follow `--lx` / `--ly`; the outer gradient vignettes the edges while the inner #262633 beam opens onto the dark ground. A 2.6rem two-axis zinc grid is visible only through a radial mask centered on the lamp.
 - **Pointer response:** pointer coordinates are eased toward at 7% per animation frame. Within a 220px radius, each display letter swells quadratically from 'wght' 760 toward 900; the outline ghost shifts against normalized pointer position, and the mono cyan readout reports rounded x/y coordinates.
-- **Dust:** a DPR-aware canvas draws 64 deterministic drifting motes, mostly Ink with occasional Yellow catches. Drawing pauses while the document is hidden; canvas and lamp geometry resize with the viewport.
+- **Star Burst (user-specified 2026-08-27):** a transparent DPR-aware canvas adapted from Originkit's Star Burst replaces the drifting dust. Twenty-eight seeded Ink spokes radiate from the lower-right corner; each carries 15 additive, twinkling streak pulses over a concentrated flower bloom. Motion is time-based, drawing pauses while the document is hidden, and a `ResizeObserver` keeps the canvas fitted without obscuring the lamp or grid.
 - **Touch:** when hover is unavailable, and before the first real pointer movement on hover-capable devices, the lamp follows a slow sinusoidal autopilot so the authored response remains visible without requiring a cursor.
-- **Reduced motion:** the client animation loop never starts. The CSS defaults hold a static lamp at 30% / 24%, the wordmark stays fully legible at 'wght' 760 / 'opsz' 96, dust is not drawn, the ghost does not parallax, and transitions collapse with the global reduced-motion rule.
+- **Reduced motion:** the pointer animation loop never starts. The CSS defaults hold a static lamp at 30% / 24%, the Star Burst warms up to one still frame, the wordmark stays fully legible at 'wght' 760 / 'opsz' 96, the ghost does not parallax, and transitions collapse with the global reduced-motion rule.
 - **Scope:** this orchestration belongs only to `/`. `/overview` receives the visitor into the established hub shell and retains its own static-position stage and content sequence.
 
 ### Exhibit (the page's structural unit)
@@ -250,7 +250,7 @@ Near-square geometry: radii run 2px (actions, chips, copy buttons, filter groups
 - The hub imports `@aurora-ui/components-v2/style.css` globally and pins `html.dark`, so DS components render in their own dark tokens on the shared #09090b ground. DS styles live in cascade layers; the hub's unlayered CSS wins specificity ties by design. DS-rendered visuals are content: never restyle them to hub laws, and never screenshot them — render the real package. **One user-granted exception (2026-08-26):** DS form controls (`input[data-slot='input']`, `[data-slot='select-trigger']`, `[data-slot='checkbox']`) carry the yellow family site-wide — border color 30% Yellow into Rule plus a 1px inset ring at 15% Yellow; fills stay DS-dark.
 
 ### Motion
-All micro-transitions run 120–160ms on `--ease-out` (`cubic-bezier(0.16, 1, 0.3, 1)`). Motion is sparse and role-bound: identity uses the 1100ms variable-weight settle; the root landing adds direct lamp/dust/letter response as one inseparable authored moment; `/overview` retains its 18s alternating ghost drift; the playground uses a 700ms cyan recalc flash; the contents rail answers navigation in ~200ms; and the pyramid uses its measured 380/240ms close then 550/450ms open handoff.
+All micro-transitions run 120–160ms on `--ease-out` (`cubic-bezier(0.16, 1, 0.3, 1)`). Motion is sparse and role-bound: identity uses the 1100ms variable-weight settle; the root landing adds direct lamp/Star Burst/letter response as one inseparable authored moment; `/overview` retains its 18s alternating ghost drift; the playground uses a 700ms cyan recalc flash; the contents rail answers navigation in ~200ms; and the pyramid uses its measured 380/240ms close then 550/450ms open handoff.
 
 **The Authored Motion Rule.** New motion must justify itself as identity, atmosphere, liveness, or navigation feedback. Under `prefers-reduced-motion: reduce`, the root landing does not create its animation loop, all keyframes are disabled, smooth scroll turns off, and every transition collapses to 0.01ms.
 
@@ -264,13 +264,13 @@ All micro-transitions run 120–160ms on `--ease-out` (`cubic-bezier(0.16, 1, 0.
 - **Do** use the five physical status marks plus the status word; deprecated rows also strike through.
 - **Do** render DS components live from `@aurora-ui/components-v2` and label their provenance in the readout/caption.
 - **Do** mark every unconfirmed value with the amber `Provisional` chip and a matching replacement-list entry.
-- **Do** keep the lamp, dust, pointer/touch response, and per-letter weight behavior together on `/`; hand visitors into the document at `/overview`.
+- **Do** keep the lamp, Star Burst, pointer/touch response, and per-letter weight behavior together on `/`; hand visitors into the document at `/overview`.
 
 ### Don't:
 - **Don't** introduce a light theme or per-component background overrides; #09090b is the only ground.
 - **Don't** use yellow, cyan, amber, or green outside their laws (primary/new/active-section chip, live, provisional, copied).
 - **Don't** tint status with color, use glyph-font icons or emoji, or replace drawn SVG marks with badges.
 - **Don't** add shadows at rest, radii above 4px, or borders heavier than 1px (the strong table rule stays 1px Ink).
-- **Don't** generalize the root landing's pointer lamp, dust canvas, or per-letter response into the numbered hub pages.
+- **Don't** generalize the root landing's pointer lamp, Star Burst canvas, or per-letter response into the numbered hub pages.
 - **Don't** ship decorative motion that survives `prefers-reduced-motion: reduce`.
 - **Don't** restyle DS-rendered content to hub chrome laws, and don't move hub CSS into cascade layers (unlayered hub CSS deliberately wins ties over the DS's layered styles).

@@ -530,8 +530,8 @@ button {
 	display: flex;
 	flex-direction: column;
 	background:
-		radial-gradient(150% 130% at var(--lx) var(--ly), transparent 52%, rgba(0, 0, 0, 0.55) 100%),
-		radial-gradient(90% 75% at var(--lx) var(--ly), #262633 0%, #0d0d12 52%, #08080a 100%);
+		radial-gradient(140% 120% at var(--lx) var(--ly), transparent 46%, rgba(0, 0, 0, 0.62) 100%),
+		radial-gradient(82% 68% at var(--lx) var(--ly), color-mix(in srgb, var(--rule) 88%, var(--ink)) 0%, color-mix(in srgb, var(--paper) 88%, var(--rule)) 54%, var(--paper) 100%);
 }
 
 /* the drafting grid lives only where the lamp reaches */
@@ -547,12 +547,12 @@ button {
 	mask-image: radial-gradient(120% 100% at var(--lx) var(--ly), #000 0%, rgba(0, 0, 0, 0.25) 45%, transparent 80%);
 }
 
-.landing-dust {
+.landing-starburst {
 	position: absolute;
 	inset: 0;
-	width: 100%;
-	height: 100%;
+	overflow: hidden;
 	pointer-events: none;
+	z-index: 0;
 }
 
 .landing-dateline {
