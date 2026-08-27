@@ -555,32 +555,6 @@ button {
 	z-index: 0;
 }
 
-.landing-signal {
-	position: absolute;
-	left: var(--lx);
-	top: var(--ly);
-	width: clamp(11rem, 22vw, 20rem);
-	aspect-ratio: 405 / 365;
-	pointer-events: none;
-	z-index: 0;
-	background: rgba(0, 0, 0, 0.78);
-	opacity: 0.5;
-	filter: blur(0.7px);
-	-webkit-mask-position: center;
-	mask-position: center;
-	-webkit-mask-repeat: no-repeat;
-	mask-repeat: no-repeat;
-	-webkit-mask-size: contain;
-	mask-size: contain;
-	transform: translate3d(
-		calc(-50% + var(--pnx) * -18px),
-		calc(-50% + var(--pny) * -12px),
-		0
-	);
-	transform-origin: center;
-	will-change: transform;
-}
-
 .landing-dateline {
 	max-width: none;
 	display: flex;
@@ -711,15 +685,6 @@ button {
 		padding-block: 0.75rem;
 		font-size: 0.62rem;
 		letter-spacing: 0.1em;
-	}
-	.landing-signal {
-		width: clamp(9.5rem, 42vw, 13rem);
-		opacity: 0.46;
-		transform: translate3d(
-			calc(-50% + var(--pnx) * -10px),
-			calc(-50% + var(--pny) * -7px),
-			0
-		);
 	}
 	.landing-word-wrap {
 		flex: 0 0 clamp(18rem, 43svh, 25rem);
@@ -1521,9 +1486,6 @@ input[data-slot='input'],
 	}
 	.landing-ghost {
 		transform: none;
-	}
-	.landing-signal {
-		transform: translate3d(-50%, -50%, 0);
 	}
 	* {
 		transition-duration: 0.01ms !important;
