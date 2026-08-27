@@ -1,4 +1,5 @@
 import substrate from '@/data/substrate.json';
+import substrateReleases from '@/data/releases.json';
 
 export type CatalogStatus = 'stable' | 'proposed' | 'experimental' | 'planned' | 'deprecated';
 
@@ -22,9 +23,27 @@ export interface HistoryEntry {
 	summary: string;
 }
 
+export interface ReleaseEntry {
+	version: string;
+	tag: string;
+	name: string;
+	url: string;
+	publishedAt: string;
+	body: string;
+	prerelease: boolean;
+	breaking: boolean;
+}
+
 export const data = substrate as unknown as {
 	syncedAt: string;
-	source: { repo: string; package: string; version: string; registry: string | null };
+	source: {
+		repo: string;
+		package: string;
+		version: string;
+		registry: string | null;
+		ref: string;
+		sha: string;
+	};
 	primitives: CatalogEntry[];
 	composites: CatalogEntry[];
 	experimental: { name: string; track: string; source: string }[];
@@ -37,6 +56,12 @@ export const data = substrate as unknown as {
 	};
 	history: HistoryEntry[];
 	counts: { primitives: number; composites: number; experimental: number; stable: number; proposed: number };
+};
+
+export const releasesData = substrateReleases as unknown as {
+	syncedAt: string;
+	source: string;
+	releases: ReleaseEntry[];
 };
 
 export const catalog: CatalogEntry[] = [...data.composites, ...data.primitives];

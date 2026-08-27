@@ -1,48 +1,53 @@
 import type { Metadata } from 'next';
+import ReactMarkdown from 'react-markdown';
 import { Exhibit } from '@/components/exhibit';
-import { Provisional } from '@/components/provisional';
 import { site } from '@/config/site';
-import { data, fmtDate } from '@/lib/data';
-
+import { data, fmtDate, releasesData } from '@/lib/data';
 export const metadata: Metadata = { title: 'Releases' };
 
 export default function Releases() {
-	const latest = data.history[0];
-	const breaking = data.history.filter((h) => h.breaking);
+	const releases = releasesData.releases;
+	const latestRelease = releases[0];
+	const previousReleases = releases.slice(1);
+	const breakingReleases = releases.filter((release) => release.breaking);
+	const currentVersion = latestRelease?.version ?? data.source.version;
+	const latestChange = data.history[0];
 
 	return (
 		<>
 			<div className="cover" style={{ paddingBottom: '1.6rem' }}>
 				<p className="cover-issue">
 					<span>05 · Releases</span>
-					<span>current: v{data.source.version}</span>
+					<span>current: v{currentVersion}</span>
 				</p>
 				<h1 style={{ fontSize: 'clamp(2rem, 3.6vw, 3.2rem)' }}>
-					v{data.source.version} <span className="new-signal" style={{ verticalAlign: 'middle' }}>current</span>
+					v{currentVersion}{' '}
+					<span className="new-signal" style={{ verticalAlign: 'middle' }}>
+						current
+					</span>
 				</h1>
 				<p className="cover-standfirst">
-					Substrate is pre-1.0 and publishes to Aurora&rsquo;s private registry. A versioned changelog
-					is not published yet, so this page reports directly from source history — the honest record
-					until release notes land. Last change {fmtDate(latest.date)}.
+					{latestRelease
+						? `Published ${fmtDate(latestRelease.publishedAt)}. Release notes are imported automatically after the design-system release succeeds.`
+						: `No versioned release is published yet. Recent package changes remain available from source history${latestChange ? ` through ${fmtDate(latestChange.date)}` : ''}.`}
 				</p>
 			</div>
 
 			<Exhibit label="Breaking changes & migration" id="breaking">
-				{breaking.length === 0 ? (
+				{breakingReleases.length === 0 ? (
 					<p className="lede">
-						No breaking changes flagged in the last {data.history.length} changes to the package. No
-						migration actions are currently required. Pre-1.0 caveat: pin your version and read this
-						page before upgrading.
+						No published release notes flag a breaking change. Substrate is pre-1.0: pin your
+						version and read the notes before upgrading.
 					</p>
 				) : (
 					<ul className="feed">
-						{breaking.map((h) => (
-							<li key={h.hash}>
-								<span className="mono dim">{fmtDate(h.date)}</span>
+						{breakingReleases.map((release) => (
+							<li key={release.tag}>
+								<span className="mono dim">{fmtDate(release.publishedAt)}</span>
 								<span className="type">breaking</span>
-								<span>{h.summary}</span>
-								<a className="mono dim hash" href={`${site.repoUrl}/commit/${h.hash}`} target="_blank" rel="noreferrer">
-									{h.hash}
+								<span>v{release.version}</span>
+								<a className="mono dim hash" href={release.url} target="_blank" rel="noreferrer">
+									notes
 								</a>
 							</li>
 						))}
@@ -51,39 +56,100 @@ export default function Releases() {
 			</Exhibit>
 
 			<Exhibit
-				label={`Log — source history (${data.history.length} changes)`}
+				label={latestRelease ? `Latest release — v${latestRelease.version}` : 'Latest release'}
 				meta={
-					<a href={`${site.repoUrl}/commits/main/packages/components-v2`} target="_blank" rel="noreferrer">
-						source release notes
+					latestRelease ? (
+						<a href={latestRelease.url} target="_blank" rel="noreferrer">
+							GitHub release
+						</a>
+					) : null
+				}
+				id="latest"
+			>
+				{latestRelease ? (
+					latestRelease.body.trim() ? (
+						<article className="release-notes">
+							<ReactMarkdown>{latestRelease.body}</ReactMarkdown>
+						</article>
+					) : (
+						<p className="lede">
+							v{latestRelease.version} was published without additional change details. The
+							version and source tag remain available in the GitHub release.
+						</p>
+					)
+				) : (
+					<p className="lede">
+						Release notes will appear here after the first automated components-v2 release is
+						published.
+					</p>
+				)}
+			</Exhibit>
+
+			<Exhibit
+				label={`Previous releases (${previousReleases.length})`}
+				meta={
+					<a href={releasesData.source} target="_blank" rel="noreferrer">
+						all GitHub releases
+					</a>
+				}
+				id="previous"
+			>
+				{previousReleases.length === 0 ? (
+					<p className="lede">No previous components-v2 releases are published.</p>
+				) : (
+					<ul className="feed">
+						{previousReleases.map((release) => (
+							<li key={release.tag}>
+								<span className="mono dim">{fmtDate(release.publishedAt)}</span>
+								<span className="type">release</span>
+								<span>
+									v{release.version}
+									{release.prerelease ? <span className="dim mono"> · prerelease</span> : null}
+								</span>
+								<a className="mono dim hash" href={release.url} target="_blank" rel="noreferrer">
+									notes
+								</a>
+							</li>
+						))}
+					</ul>
+				)}
+			</Exhibit>
+
+			<Exhibit
+				label={`Recent source history (${data.history.length} changes)`}
+				meta={
+					<a
+						href={`${site.repoUrl}/commits/release/packages/components-v2`}
+						target="_blank"
+						rel="noreferrer"
+					>
+						source history
 					</a>
 				}
 				id="history"
 			>
 				<ul className="feed">
-					{data.history.map((h, i) => (
-						<li key={h.hash}>
-							<span className="mono dim">{fmtDate(h.date)}</span>
-							<span className="type" data-t={h.type ?? undefined}>
-								{h.type ?? 'change'}
+					{data.history.map((entry, index) => (
+						<li key={entry.hash}>
+							<span className="mono dim">{fmtDate(entry.date)}</span>
+							<span className="type" data-t={entry.type ?? undefined}>
+								{entry.type ?? 'change'}
 							</span>
 							<span>
-								{i === 0 ? <span className="new-signal">new</span> : null} {h.summary}
-								{h.scope ? <span className="dim mono"> · {h.scope}</span> : null}
+								{index === 0 ? <span className="new-signal">new</span> : null} {entry.summary}
+								{entry.scope ? <span className="dim mono"> · {entry.scope}</span> : null}
 							</span>
-							<a className="mono dim hash" href={`${site.repoUrl}/commit/${h.hash}`} target="_blank" rel="noreferrer">
-								{h.hash}
+							<a
+								className="mono dim hash"
+								href={`${site.repoUrl}/commit/${entry.hash}`}
+								target="_blank"
+								rel="noreferrer"
+							>
+								{entry.hash}
 							</a>
 						</li>
 					))}
 				</ul>
-			</Exhibit>
-
-			<Exhibit label="Previous releases" id="previous">
-				<p className="lede">
-					None published yet — v{data.source.version} is the first packaged version. When
-					semantic-release starts cutting versions, they will list here with dates, changelogs, and
-					migration actions. <Provisional what="wire changelog source when published" />
-				</p>
 			</Exhibit>
 		</>
 	);

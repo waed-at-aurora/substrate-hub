@@ -1228,6 +1228,58 @@ input[data-slot='input'],
 	color: var(--live);
 }
 
+.release-notes {
+	max-width: 76ch;
+	color: var(--ink-2);
+	overflow-wrap: anywhere;
+}
+.release-notes > :first-child {
+	margin-top: 0;
+}
+.release-notes > :last-child {
+	margin-bottom: 0;
+}
+.release-notes h2 {
+	margin: 0 0 1.1rem;
+	color: var(--ink);
+	font-family: var(--font-display), sans-serif;
+	font-size: 1.65rem;
+	font-variation-settings: 'wght' 640;
+	letter-spacing: -0.015em;
+	line-height: 1.2;
+}
+.release-notes h3 {
+	margin: 1.6rem 0 0.55rem;
+	color: var(--ink);
+	font-family: var(--font-mono), monospace;
+	font-size: 0.72rem;
+	font-weight: 500;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+.release-notes p,
+.release-notes ul,
+.release-notes ol {
+	margin: 0.7rem 0;
+}
+.release-notes ul,
+.release-notes ol {
+	padding-inline-start: 1.25rem;
+}
+.release-notes li {
+	margin: 0.35rem 0;
+	padding-inline-start: 0.2rem;
+}
+.release-notes code {
+	border: 1px solid var(--rule);
+	border-radius: 2px;
+	background: var(--paper-raised);
+	color: var(--ink);
+	padding: 0.08rem 0.28rem;
+	font-family: var(--font-mono), monospace;
+	font-size: 0.85em;
+}
+
 /* ── resource list ──────────────────────────────────────────── */
 
 .resources {

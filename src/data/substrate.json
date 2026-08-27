@@ -1,9 +1,11 @@
 {
-	"syncedAt": "2026-08-26T09:10:38.930Z",
+	"syncedAt": "2026-08-27T13:31:54.545Z",
 	"source": {
 		"repo": "https://github.com/AuroraEnergyResearch/aurora-ui",
 		"package": "@aurora-ui/components-v2",
 		"version": "1.0.20",
+		"ref": "origin/release",
+		"sha": "87cdc51f3e7c3ea9816ad1641fab4334309cf21e",
 		"registry": "https://aer-shared-services-730335338013.d.codeartifact.eu-west-2.amazonaws.com/npm/aer-software-development-managed-repository/"
 	},
 	"primitives": [
@@ -597,24 +599,6 @@
 	},
 	"history": [
 		{
-			"hash": "d372ed7f17",
-			"date": "2026-08-24T16:28:17+01:00",
-			"subject": "fix(DS-59): preserve app fonts across cascade layers",
-			"type": "fix",
-			"scope": "DS-59",
-			"breaking": false,
-			"summary": "preserve app fonts across cascade layers"
-		},
-		{
-			"hash": "e53b87f742",
-			"date": "2026-08-24T15:12:26+01:00",
-			"subject": "fix(DS-59): establish CSS cascade layer contract for design system borders",
-			"type": "fix",
-			"scope": "DS-59",
-			"breaking": false,
-			"summary": "establish CSS cascade layer contract for design system borders"
-		},
-		{
 			"hash": "e9746dc64d",
 			"date": "2026-08-21T09:53:44+01:00",
 			"subject": "fix(ds-59): fix modal separator border colour and button ordering",
@@ -1135,6 +1119,24 @@
 			"scope": null,
 			"breaking": false,
 			"summary": " [EOS-3540] Clean up design tokens - Part 2 (#6676)"
+		},
+		{
+			"hash": "d97f69c22c",
+			"date": "2026-07-07T11:09:28+01:00",
+			"subject": "[EOS-3540] Clean up design tokens - part 1 (#6675)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[EOS-3540] Clean up design tokens - part 1 (#6675)"
+		},
+		{
+			"hash": "05ea01cae6",
+			"date": "2026-07-06T10:34:37+01:00",
+			"subject": "[FLE-603][CI] Bumping Playwright version to `1.61.1` (#6665)",
+			"type": null,
+			"scope": null,
+			"breaking": false,
+			"summary": "[FLE-603][CI] Bumping Playwright version to `1.61.1` (#6665)"
 		}
 	],
 	"counts": {

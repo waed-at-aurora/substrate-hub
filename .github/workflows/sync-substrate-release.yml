@@ -1,0 +1,111 @@
+name: Sync published Substrate release
+
+on:
+  repository_dispatch:
+    types: [substrate-released]
+  workflow_dispatch:
+    inputs:
+      source_tag:
+        description: Published components-v2 tag, for example packages/components-v2/1.2.3
+        required: true
+        type: string
+
+concurrency:
+  group: sync-substrate-release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    name: Regenerate hub and release notes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Substrate Hub
+        uses: actions/checkout@v4
+        with:
+          path: substrate-hub
+
+      - name: Resolve source release
+        id: source
+        shell: bash
+        env:
+          SOURCE_TAG: ${{ github.event.client_payload.tag || inputs.source_tag }}
+          SOURCE_VERSION: ${{ github.event.client_payload.version }}
+        run: |
+          set -euo pipefail
+          if [[ "$SOURCE_TAG" != packages/components-v2/* ]]; then
+            echo "Expected a packages/components-v2/* release tag, received: $SOURCE_TAG" >&2
+            exit 1
+          fi
+          version="${SOURCE_VERSION:-${SOURCE_TAG#packages/components-v2/}}"
+          echo "tag=$SOURCE_TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Check out the published design system
+        uses: actions/checkout@v4
+        with:
+          repository: AuroraEnergyResearch/aurora-ui
+          ref: ${{ steps.source.outputs.tag }}
+          token: ${{ secrets.AURORA_UI_TOKEN }}
+          fetch-depth: 0
+          path: aurora-ui
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: substrate-hub/package-lock.json
+
+      - name: Install dependencies
+        working-directory: substrate-hub
+        run: npm ci
+
+      - name: Regenerate design-system data
+        working-directory: substrate-hub
+        env:
+          AURORA_UI_WORKTREE: ../aurora-ui
+          AURORA_UI_EXPECTED_REF: ${{ steps.source.outputs.tag }}
+          SUBSTRATE_VERSION: ${{ steps.source.outputs.version }}
+        run: npm run sync
+
+      - name: Import published release notes
+        working-directory: substrate-hub
+        env:
+          AURORA_UI_TOKEN: ${{ secrets.AURORA_UI_TOKEN }}
+          SUBSTRATE_RELEASE_TAG: ${{ steps.source.outputs.tag }}
+        run: npm run sync:releases
+
+      - name: Build the static hub
+        working-directory: substrate-hub
+        env:
+          GITHUB_PAGES: 'true'
+        run: npm run build
+
+      - name: Open the verified update pull request
+        id: update
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.SUBSTRATE_HUB_AUTOMATION_TOKEN }}
+          path: substrate-hub
+          branch: automation/substrate-release
+          delete-branch: true
+          commit-message: "chore(substrate): sync v${{ steps.source.outputs.version }}"
+          title: "chore(substrate): sync v${{ steps.source.outputs.version }}"
+          body: |
+            Automated from `${{ steps.source.outputs.tag }}` after the design-system release succeeded.
+
+            Source PR: ${{ github.event.client_payload.pull_request.url || 'manual workflow run' }}
+          add-paths: |
+            src/data/substrate.json
+            src/data/releases.json
+
+      - name: Enable automatic merge
+        if: steps.update.outputs.pull-request-number != ''
+        working-directory: substrate-hub
+        env:
+          GH_TOKEN: ${{ secrets.SUBSTRATE_HUB_AUTOMATION_TOKEN }}
+        run: gh pr merge --auto --squash "${{ steps.update.outputs.pull-request-url }}"

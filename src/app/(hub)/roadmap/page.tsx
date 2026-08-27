@@ -31,11 +31,6 @@ const roadmap = {
 			note: 'Filtering & toolbars, model & time inputs, output visualisation, case management.',
 			kind: 'exploration' as const,
 		},
-		{
-			title: 'First published release with changelog',
-			note: 'Semantic-release is configured; versioned notes replace the source-history log.',
-			kind: 'exploration' as const,
-		},
 	],
 	later: [
 		{

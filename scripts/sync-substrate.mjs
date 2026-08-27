@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /**
  * Syncs Substrate Hub's data from the design system source of truth.
- * Reads ../aurora-ui (override with AURORA_UI_WORKTREE) and writes
- * src/data/substrate.json. Never invents entries: everything here is
- * derived from files and git history in the aurora-ui repo.
+ * Reads a clean origin/release checkout at ../aurora-ui (override the path
+ * with AURORA_UI_WORKTREE and the exact ref with AURORA_UI_EXPECTED_REF) and
+ * writes src/data/substrate.json. Never invents entries: everything here is
+ * derived from release files and release git history in the aurora-ui repo.
  */
 import { execFileSync } from 'node:child_process';
 import { readdirSync, readFileSync, statSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
@@ -14,9 +15,32 @@ const here = dirname(fileURLToPath(import.meta.url));
 const AURORA = process.env.AURORA_UI_WORKTREE ?? join(here, '..', '..', 'aurora-ui');
 const DS = join(AURORA, 'packages', 'components-v2');
 const SB = join(AURORA, 'storybook-v2', 'src');
+const EXPECTED_REF = process.env.AURORA_UI_EXPECTED_REF ?? 'origin/release';
+const git = (args) => execFileSync('git', args, { cwd: AURORA, encoding: 'utf8' }).trim();
 
 if (!existsSync(DS)) {
 	console.error(`aurora-ui not found at ${AURORA}; set AURORA_UI_WORKTREE`);
+	process.exit(1);
+}
+
+let sourceSha;
+try {
+	const headSha = git(['rev-parse', 'HEAD']);
+	sourceSha = git(['rev-parse', `${EXPECTED_REF}^{commit}`]);
+	if (headSha !== sourceSha) {
+		console.error(
+			`aurora-ui HEAD ${headSha} does not match ${EXPECTED_REF} (${sourceSha}); sync from the exact release ref`,
+		);
+		process.exit(1);
+	}
+} catch {
+	console.error(`could not resolve ${EXPECTED_REF} in aurora-ui; fetch the release ref before syncing`);
+	process.exit(1);
+}
+
+const dirtySource = git(['status', '--porcelain', '--', 'packages/components-v2', 'storybook-v2']);
+if (dirtySource) {
+	console.error('aurora-ui has uncommitted design-system changes; sync only from a clean release checkout');
 	process.exit(1);
 }
 
@@ -123,7 +147,6 @@ const formsDocsPath = formsChapters.includes('Overview')
 		: null;
 
 /* ---- Releases / history from git ---- */
-const git = (args) => execFileSync('git', args, { cwd: AURORA, encoding: 'utf8' }).trim();
 const logRaw = git(['log', '-60', '--date=iso-strict', '--pretty=%h%x09%ad%x09%s', '--', 'packages/components-v2', 'storybook-v2']);
 const history = logRaw.split('\n').filter(Boolean).map((line) => {
 	const [hash, date, ...rest] = line.split('\t');
@@ -144,7 +167,14 @@ const pkg = JSON.parse(readFileSync(join(DS, 'package.json'), 'utf8'));
 
 const data = {
 	syncedAt: new Date().toISOString(),
-	source: { repo: 'https://github.com/AuroraEnergyResearch/aurora-ui', package: pkg.name, version: pkg.version, registry: pkg.publishConfig?.registry ?? null },
+	source: {
+		repo: 'https://github.com/AuroraEnergyResearch/aurora-ui',
+		package: pkg.name,
+		version: process.env.SUBSTRATE_VERSION ?? pkg.version,
+		ref: EXPECTED_REF,
+		sha: sourceSha,
+		registry: pkg.publishConfig?.registry ?? null,
+	},
 	primitives,
 	composites,
 	experimental,
