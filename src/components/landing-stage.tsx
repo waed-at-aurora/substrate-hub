@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import StarBurst from '@/components/star-burst';
-import { ExtArrow } from '@/components/marks';
 import { InstallLine } from '@/components/install-line';
 
 const WORD = 'Substrate'.split('');
@@ -46,60 +45,83 @@ export function LandingStage({
 
 		const autopilot = window.matchMedia('(hover: none)').matches;
 		const letters = Array.from(word.querySelectorAll<HTMLSpanElement>('.landing-l'));
-
-		// Pointer state, lerped each frame so the lamp trails like a real light.
-		let tx = window.innerWidth * 0.3;
-		let ty = window.innerHeight * 0.25;
+		const t0 = performance.now();
+		let width = root.clientWidth;
+		let height = root.clientHeight;
+		let tx = width * 0.3;
+		let ty = height * 0.25;
 		let lx = tx;
 		let ly = ty;
 		let idle = true;
 		let raf = 0;
-		let t0 = performance.now();
+		let lastReadout = '';
+		let letterMetrics: Array<{ element: HTMLSpanElement; x: number; y: number; weight: number }> = [];
 
-		const onMove = (e: PointerEvent) => {
+		const measure = () => {
+			const measuredWeights = new Map(letterMetrics.map(({ element, weight }) => [element, weight]));
+			const rootRect = root.getBoundingClientRect();
+			width = rootRect.width;
+			height = rootRect.height;
+			letterMetrics = letters.map((element) => {
+				const rect = element.getBoundingClientRect();
+				return {
+					element,
+					x: rect.left - rootRect.left + rect.width / 2,
+					y: rect.top - rootRect.top + rect.height / 2,
+					weight: measuredWeights.get(element) ?? BASE_WGHT,
+				};
+			});
+		};
+		measure();
+
+		const resizeObserver = new ResizeObserver(measure);
+		resizeObserver.observe(root);
+		resizeObserver.observe(word);
+
+		const onMove = (event: PointerEvent) => {
+			const rootRect = root.getBoundingClientRect();
 			idle = false;
-			tx = e.clientX;
-			ty = e.clientY;
+			tx = event.clientX - rootRect.left;
+			ty = event.clientY - rootRect.top;
 		};
-		root.addEventListener('pointermove', onMove);
+		root.addEventListener('pointermove', onMove, { passive: true });
 
-		let w = 0;
-		let h = 0;
-		const resize = () => {
-			w = root.clientWidth;
-			h = root.clientHeight;
-		};
-		resize();
-		window.addEventListener('resize', resize);
+		const frame = (time: number) => {
+			if (width < 1 || height < 1) {
+				raf = requestAnimationFrame(frame);
+				return;
+			}
 
-		const frame = (t: number) => {
 			// Autopilot on touch devices, and until the first real pointer move.
 			if (autopilot || idle) {
-				const s = (t - t0) / 1000;
-				tx = w * (0.5 + 0.34 * Math.sin(s * 0.21));
-				ty = h * (0.34 + 0.2 * Math.sin(s * 0.13 + 1.7));
+				const elapsed = (time - t0) / 1000;
+				tx = width * (0.5 + 0.34 * Math.sin(elapsed * 0.21));
+				ty = height * (0.34 + 0.2 * Math.sin(elapsed * 0.13 + 1.7));
 			}
 			lx += (tx - lx) * 0.07;
 			ly += (ty - ly) * 0.07;
 
-			root.style.setProperty('--lx', `${((lx / w) * 100).toFixed(2)}%`);
-			root.style.setProperty('--ly', `${((ly / h) * 100).toFixed(2)}%`);
-			root.style.setProperty('--pnx', ((lx / w) - 0.5).toFixed(3));
-			root.style.setProperty('--pny', ((ly / h) - 0.5).toFixed(3));
+			root.style.setProperty('--lx', `${((lx / width) * 100).toFixed(2)}%`);
+			root.style.setProperty('--ly', `${((ly / height) * 100).toFixed(2)}%`);
+			root.style.setProperty('--pnx', ((lx / width) - 0.5).toFixed(3));
+			root.style.setProperty('--pny', ((ly / height) - 0.5).toFixed(3));
 
-			// The light presses the letterforms: weight swells with proximity.
-			for (const el of letters) {
-				const r = el.getBoundingClientRect();
-				const dx = r.left + r.width / 2 - lx;
-				const dy = r.top + r.height / 2 - ly;
-				const d = Math.hypot(dx, dy);
-				const k = Math.max(0, 1 - d / SWELL_RADIUS);
-				const wght = Math.round(BASE_WGHT + (SWELL_WGHT - BASE_WGHT) * k * k);
-				el.style.fontVariationSettings = `'wght' ${wght}, 'opsz' 96`;
+			for (const metric of letterMetrics) {
+				const distance = Math.hypot(metric.x - lx, metric.y - ly);
+				const proximity = Math.max(0, 1 - distance / SWELL_RADIUS);
+				const weight = Math.round(BASE_WGHT + (SWELL_WGHT - BASE_WGHT) * proximity * proximity);
+				if (weight !== metric.weight) {
+					metric.element.style.fontVariationSettings = `'wght' ${weight}, 'opsz' 96`;
+					metric.weight = weight;
+				}
 			}
 
 			if (readout) {
-				readout.textContent = `${String(Math.round(lx)).padStart(4, '0')} · ${String(Math.round(ly)).padStart(4, '0')}`;
+				const nextReadout = `${String(Math.round(lx)).padStart(4, '0')} · ${String(Math.round(ly)).padStart(4, '0')}`;
+				if (nextReadout !== lastReadout) {
+					readout.textContent = nextReadout;
+					lastReadout = nextReadout;
+				}
 			}
 
 			raf = requestAnimationFrame(frame);
@@ -108,8 +130,8 @@ export function LandingStage({
 
 		return () => {
 			cancelAnimationFrame(raf);
+			resizeObserver.disconnect();
 			root.removeEventListener('pointermove', onMove);
-			window.removeEventListener('resize', resize);
 		};
 	}, []);
 
