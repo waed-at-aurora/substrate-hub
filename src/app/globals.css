@@ -1228,6 +1228,23 @@ button {
 	background: var(--ink);
 }
 
+@media (min-width: 52.0625rem) and (prefers-reduced-motion: no-preference) {
+	.foundation-model {
+		position: absolute;
+		inset: 0;
+		grid-column: auto;
+		grid-row: auto;
+		width: auto;
+		height: auto;
+		min-height: 0;
+		align-self: stretch;
+		justify-self: stretch;
+	}
+	.foundation-stages {
+		background: var(--paper);
+	}
+}
+
 @media (max-width: 64rem) {
 	.foundation-copy {
 		grid-column: 1 / span 6;

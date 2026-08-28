@@ -13,6 +13,7 @@ const LAYER_PROGRESS = [0.14, 0.34, 0.54, 0.74] as const;
 const SCROLL_SYNC_SMOOTHNESS = 0.35;
 const EXIT_DURATION = 820;
 const EXIT_NAVIGATION_DELAY = EXIT_DURATION + 220;
+const DESKTOP_PYRAMID_VIEW_OFFSET = 0.18;
 
 const LAYERS = [
 	{
@@ -295,12 +296,20 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					renderer.render(scene, camera);
 				};
 
+				const desktopPyramidComposition = window.matchMedia(
+					'(min-width: 52.0625rem) and (prefers-reduced-motion: no-preference)',
+				);
+
 				const resize = () => {
 					const width = Math.max(1, model.clientWidth);
 					const height = Math.max(1, model.clientHeight);
 					renderer.setSize(width, height, false);
-					camera.aspect = width / height;
-					camera.updateProjectionMatrix();
+					if (desktopPyramidComposition.matches) {
+						camera.setViewOffset(width, height, -width * DESKTOP_PYRAMID_VIEW_OFFSET, 0, width, height);
+					} else {
+						camera.aspect = width / height;
+						camera.clearViewOffset();
+					}
 					render();
 				};
 				const resizeObserver = new ResizeObserver(resize);
