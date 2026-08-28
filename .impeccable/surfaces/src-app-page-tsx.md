@@ -18,7 +18,9 @@ Hero (user-pinned requirements): self-contained stage framed by rules; SUBSTRATE
 
 Memorable moment: the stage itself, plus FIG. 2 — the live InvestmentCaseSelectionCard playground (active state by default) rendering the real installed package with a cyan recalc tick per option change.
 
-Content order below the stage (user-pinned earlier): system pyramid → quick start → coverage → what's happening → resources; all data synced from the real aurora-ui repo (`npm run sync`).
+Landing continuation (user-redesigned 2026-08-28): a full-viewport sticky Three.js tour presents a LEGO pyramid from Tokens → Primitives → Composites → Products. Anime.js Scroll Observer and its Three adapter spin the model, zoom into each tier, reveal one concise explanation, zoom back out, then advance. Pointer orbit, raycast tier selection, keyboard/touch layer controls, live counts, and a final “Ready to explore Substrate?” overview action complete the interaction. Reduced motion becomes a static document with the full pyramid, all explanations, and the same action.
+
+Hub overview order after the landing route: system pyramid → quick start → coverage → what's happening → resources; all data synced from the real aurora-ui repo (`npm run sync`).
 
 Constraints: DS components used directly (html.dark drives their real dark theme); never duplicate Storybook API docs; provisional values stay visibly marked (README replacement list).
 

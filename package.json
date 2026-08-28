@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev -p 4400",
+		"dev": "node scripts/dev.mjs",
 		"build": "next build",
 		"start": "next start -p 4400",
 		"sync": "node scripts/sync-substrate.mjs",
@@ -18,12 +18,14 @@
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"react-i18next": "^15.4.0",
-		"react-markdown": "^10.1.0"
+		"react-markdown": "^10.1.0",
+		"three": "^0.185.1"
 	},
 	"devDependencies": {
 		"@types/node": "^22.10.0",
 		"@types/react": "^19.0.0",
 		"@types/react-dom": "^19.0.0",
+		"@types/three": "^0.185.4",
 		"playwright-core": "^1.62.1",
 		"typescript": "^5.7.0"
 	},
