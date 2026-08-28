@@ -2334,6 +2334,15 @@ input[data-slot='input'],
 	gap: 1rem;
 	width: min(28rem, 100%);
 }
+.gallery-range-control {
+	width: 100%;
+	padding: 0.65rem 0;
+	cursor: ew-resize;
+	touch-action: none;
+}
+.gallery-range-control [data-slot='slider'] {
+	width: 100%;
+}
 .gallery-range > div:first-child,
 .gallery-range-scale {
 	display: flex;

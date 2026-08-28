@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, type ReactNode } from 'react';
+import { useMemo, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import {
 	Accordion,
 	AccordionContent,
@@ -95,23 +95,46 @@ function GalleryTabPanel({
 function SliderPreview() {
 	const [confidence, setConfidence] = useState(72);
 
+	const updateFromPointer = (event: ReactPointerEvent<HTMLDivElement>) => {
+		const bounds = event.currentTarget.getBoundingClientRect();
+		const percentage = ((event.clientX - bounds.left) / bounds.width) * 100;
+		setConfidence(Math.round(Math.min(100, Math.max(0, percentage))));
+	};
+
 	return (
 		<div className="gallery-range">
 			<div>
 				<span>Confidence</span>
 				<strong aria-live="polite">{confidence}%</strong>
 			</div>
-			<Slider
-				value={[confidence]}
-				max={100}
-				step={1}
-				aria-label="Confidence"
-				aria-valuetext={`${confidence}% confidence`}
-				onValueChange={(nextValue: number[]) => {
-					const nextConfidence = nextValue[0];
-					if (typeof nextConfidence === 'number') setConfidence(nextConfidence);
+			<div
+				className="gallery-range-control"
+				onPointerDown={(event) => {
+					event.currentTarget.setPointerCapture(event.pointerId);
+					updateFromPointer(event);
 				}}
-			/>
+				onPointerMove={(event) => {
+					if (event.currentTarget.hasPointerCapture(event.pointerId)) updateFromPointer(event);
+				}}
+				onPointerUp={(event) => {
+					updateFromPointer(event);
+					if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+						event.currentTarget.releasePointerCapture(event.pointerId);
+					}
+				}}
+			>
+				<Slider
+					value={[confidence]}
+					max={100}
+					step={1}
+					aria-label="Confidence"
+					aria-valuetext={`${confidence}% confidence`}
+					onValueChange={(nextValue: number[]) => {
+						const nextConfidence = nextValue[0];
+						if (typeof nextConfidence === 'number') setConfidence(nextConfidence);
+					}}
+				/>
+			</div>
 			<div className="gallery-range-scale">
 				<span>Conservative</span>
 				<span>Aggressive</span>
