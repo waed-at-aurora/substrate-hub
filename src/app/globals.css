@@ -945,6 +945,12 @@ button {
 	max-width: 37ch;
 	color: var(--ink-2);
 	font-size: 0.96rem;
+	transition: opacity 220ms var(--ease-out), transform 320ms var(--ease-out);
+}
+
+.foundation-scroll[data-inspecting='true'] .foundation-copy > p:last-child {
+	opacity: 0;
+	transform: translate3d(0, -0.35rem, 0);
 }
 
 .foundation-model {
@@ -1269,6 +1275,17 @@ button {
 	.foundation-narrative,
 	.foundation-stages {
 		grid-column: 1 / span 6;
+	}
+}
+
+@media (min-width: 52.0625rem) and (max-width: 72rem), (min-width: 52.0625rem) and (max-height: 56rem) {
+	.foundation-copy {
+		grid-column: 1 / -1;
+	}
+	.foundation-copy h2 {
+		max-width: none;
+		white-space: nowrap;
+		font-size: clamp(2.35rem, 4.4vw, 3.2rem);
 	}
 }
 
