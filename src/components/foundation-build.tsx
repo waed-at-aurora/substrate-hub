@@ -72,6 +72,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 	const readoutRef = useRef<HTMLSpanElement | null>(null);
 	const reducedRef = useRef(false);
 	const [activeStage, setActiveStage] = useState(-1);
+	const [isInspecting, setIsInspecting] = useState(false);
 	const [threeReady, setThreeReady] = useState(false);
 
 	const jumpTo = (index: number) => {
@@ -222,6 +223,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				let focusedLayer = -1;
 				let focusMix = 0;
 				let lastReportedStage = -2;
+				let lastReportedInspecting = false;
 				const raycaster = new THREE.Raycaster();
 				const pointer = new THREE.Vector2();
 
@@ -267,6 +269,12 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					setActiveStage(nextStage);
 				};
 
+				const reportInspecting = (nextInspecting: boolean) => {
+					if (nextInspecting === lastReportedInspecting) return;
+					lastReportedInspecting = nextInspecting;
+					setIsInspecting(nextInspecting);
+				};
+
 				const focusState = { value: 0 };
 				const timeline = anime.createTimeline({
 					autoplay: anime.onScroll({
@@ -287,6 +295,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						focusedLayer = nextStage >= 0 && nextStage < 4 ? nextStage : -1;
 						focusMix = Number(focusState.value);
 						reportStage(nextStage);
+						reportInspecting(time >= INTRO_DURATION && time < FINAL_START);
 
 						const ending = clamp01((time - FINAL_START) / 850);
 						root.style.setProperty('--build-progress', `${Math.round(progress * 100)}%`);
@@ -373,6 +382,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					root.style.setProperty('--ending-progress', '1');
 					if (readoutRef.current) readoutRef.current.textContent = '100';
 					reportStage(4);
+					reportInspecting(false);
 				}
 
 				root.dataset.renderState = 'ready';
@@ -416,7 +426,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 			ref={rootRef}
 			aria-labelledby="foundation-title"
 			data-ending={activeStage === 4}
-			data-inspecting={activeStage >= 0 && activeStage < 4}
+			data-inspecting={isInspecting}
 			data-three-ready={threeReady}
 		>
 			<div className="foundation-sticky">
