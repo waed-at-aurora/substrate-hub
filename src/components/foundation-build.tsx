@@ -9,6 +9,7 @@ const FOCUS_DURATION = 1800;
 const FINAL_START = INTRO_DURATION + CHAPTER_DURATION * 4;
 const FINAL_DURATION = 1900;
 const LAYER_PROGRESS = [0.14, 0.34, 0.54, 0.74] as const;
+const SCROLL_SYNC_SMOOTHNESS = 0.35;
 
 const LAYERS = [
 	{
@@ -272,7 +273,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						target: root,
 						enter: 'top top',
 						leave: 'bottom bottom',
-						sync: true,
+						sync: SCROLL_SYNC_SMOOTHNESS,
 					}),
 					onUpdate: (self) => {
 						const time = self.currentTime;
