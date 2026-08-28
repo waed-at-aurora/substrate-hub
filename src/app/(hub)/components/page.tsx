@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Catalog } from '@/components/islands';
-import { Exhibit } from '@/components/exhibit';
-import { StatusMark } from '@/components/marks';
+import { site } from '@/config/site';
 import { catalog, data } from '@/lib/data';
 
 export const metadata: Metadata = { title: 'Components' };
@@ -10,46 +9,34 @@ export const metadata: Metadata = { title: 'Components' };
 export default function Components() {
 	return (
 		<>
-			<div className="cover" style={{ paddingBottom: '1.6rem' }}>
+			<div className="cover components-cover">
 				<p className="cover-issue">
 					<span>03 · Components</span>
 					<span>
 						{data.counts.composites} composites · {data.counts.primitives} primitives
 					</span>
 				</p>
-				<h1 style={{ fontSize: 'clamp(2rem, 3.6vw, 3.2rem)' }}>Find it, import it, move on.</h1>
+				<h1>See the system at work.</h1>
 				<p className="cover-standfirst">
-					The full index of what Substrate ships, straight from the package source. Detailed API
-					documentation stays in Storybook — each row links to the exact page. Composites are the
-					layer Substrate exists for; related patterns live in{' '}
+					Browse live components instead of reading an inventory. Every specimen below renders from the
+					package, keeps its real states and interactions, and opens directly into Storybook when you need
+					the full API. For guidance on combining them, continue to{' '}
 					<Link href="/patterns">patterns → 04</Link>.
 				</p>
+				<div className="cover-actions">
+					<a className="action action-primary" href={site.storybookUrl.value} target="_blank" rel="noreferrer">
+						Open Storybook
+					</a>
+				</div>
 			</div>
 
-			<Exhibit
-				label={`Table 1 — component index · synced from source`}
-				meta={
-					<span style={{ display: 'inline-flex', gap: '1.1rem' }}>
-						<span className="status">
-							<StatusMark status="stable" /> stable
-						</span>
-						<span className="status">
-							<StatusMark status="proposed" /> proposed
-						</span>
-						<span className="status">
-							<StatusMark status="experimental" /> experimental
-						</span>
-					</span>
-				}
-				id="index"
-			>
+			<section className="component-gallery-section" aria-label="Live component gallery">
 				<Catalog entries={catalog} />
-				<p className="note" style={{ marginTop: '1rem' }}>
-					All entries import from <code className="mono">@aurora-ui/components-v2</code>. The{' '}
-					{data.counts.experimental} experimental ux-intent explorations are excluded from this index
-					until they graduate; they ship only on the alpha channel.
+				<p className="note component-gallery-note">
+					This working gallery presents a representative cross-section of Substrate. Storybook remains the
+					complete source for every component, state, and accessibility contract.
 				</p>
-			</Exhibit>
+			</section>
 		</>
 	);
 }

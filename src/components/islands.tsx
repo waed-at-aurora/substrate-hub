@@ -33,7 +33,7 @@ export const Playground = dynamic(() => import('./playground').then((m) => m.Pla
 
 export const Catalog = dynamic(() => import('./catalog').then((m) => m.Catalog), {
 	ssr: false,
-	loading: () => <Loading minHeight="24rem" label="loading index…" />,
+	loading: () => <Loading minHeight="32rem" label="loading component gallery…" />,
 });
 
 export const Troubleshooting = dynamic(() => import('./troubleshooting').then((m) => m.Troubleshooting), {

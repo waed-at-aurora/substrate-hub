@@ -256,8 +256,13 @@ Near-square geometry: radii run 2px (actions, chips, copy buttons, filter groups
 ### Playground (signature component)
 - Two-panel bordered figure: render stage (min 23rem, faint 2.2rem two-axis gridline wash over Paper Raised, centered live DS component) beside a controls column on Paper driven by real DS `Select`/`Input`/`Checkbox`. A mono readout bar states provenance ("rendered from @aurora-ui/components-v2 · dist") and stamps `recalc HH:MM:SS.mmm` in Live Cyan on every option change, flashing Live Bright. Below the controls, a generated import snippet mirrors the current props inside a washed code panel (6% Yellow into Paper, border 30% Yellow into Rule, 3px radius).
 
-### Filter group (catalog)
-- Segmented mono-uppercase buttons in one hairline-bordered strip; pressed state inverts Ink-on-Paper. Count readout (`n / total entries`) sits flush right in mono, `aria-live`.
+### Filter group (component gallery)
+- Search and segmented mono-uppercase layer controls sit in one opaque sticky ruled bar above the gallery; pressed filters invert Ink-on-Paper. The flush-right mono `aria-live` readout reports the number of visible live specimens rather than the package export total.
+
+### Component gallery
+- `/components` is a live, code-free specimen wall rather than a source table. Every displayed object renders from `@aurora-ui/components-v2`; labels and direct Storybook links sit in a separate ruled caption band so the components remain the visual subject.
+- The wall uses a dense 12-column drafting grid with deliberately mixed 4-, 6-, and 8-column specimens. A hero composite, wider interaction families, and compact primitives create varied pacing without equal-card repetition. At 64rem the wall becomes two columns with the hero full width; at 52rem every specimen becomes a single column.
+- Specimen stages use Paper Raised and the established drafting grid. The hub frames but does not visually rewrite package components. Search empty state offers one explicit gallery reset; no source rows or code snippets appear.
 
 ### Pyramid (signature figure)
 - Inline SVG report exhibit drawn entirely in the token palette via `var(--…)`: hollow-dashed top layer (products), a yellow-washed Substrate layer (fill 22% Yellow into Paper, Yellow stroke and title, Ink-2 sublines — the "active layer is yellow" reading, user-accepted 2026-08-26), Surface base, with the mono dimension callout ("THIS SYSTEM") in drafting style tinted yellow (lines 55%, text 70% Yellow mixes).
