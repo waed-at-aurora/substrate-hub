@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { type MouseEvent, useEffect, useRef, useState } from 'react';
 
 const INTRO_DURATION = 800;
 const CHAPTER_DURATION = 2000;
@@ -10,6 +11,8 @@ const FINAL_START = INTRO_DURATION + CHAPTER_DURATION * 4;
 const FINAL_DURATION = 1900;
 const LAYER_PROGRESS = [0.14, 0.34, 0.54, 0.74] as const;
 const SCROLL_SYNC_SMOOTHNESS = 0.35;
+const EXIT_DURATION = 820;
+const EXIT_NAVIGATION_DELAY = EXIT_DURATION + 220;
 
 const LAYERS = [
 	{
@@ -61,19 +64,57 @@ const LAYER_SPECS = [
 	{ size: 1, y: 0.9, color: '#ffcc00', stud: '#ffd633' },
 ] as const;
 
+const EXIT_DIRECTIONS = [
+	{ x: -8, y: -5, z: -1, rotateX: -28, rotateZ: 24 },
+	{ x: 8, y: -3, z: 0.5, rotateX: 22, rotateZ: -32 },
+	{ x: -7, y: 6, z: -1.5, rotateX: -20, rotateZ: -40 },
+	{ x: 7, y: 7, z: 1, rotateX: 38, rotateZ: 48 },
+] as const;
+
 function clamp01(value: number) {
 	return Math.max(0, Math.min(1, value));
 }
 
 export function FoundationBuild({ primitives, composites }: { primitives: number; composites: number }) {
+	const router = useRouter();
 	const rootRef = useRef<HTMLElement | null>(null);
 	const modelRef = useRef<HTMLDivElement | null>(null);
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const readoutRef = useRef<HTMLSpanElement | null>(null);
+	const playExitRef = useRef<(() => void) | null>(null);
+	const exitNavigationTimerRef = useRef<number | null>(null);
+	const exitingRef = useRef(false);
 	const reducedRef = useRef(false);
 	const [activeStage, setActiveStage] = useState(-1);
 	const [isInspecting, setIsInspecting] = useState(false);
+	const [isExiting, setIsExiting] = useState(false);
 	const [threeReady, setThreeReady] = useState(false);
+
+	const exitToOverview = (event: MouseEvent<HTMLAnchorElement>) => {
+		if (
+			event.defaultPrevented ||
+			event.button !== 0 ||
+			event.metaKey ||
+			event.ctrlKey ||
+			event.shiftKey ||
+			event.altKey
+		) {
+			return;
+		}
+
+		const playExit = playExitRef.current;
+		if (reducedRef.current || !playExit) return;
+
+		event.preventDefault();
+		if (exitingRef.current) return;
+		exitingRef.current = true;
+		setIsExiting(true);
+		playExit();
+		exitNavigationTimerRef.current = window.setTimeout(() => {
+			exitNavigationTimerRef.current = null;
+			router.push('/overview');
+		}, EXIT_NAVIGATION_DELAY);
+	};
 
 	const jumpTo = (index: number) => {
 		const root = rootRef.current;
@@ -94,6 +135,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 
 		let cancelled = false;
 		let dispose = () => {};
+		let cancelExit = () => {};
 
 		const setup = async () => {
 			root.dataset.renderState = 'loading';
@@ -222,6 +264,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				let hoveredLayer = -1;
 				let focusedLayer = -1;
 				let focusMix = 0;
+				let exitingScene = false;
 				let lastReportedStage = -2;
 				let lastReportedInspecting = false;
 				const raycaster = new THREE.Raycaster();
@@ -248,7 +291,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					pyramid.rotation.x = pointerY * 0.055;
 					pyramid.rotation.y = pointerX * 0.1;
 					camera.lookAt(lookTarget.position);
-					updateMaterials();
+					if (!exitingScene) updateMaterials();
 					renderer.render(scene, camera);
 				};
 
@@ -333,6 +376,40 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					.add(lookTarget, { y: 0.35, duration: 900, ease: 'inOut(3)' }, FINAL_START)
 					.add(orbit, { rotateY: 555, duration: FINAL_DURATION - 900, ease: 'linear' }, FINAL_START + 900);
 
+				playExitRef.current = () => {
+					exitingScene = true;
+					timeline.pause();
+					hoveredLayer = -1;
+					focusedLayer = -1;
+					pointerX = 0;
+					pointerY = 0;
+
+					const exitTimeline = anime.createTimeline({
+						autoplay: false,
+						onUpdate: render,
+					});
+					EXIT_DIRECTIONS.forEach((direction, index) => {
+						exitTimeline.add(
+							layerGroups[index],
+							{
+								...direction,
+								scale: 1.08,
+								duration: EXIT_DURATION,
+								ease: 'in(3)',
+							},
+							0,
+						);
+					});
+					materials.forEach(({ block, stud }) => {
+						exitTimeline
+							.add(block, { opacity: 0, duration: 220, ease: 'linear' }, EXIT_DURATION - 220)
+							.add(stud, { opacity: 0, duration: 220, ease: 'linear' }, EXIT_DURATION - 220);
+					});
+					exitTimeline.add(gridMaterial, { opacity: 0, duration: 300, ease: 'linear' }, EXIT_DURATION - 300);
+					cancelExit = () => exitTimeline.cancel();
+					exitTimeline.play();
+				};
+
 				const onPointerMove = (event: globalThis.PointerEvent) => {
 					const bounds = canvas.getBoundingClientRect();
 					pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
@@ -390,6 +467,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				resize();
 
 				dispose = () => {
+					playExitRef.current = null;
+					cancelExit();
 					if (!timelineReverted) timeline.revert();
 					resizeObserver.disconnect();
 					canvas.removeEventListener('pointermove', onPointerMove);
@@ -415,6 +494,10 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 
 		void setup();
 		return () => {
+			if (exitNavigationTimerRef.current !== null) {
+				window.clearTimeout(exitNavigationTimerRef.current);
+				exitNavigationTimerRef.current = null;
+			}
 			cancelled = true;
 			dispose();
 		};
@@ -427,6 +510,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 			aria-labelledby="foundation-title"
 			data-ending={activeStage === 4}
 			data-inspecting={isInspecting}
+			data-exiting={isExiting}
+			aria-busy={isExiting}
 			data-three-ready={threeReady}
 		>
 			<div className="foundation-sticky">
@@ -481,7 +566,13 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					<p className="foundation-caption">Construction complete</p>
 					<h2>Ready to explore Substrate?</h2>
 					<p>The system is assembled. See how it fits, install it, and build with the real components.</p>
-					<Link className="action action-primary" href="/overview" tabIndex={activeStage === 4 || reducedRef.current ? 0 : -1}>
+					<Link
+						className="action action-primary"
+						href="/overview"
+						onClick={exitToOverview}
+						aria-disabled={isExiting || undefined}
+						tabIndex={isExiting ? -1 : activeStage === 4 || reducedRef.current ? 0 : -1}
+					>
 						Open the overview
 					</Link>
 				</div>

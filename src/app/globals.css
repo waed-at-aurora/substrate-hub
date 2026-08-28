@@ -853,6 +853,40 @@ button {
 		var(--paper);
 }
 
+.foundation-sticky::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	background: #000;
+	opacity: 0;
+	transition: opacity 720ms linear;
+}
+
+.foundation-scroll[data-exiting='true'] .foundation-sticky {
+	pointer-events: none;
+}
+
+.foundation-scroll[data-exiting='true'] .foundation-sticky::after {
+	opacity: 1;
+	will-change: opacity;
+}
+
+.foundation-scroll[data-exiting='true']
+	:is(
+		.foundation-copy,
+		.foundation-narrative,
+		.foundation-stages,
+		.foundation-ending,
+		.foundation-progress,
+		.foundation-inspect-hint
+	) {
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 180ms linear;
+}
+
 .foundation-copy {
 	position: relative;
 	z-index: 4;
