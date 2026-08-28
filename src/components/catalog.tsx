@@ -31,7 +31,6 @@ import {
 	RadioGroup,
 	RadioGroupItem,
 	Slider,
-	Spinner,
 	Switch,
 	Tabs,
 	TabsContent,
@@ -62,7 +61,6 @@ const FEATURED = [
 	{ name: 'Accordion', size: 'wide' },
 	{ name: 'Textarea', size: 'standard' },
 	{ name: 'ToggleGroup', size: 'standard' },
-	{ name: 'Spinner', size: 'standard' },
 ] as const;
 
 function CaseMark() {
@@ -233,13 +231,6 @@ function ComponentPreview({ name }: { name: string }) {
 					<ToggleGroupItem value="quarterly">Quarterly</ToggleGroupItem>
 					<ToggleGroupItem value="annual">Annual</ToggleGroupItem>
 				</ToggleGroup>
-			);
-		case 'Spinner':
-			return (
-				<div className="gallery-spinner-row">
-					<Spinner />
-					<span>Recalculating scenario</span>
-				</div>
 			);
 		default:
 			return null;

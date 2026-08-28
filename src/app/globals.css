@@ -2287,14 +2287,12 @@ input[data-slot='input'],
 .gallery-range > div:first-child strong {
 	font-variant-numeric: tabular-nums;
 }
-.gallery-avatar-row,
-.gallery-spinner-row {
+.gallery-avatar-row {
 	display: flex;
 	align-items: center;
 	gap: 1rem;
 }
-.gallery-avatar-row > span,
-.gallery-spinner-row > span {
+.gallery-avatar-row > span {
 	color: var(--ink-2);
 	font-size: 0.84rem;
 }
