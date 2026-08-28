@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import type { JSAnimation } from 'animejs';
 import { useRouter } from 'next/navigation';
 import { type MouseEvent, useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
@@ -10,7 +11,6 @@ const CHAPTER_DURATION = 2000;
 const FOCUS_DURATION = 1800;
 const FINAL_START = INTRO_DURATION + CHAPTER_DURATION * 4;
 const FINAL_DURATION = 1900;
-const LAYER_PROGRESS = [0.14, 0.34, 0.54, 0.74] as const;
 const SCROLL_SYNC_SMOOTHNESS = 0.35;
 const EXIT_DISASSEMBLY_DELAY = 120;
 const EXIT_DURATION = 1100;
@@ -147,6 +147,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 	const readoutRef = useRef<HTMLSpanElement | null>(null);
 	const exitTransitionRef = useRef<ExitTransitionController | null>(null);
 	const exitNavigationTimerRef = useRef<number | null>(null);
+	const layerSelectionRef = useRef<((index: number) => void) | null>(null);
 	const exitingRef = useRef(false);
 	const reducedRef = useRef(false);
 	const [activeStage, setActiveStage] = useState(-1);
@@ -181,15 +182,18 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 		}, EXIT_NAVIGATION_DELAY);
 	};
 
-	const jumpTo = (index: number) => {
-		const root = rootRef.current;
-		if (!root) return;
+	const selectLayer = (index: number) => {
 		if (reducedRef.current) {
 			document.getElementById(`foundation-layer-${LAYERS[index].key}`)?.scrollIntoView({ block: 'center' });
 			return;
 		}
-		const distance = Math.max(0, root.offsetHeight - window.innerHeight);
-		window.scrollTo({ top: root.offsetTop + distance * LAYER_PROGRESS[index], behavior: 'smooth' });
+		const select = layerSelectionRef.current;
+		if (select) {
+			select(index);
+			return;
+		}
+		setActiveStage(index);
+		setIsInspecting(true);
 	};
 
 	useEffect(() => {
@@ -231,8 +235,10 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				scene.add(lookTarget);
 
 				const orbit = new THREE.Group();
+				const selectionPivot = new THREE.Group();
 				const pyramid = new THREE.Group();
-				orbit.add(pyramid);
+				selectionPivot.add(pyramid);
+				orbit.add(selectionPivot);
 				scene.add(orbit);
 				orbit.rotation.y = THREE.MathUtils.degToRad(-25);
 
@@ -363,6 +369,9 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				let hoveredLayer = -1;
 				let focusedLayer = -1;
 				let focusMix = 0;
+				let manuallySelectedLayer = -1;
+				let manualSelectionScrollY = 0;
+				let selectionTurn: JSAnimation | null = null;
 				let exitingScene = false;
 				let preservedExitProjection: ExitProjection | null = null;
 				let lastReportedStage = -2;
@@ -440,6 +449,24 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					setIsInspecting(nextInspecting);
 				};
 
+				layerSelectionRef.current = (index) => {
+					manuallySelectedLayer = index;
+					manualSelectionScrollY = window.scrollY;
+					focusedLayer = index;
+					focusMix = 1;
+					reportStage(index);
+					reportInspecting(true);
+					root.style.setProperty('--focus-opacity', '1');
+					selectionTurn?.cancel();
+					selectionTurn = anime.animate(selectionPivot, {
+						rotateY: (index - (LAYERS.length - 1) / 2) * 3,
+						duration: 420,
+						ease: 'out(3)',
+						onUpdate: render,
+					});
+					render();
+				};
+
 				const focusState = { value: 0 };
 				const timeline = anime.createTimeline({
 					autoplay: anime.onScroll({
@@ -451,16 +478,21 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					onUpdate: (self) => {
 						const time = self.currentTime;
 						const progress = clamp01(time / self.duration);
-						let nextStage = -1;
-						for (let index = 0; index < LAYERS.length; index += 1) {
-							const start = INTRO_DURATION + index * CHAPTER_DURATION;
-							if (time >= start && time < start + FOCUS_DURATION) nextStage = index;
+						let nextStage = manuallySelectedLayer;
+						if (nextStage < 0) {
+							for (let index = 0; index < LAYERS.length; index += 1) {
+								const start = INTRO_DURATION + index * CHAPTER_DURATION;
+								if (time >= start && time < start + FOCUS_DURATION) nextStage = index;
+							}
+							if (time >= FINAL_START) nextStage = 4;
+							focusMix = Number(focusState.value);
+							reportInspecting(time >= INTRO_DURATION && time < FINAL_START);
+						} else {
+							focusMix = 1;
+							reportInspecting(true);
 						}
-						if (time >= FINAL_START) nextStage = 4;
 						focusedLayer = nextStage >= 0 && nextStage < 4 ? nextStage : -1;
-						focusMix = Number(focusState.value);
 						reportStage(nextStage);
-						reportInspecting(time >= INTRO_DURATION && time < FINAL_START);
 
 						const ending = clamp01((time - FINAL_START) / 850);
 						root.style.setProperty('--build-progress', `${Math.round(progress * 100)}%`);
@@ -587,7 +619,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					render();
 				};
 				const onPointerClick = () => {
-					if (hoveredLayer >= 0) jumpTo(hoveredLayer);
+					if (hoveredLayer >= 0) selectLayer(hoveredLayer);
 				};
 				const onContextLost = (event: Event) => {
 					event.preventDefault();
@@ -595,10 +627,24 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					setThreeReady(false);
 				};
 
+				const clearManualSelection = () => {
+					if (manuallySelectedLayer >= 0 && Math.abs(window.scrollY - manualSelectionScrollY) > 1) {
+						manuallySelectedLayer = -1;
+						selectionTurn?.cancel();
+						selectionTurn = anime.animate(selectionPivot, {
+							rotateY: 0,
+							duration: 240,
+							ease: 'out(3)',
+							onUpdate: render,
+						});
+					}
+				};
+
 				canvas.addEventListener('pointermove', onPointerMove, { passive: true });
 				canvas.addEventListener('pointerleave', onPointerLeave);
 				canvas.addEventListener('click', onPointerClick);
 				canvas.addEventListener('webglcontextlost', onContextLost);
+				window.addEventListener('scroll', clearManualSelection, { passive: true });
 
 				let timelineReverted = false;
 				const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -624,12 +670,14 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				dispose = () => {
 					exitTransitionRef.current = null;
 					cancelExit();
+					selectionTurn?.cancel();
 					if (!timelineReverted) timeline.revert();
 					resizeObserver.disconnect();
 					canvas.removeEventListener('pointermove', onPointerMove);
 					canvas.removeEventListener('pointerleave', onPointerLeave);
 					canvas.removeEventListener('click', onPointerClick);
 					canvas.removeEventListener('webglcontextlost', onContextLost);
+					window.removeEventListener('scroll', clearManualSelection);
 					blockGeometry.dispose();
 					studGeometry.dispose();
 					grid.geometry.dispose();
@@ -649,6 +697,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 
 		void setup();
 		return () => {
+			layerSelectionRef.current = null;
 			if (exitNavigationTimerRef.current !== null) {
 				window.clearTimeout(exitNavigationTimerRef.current);
 				exitNavigationTimerRef.current = null;
@@ -713,7 +762,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				<ol className="foundation-stages" aria-label="Inspect a system layer">
 					{LAYERS.map((layer, index) => (
 						<li key={layer.key}>
-							<button type="button" onClick={() => jumpTo(index)} aria-pressed={activeStage === index}>
+							<button type="button" onClick={() => selectLayer(index)} aria-pressed={activeStage === index}>
 								<span>{layer.number}</span>
 								{layer.name}
 							</button>
