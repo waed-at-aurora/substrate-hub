@@ -244,8 +244,11 @@ Near-square geometry: radii run 2px (actions, chips, copy buttons, filter groups
 ### Status marks
 - `Status` = 9px drawn mark + lowercase status word in mono 0.72rem Ink-2. Shapes per the Mark-Not-Tint Rule; color is inherited, never semantic.
 
-### Feed (updates/releases)
+### Feed (updates)
 - Hairline-separated grid rows: mono date (Muted) · type tag (mono, cyan when `feat`) · summary (first entry gets the yellow `new` signal) · mono hash link. Collapses to date + summary at 52rem.
+
+### Release notes
+- The releases page shows only the current and immediately previous versions. Both use the full imported Markdown release-note format with a direct GitHub release link; source-history and multi-release log feeds do not appear on this route.
 
 ### Provisional mark
 - Inline mono uppercase chip, Amber text, 1px dashed amber-mixed border, reading `provisional · <what>`. Every render corresponds to a TODO on the replacement list; it is honest signage, not decoration.
