@@ -72,6 +72,54 @@ function CaseMark() {
 	);
 }
 
+function GalleryTabPanel({
+	context,
+	value,
+	detail,
+}: {
+	context: string;
+	value: string;
+	detail: string;
+}) {
+	return (
+		<div className="gallery-tab-summary">
+			<span className="gallery-tab-context">{context}</span>
+			<div className="gallery-tab-value">
+				<strong>{value}</strong>
+				<span>{detail}</span>
+			</div>
+		</div>
+	);
+}
+
+function SliderPreview() {
+	const [confidence, setConfidence] = useState(72);
+
+	return (
+		<div className="gallery-range">
+			<div>
+				<span>Confidence</span>
+				<strong aria-live="polite">{confidence}%</strong>
+			</div>
+			<Slider
+				value={[confidence]}
+				max={100}
+				step={1}
+				aria-label="Confidence"
+				aria-valuetext={`${confidence}% confidence`}
+				onValueChange={(nextValue: number[]) => {
+					const nextConfidence = nextValue[0];
+					if (typeof nextConfidence === 'number') setConfidence(nextConfidence);
+				}}
+			/>
+			<div className="gallery-range-scale">
+				<span>Conservative</span>
+				<span>Aggressive</span>
+			</div>
+		</div>
+	);
+}
+
 function ComponentPreview({ name }: { name: string }) {
 	switch (name) {
 		case 'InvestmentCaseSelectionCard':
@@ -119,17 +167,20 @@ function ComponentPreview({ name }: { name: string }) {
 		case 'Tabs':
 			return (
 				<Tabs defaultValue="forecast" className="gallery-tabs">
-					<TabsList>
-						<TabsTrigger value="forecast">Forecast</TabsTrigger>
-						<TabsTrigger value="capacity">Capacity</TabsTrigger>
-						<TabsTrigger value="prices">Prices</TabsTrigger>
+					<TabsList variant="line" className="gallery-tabs-list">
+						<TabsTrigger value="forecast" className="gallery-tab-trigger">Forecast</TabsTrigger>
+						<TabsTrigger value="capacity" className="gallery-tab-trigger">Capacity</TabsTrigger>
+						<TabsTrigger value="prices" className="gallery-tab-trigger">Prices</TabsTrigger>
 					</TabsList>
-					<TabsContent value="forecast">
-						<p>Central case · annual profile</p>
-						<strong>68.4 TWh</strong>
+					<TabsContent value="forecast" className="gallery-tab-panel">
+						<GalleryTabPanel context="Central case · annual profile" value="68.4 TWh" detail="+4.2% from 2027" />
 					</TabsContent>
-					<TabsContent value="capacity">Installed capacity · 42.8 GW</TabsContent>
-					<TabsContent value="prices">Capture price · £62/MWh</TabsContent>
+					<TabsContent value="capacity" className="gallery-tab-panel">
+						<GalleryTabPanel context="Installed capacity · GB" value="42.8 GW" detail="+6.1 GW committed" />
+					</TabsContent>
+					<TabsContent value="prices" className="gallery-tab-panel">
+						<GalleryTabPanel context="Capture price · baseload" value="£62/MWh" detail="2030 real terms" />
+					</TabsContent>
 				</Tabs>
 			);
 		case 'Alert':
@@ -178,13 +229,7 @@ function ComponentPreview({ name }: { name: string }) {
 				</div>
 			);
 		case 'Slider':
-			return (
-				<div className="gallery-range">
-					<div><span>Confidence</span><strong>72%</strong></div>
-					<Slider defaultValue={[72]} max={100} step={1} aria-label="Confidence" />
-					<div className="gallery-range-scale"><span>Conservative</span><span>Aggressive</span></div>
-				</div>
-			);
+			return <SliderPreview />;
 		case 'Progress':
 			return (
 				<Progress value={68}>
