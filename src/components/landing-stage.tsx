@@ -47,7 +47,7 @@ export function LandingStage({
 		[],
 	);
 
-	const enterHub = (event: MouseEvent<HTMLAnchorElement>) => {
+	const openOverview = (event: MouseEvent<HTMLAnchorElement>) => {
 		if (
 			event.defaultPrevented ||
 			event.button !== 0 ||
@@ -219,8 +219,11 @@ export function LandingStage({
 						{primitives} primitives, one shared system with room to differ above it.
 					</p>
 					<div className="landing-actions">
-						<Link className="action action-primary" href="/overview" onClick={enterHub}>
-							Enter the hub
+						<Link className="action action-primary" href="/overview" onClick={openOverview}>
+							Open overview
+						</Link>
+						<Link className="action" href="/components">
+							Browse components
 						</Link>
 						<Link className="action" href="/get-started">
 							Install Substrate
