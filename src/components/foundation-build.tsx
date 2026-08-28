@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { type MouseEvent, useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 
 const INTRO_DURATION = 800;
 const CHAPTER_DURATION = 2000;
@@ -11,8 +12,11 @@ const FINAL_START = INTRO_DURATION + CHAPTER_DURATION * 4;
 const FINAL_DURATION = 1900;
 const LAYER_PROGRESS = [0.14, 0.34, 0.54, 0.74] as const;
 const SCROLL_SYNC_SMOOTHNESS = 0.35;
-const EXIT_DURATION = 820;
-const EXIT_NAVIGATION_DELAY = EXIT_DURATION + 220;
+const EXIT_DISASSEMBLY_DELAY = 120;
+const EXIT_DURATION = 1100;
+const EXIT_BRICK_FADE_DURATION = 320;
+const EXIT_GRID_FADE_DURATION = 420;
+const EXIT_NAVIGATION_DELAY = EXIT_DISASSEMBLY_DELAY + EXIT_DURATION + 220;
 const DESKTOP_PYRAMID_VIEW_OFFSET = 0.18;
 
 const LAYERS = [
@@ -30,7 +34,7 @@ const LAYERS = [
 		key: 'primitives',
 		number: '02',
 		name: 'Primitives',
-		statement: 'Reliable parts for every interface.',
+		statement: 'Shared components. Build once, reuse everywhere.',
 		detail: '',
 		cameraY: 0.85,
 		targetY: 0.08,
@@ -40,7 +44,7 @@ const LAYERS = [
 		key: 'composites',
 		number: '03',
 		name: 'Composites',
-		statement: 'Product workflows, already solved.',
+		statement: 'Complete components, ready to use.',
 		detail: '',
 		cameraY: 1.45,
 		targetY: 0.52,
@@ -50,8 +54,8 @@ const LAYERS = [
 		key: 'products',
 		number: '04',
 		name: 'Products',
-		statement: 'A shared base. Room to differ.',
-		detail: 'EOS experiences',
+		statement: 'One unified EOS experience across every product.',
+		detail: 'Chronos · Amun · Origin · Solaris · Lumus',
 		cameraY: 2.05,
 		targetY: 1.02,
 		cameraZ: 5.25,
@@ -65,15 +69,74 @@ const LAYER_SPECS = [
 	{ size: 1, y: 0.9, color: '#ffcc00', stud: '#ffd633' },
 ] as const;
 
-const EXIT_DIRECTIONS = [
-	{ x: -8, y: -5, z: -1, rotateX: -28, rotateZ: 24 },
-	{ x: 8, y: -3, z: 0.5, rotateX: 22, rotateZ: -32 },
-	{ x: -7, y: 6, z: -1.5, rotateX: -20, rotateZ: -40 },
-	{ x: 7, y: 7, z: 1, rotateX: 38, rotateZ: 48 },
+const STUD_OFFSETS = [
+	[-0.2, -0.2],
+	[0.2, -0.2],
+	[-0.2, 0.2],
+	[0.2, 0.2],
 ] as const;
+
+type BrickExitMotion = {
+	baseX: number;
+	baseZ: number;
+	travelX: number;
+	travelY: number;
+	travelZ: number;
+	spinX: number;
+	spinY: number;
+	spinZ: number;
+	delay: number;
+};
+
+type ExitProjection = {
+	screenLeft: number;
+	screenTop: number;
+	screenWidth: number;
+	screenHeight: number;
+	cameraFullWidth: number;
+	cameraFullHeight: number;
+	cameraOffsetX: number;
+	cameraOffsetY: number;
+	cameraViewWidth: number;
+	cameraViewHeight: number;
+};
+
+type ExitTransitionController = {
+	prepare: () => void;
+	play: () => void;
+};
+
+function seededUnit(seed: number) {
+	const value = Math.sin(seed * 12.9898) * 43758.5453;
+	return value - Math.floor(value);
+}
+
+function createBrickExitMotion(layerIndex: number, brickIndex: number, baseX: number, baseZ: number): BrickExitMotion {
+	const seed = (layerIndex + 1) * 101 + brickIndex * 17;
+	const distanceFromCenter = Math.hypot(baseX, baseZ);
+	const radialAngle = distanceFromCenter > 0.2 ? Math.atan2(baseZ, baseX) : seededUnit(seed) * Math.PI * 2;
+	const angle = radialAngle + (seededUnit(seed + 1) - 0.5) * 0.9;
+	const distance = 10 + seededUnit(seed + 2) * 7;
+
+	return {
+		baseX,
+		baseZ,
+		travelX: Math.cos(angle) * distance,
+		travelY: (seededUnit(seed + 3) - 0.45) * 16 + (layerIndex - 1.5) * 0.8,
+		travelZ: Math.sin(angle) * distance,
+		spinX: (seededUnit(seed + 4) - 0.5) * 8,
+		spinY: (seededUnit(seed + 5) - 0.5) * 10,
+		spinZ: (seededUnit(seed + 6) - 0.5) * 8,
+		delay: seededUnit(seed + 7) * 0.1,
+	};
+}
 
 function clamp01(value: number) {
 	return Math.max(0, Math.min(1, value));
+}
+
+function smootherstep(value: number) {
+	return value * value * value * (value * (value * 6 - 15) + 10);
 }
 
 export function FoundationBuild({ primitives, composites }: { primitives: number; composites: number }) {
@@ -82,7 +145,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 	const modelRef = useRef<HTMLDivElement | null>(null);
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const readoutRef = useRef<HTMLSpanElement | null>(null);
-	const playExitRef = useRef<(() => void) | null>(null);
+	const exitTransitionRef = useRef<ExitTransitionController | null>(null);
 	const exitNavigationTimerRef = useRef<number | null>(null);
 	const exitingRef = useRef(false);
 	const reducedRef = useRef(false);
@@ -103,14 +166,15 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 			return;
 		}
 
-		const playExit = playExitRef.current;
-		if (reducedRef.current || !playExit) return;
+		const exitTransition = exitTransitionRef.current;
+		if (reducedRef.current || !exitTransition) return;
 
 		event.preventDefault();
 		if (exitingRef.current) return;
 		exitingRef.current = true;
-		setIsExiting(true);
-		playExit();
+		exitTransition.prepare();
+		flushSync(() => setIsExiting(true));
+		exitTransition.play();
 		exitNavigationTimerRef.current = window.setTimeout(() => {
 			exitNavigationTimerRef.current = null;
 			router.push('/overview');
@@ -176,6 +240,11 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				const studGeometry = new THREE.CylinderGeometry(0.085, 0.085, 0.085, 20);
 				const layerGroups: InstanceType<typeof THREE.Group>[] = [];
 				const blockMeshes: InstanceType<typeof THREE.InstancedMesh>[] = [];
+				const instancedLayers: Array<{
+					blocks: InstanceType<typeof THREE.InstancedMesh>;
+					studs: InstanceType<typeof THREE.InstancedMesh>;
+					bricks: BrickExitMotion[];
+				}> = [];
 				const materials: Array<{
 					block: InstanceType<typeof THREE.MeshStandardMaterial>;
 					stud: InstanceType<typeof THREE.MeshStandardMaterial>;
@@ -183,6 +252,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					studBase: InstanceType<typeof THREE.Color>;
 				}> = [];
 				const dummy = new THREE.Object3D();
+				const studLocalMatrices = STUD_OFFSETS.map(([x, z]) => new THREE.Matrix4().makeTranslation(x, 0.212, z));
+				const composedStudMatrix = new THREE.Matrix4();
 
 				LAYER_SPECS.forEach((spec, layerIndex) => {
 					const group = new THREE.Group();
@@ -210,16 +281,20 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					const count = spec.size * spec.size;
 					const blocks = new THREE.InstancedMesh(blockGeometry, blockMaterial, count);
 					const studs = new THREE.InstancedMesh(studGeometry, studMaterial, count * 4);
+					blocks.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+					studs.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
 					blocks.userData.layer = layerIndex;
 					blockMeshes.push(blocks);
 
 					let blockIndex = 0;
 					let studIndex = 0;
 					const offset = (spec.size - 1) * 0.41;
+					const bricks: BrickExitMotion[] = [];
 					for (let row = 0; row < spec.size; row += 1) {
 						for (let column = 0; column < spec.size; column += 1) {
 							const x = column * 0.82 - offset;
 							const z = row * 0.82 - offset;
+							bricks.push(createBrickExitMotion(layerIndex, blockIndex, x, z));
 							dummy.position.set(x, 0, z);
 							dummy.rotation.set(0, 0, 0);
 							dummy.scale.set(1, 1, 1);
@@ -227,15 +302,9 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							blocks.setMatrixAt(blockIndex, dummy.matrix);
 							blockIndex += 1;
 
-							for (const [studX, studZ] of [
-								[-0.2, -0.2],
-								[0.2, -0.2],
-								[-0.2, 0.2],
-								[0.2, 0.2],
-							] as const) {
-								dummy.position.set(x + studX, 0.212, z + studZ);
-								dummy.updateMatrix();
-								studs.setMatrixAt(studIndex, dummy.matrix);
+							for (let studOffsetIndex = 0; studOffsetIndex < studLocalMatrices.length; studOffsetIndex += 1) {
+								composedStudMatrix.multiplyMatrices(dummy.matrix, studLocalMatrices[studOffsetIndex]);
+								studs.setMatrixAt(studIndex, composedStudMatrix);
 								studIndex += 1;
 							}
 						}
@@ -243,7 +312,36 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					blocks.instanceMatrix.needsUpdate = true;
 					studs.instanceMatrix.needsUpdate = true;
 					group.add(blocks, studs);
+					instancedLayers.push({ blocks, studs, bricks });
 				});
+
+				const updateBrickExit = (progress: number) => {
+					for (let layerIndex = 0; layerIndex < instancedLayers.length; layerIndex += 1) {
+						const { blocks, studs, bricks } = instancedLayers[layerIndex];
+						for (let brickIndex = 0; brickIndex < bricks.length; brickIndex += 1) {
+							const brick = bricks[brickIndex];
+							const localProgress = clamp01((progress - brick.delay) / (1 - brick.delay));
+							const distance = smootherstep(localProgress);
+							dummy.position.set(
+								brick.baseX + brick.travelX * distance,
+								brick.travelY * distance,
+								brick.baseZ + brick.travelZ * distance,
+							);
+							dummy.rotation.set(brick.spinX * distance, brick.spinY * distance, brick.spinZ * distance);
+							dummy.scale.set(1, 1, 1);
+							dummy.updateMatrix();
+							blocks.setMatrixAt(brickIndex, dummy.matrix);
+
+							const firstStudIndex = brickIndex * STUD_OFFSETS.length;
+							for (let studOffsetIndex = 0; studOffsetIndex < studLocalMatrices.length; studOffsetIndex += 1) {
+								composedStudMatrix.multiplyMatrices(dummy.matrix, studLocalMatrices[studOffsetIndex]);
+								studs.setMatrixAt(firstStudIndex + studOffsetIndex, composedStudMatrix);
+							}
+						}
+						blocks.instanceMatrix.needsUpdate = true;
+						studs.instanceMatrix.needsUpdate = true;
+					}
+				};
 
 				const grid = new THREE.GridHelper(15, 30, 0x34343c, 0x1b1b20);
 				grid.position.y = -0.64;
@@ -266,6 +364,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				let focusedLayer = -1;
 				let focusMix = 0;
 				let exitingScene = false;
+				let preservedExitProjection: ExitProjection | null = null;
 				let lastReportedStage = -2;
 				let lastReportedInspecting = false;
 				const raycaster = new THREE.Raycaster();
@@ -304,7 +403,21 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					const width = Math.max(1, model.clientWidth);
 					const height = Math.max(1, model.clientHeight);
 					renderer.setSize(width, height, false);
-					if (desktopPyramidComposition.matches) {
+					const exitProjection = preservedExitProjection;
+					if (exitProjection) {
+						const screenWidth = Math.max(1, exitProjection.screenWidth);
+						const screenHeight = Math.max(1, exitProjection.screenHeight);
+						camera.setViewOffset(
+							exitProjection.cameraFullWidth,
+							exitProjection.cameraFullHeight,
+							exitProjection.cameraOffsetX -
+								(exitProjection.screenLeft / screenWidth) * exitProjection.cameraViewWidth,
+							exitProjection.cameraOffsetY -
+								(exitProjection.screenTop / screenHeight) * exitProjection.cameraViewHeight,
+							exitProjection.cameraViewWidth * (width / screenWidth),
+							exitProjection.cameraViewHeight * (height / screenHeight),
+						);
+					} else if (desktopPyramidComposition.matches) {
 						camera.setViewOffset(width, height, -width * DESKTOP_PYRAMID_VIEW_OFFSET, 0, width, height);
 					} else {
 						camera.aspect = width / height;
@@ -385,38 +498,71 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					.add(lookTarget, { y: 0.35, duration: 900, ease: 'inOut(3)' }, FINAL_START)
 					.add(orbit, { rotateY: 555, duration: FINAL_DURATION - 900, ease: 'linear' }, FINAL_START + 900);
 
-				playExitRef.current = () => {
-					exitingScene = true;
-					timeline.pause();
-					hoveredLayer = -1;
-					focusedLayer = -1;
-					pointerX = 0;
-					pointerY = 0;
+				exitTransitionRef.current = {
+					prepare: () => {
+						const bounds = canvas.getBoundingClientRect();
+						const modelWidth = Math.max(1, model.clientWidth);
+						const modelHeight = Math.max(1, model.clientHeight);
+						const view = camera.view?.enabled ? camera.view : null;
+						preservedExitProjection = {
+							screenLeft: bounds.left,
+							screenTop: bounds.top,
+							screenWidth: bounds.width,
+							screenHeight: bounds.height,
+							cameraFullWidth: view?.fullWidth ?? modelWidth,
+							cameraFullHeight: view?.fullHeight ?? modelHeight,
+							cameraOffsetX: view?.offsetX ?? 0,
+							cameraOffsetY: view?.offsetY ?? 0,
+							cameraViewWidth: view?.width ?? modelWidth,
+							cameraViewHeight: view?.height ?? modelHeight,
+						};
+					},
+					play: () => {
+						grid.renderOrder = -1;
+						gridMaterial.depthTest = false;
+						gridMaterial.depthWrite = false;
+						exitingScene = true;
+						resize();
+						timeline.pause();
+						hoveredLayer = -1;
+						focusedLayer = -1;
+						pointerX = 0;
+						pointerY = 0;
 
-					const exitTimeline = anime.createTimeline({
-						autoplay: false,
-						onUpdate: render,
-					});
-					EXIT_DIRECTIONS.forEach((direction, index) => {
-						exitTimeline.add(
-							layerGroups[index],
-							{
-								...direction,
-								scale: 1.08,
-								duration: EXIT_DURATION,
-								ease: 'in(3)',
+						const exitState = { progress: 0 };
+						const exitTimeline = anime.createTimeline({
+							autoplay: false,
+							onUpdate: () => {
+								updateBrickExit(Number(exitState.progress));
+								render();
 							},
+						});
+						exitTimeline.add(
+							exitState,
+							{ progress: 1, delay: EXIT_DISASSEMBLY_DELAY, duration: EXIT_DURATION, ease: 'linear' },
 							0,
 						);
-					});
-					materials.forEach(({ block, stud }) => {
-						exitTimeline
-							.add(block, { opacity: 0, duration: 220, ease: 'linear' }, EXIT_DURATION - 220)
-							.add(stud, { opacity: 0, duration: 220, ease: 'linear' }, EXIT_DURATION - 220);
-					});
-					exitTimeline.add(gridMaterial, { opacity: 0, duration: 300, ease: 'linear' }, EXIT_DURATION - 300);
-					cancelExit = () => exitTimeline.cancel();
-					exitTimeline.play();
+						materials.forEach(({ block, stud }) => {
+							exitTimeline
+								.add(
+									block,
+									{ opacity: 0, duration: EXIT_BRICK_FADE_DURATION, ease: 'inOut(2)' },
+									EXIT_DISASSEMBLY_DELAY + EXIT_DURATION - EXIT_BRICK_FADE_DURATION,
+								)
+								.add(
+									stud,
+									{ opacity: 0, duration: EXIT_BRICK_FADE_DURATION, ease: 'inOut(2)' },
+									EXIT_DISASSEMBLY_DELAY + EXIT_DURATION - EXIT_BRICK_FADE_DURATION,
+								);
+						});
+						exitTimeline.add(
+							gridMaterial,
+							{ opacity: 0, duration: EXIT_GRID_FADE_DURATION, ease: 'inOut(2)' },
+							0,
+						);
+						cancelExit = () => exitTimeline.cancel();
+						exitTimeline.play();
+					},
 				};
 
 				const onPointerMove = (event: globalThis.PointerEvent) => {
@@ -476,7 +622,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				resize();
 
 				dispose = () => {
-					playExitRef.current = null;
+					exitTransitionRef.current = null;
 					cancelExit();
 					if (!timelineReverted) timeline.revert();
 					resizeObserver.disconnect();
@@ -554,7 +700,11 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							</p>
 							<h3>{layer.statement}</h3>
 							<p>
-								{index === 1 ? `${primitives} reusable building blocks` : index === 2 ? `${composites} shared compositions` : layer.detail}
+								{index === 1
+									? `${primitives} shareable primitives · reuse instead of rebuild`
+									: index === 2
+										? `${composites} production-ready composites`
+										: layer.detail}
 							</p>
 						</article>
 					))}

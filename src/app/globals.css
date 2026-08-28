@@ -861,11 +861,24 @@ button {
 	pointer-events: none;
 	background: #000;
 	opacity: 0;
-	transition: opacity 720ms linear;
+	transition: opacity 900ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .foundation-scroll[data-exiting='true'] .foundation-sticky {
 	pointer-events: none;
+}
+
+.foundation-scroll[data-exiting='true'] .foundation-model {
+	position: fixed;
+	inset: 0;
+	width: 100vw;
+	height: 100svh;
+	min-height: 0;
+	align-self: stretch;
+	justify-self: stretch;
+	opacity: 1;
+	transform: none;
+	z-index: 1;
 }
 
 .foundation-scroll[data-exiting='true'] .foundation-sticky::after {
@@ -884,7 +897,7 @@ button {
 	) {
 	opacity: 0;
 	pointer-events: none;
-	transition: opacity 180ms linear;
+	transition: opacity 240ms var(--ease-out);
 }
 
 .foundation-copy {
