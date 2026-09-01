@@ -3,7 +3,10 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
+		"build:substrate": "node scripts/build-substrate.mjs",
+		"predev": "npm run build:substrate",
 		"dev": "node scripts/dev.mjs",
+		"prebuild": "npm run build:substrate",
 		"build": "next build",
 		"start": "next start -p 4400",
 		"sync": "node scripts/sync-substrate.mjs",

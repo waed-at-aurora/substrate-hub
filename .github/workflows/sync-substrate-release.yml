@@ -60,6 +60,10 @@ jobs:
           cache: npm
           cache-dependency-path: substrate-hub/package-lock.json
 
+      - name: Install design-system dependencies
+        working-directory: aurora-ui
+        run: corepack yarn install --immutable
+
       - name: Install dependencies
         working-directory: substrate-hub
         run: npm ci

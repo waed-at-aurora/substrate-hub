@@ -597,6 +597,20 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					},
 				};
 
+				const onSharedPointerMove = (event: globalThis.PointerEvent) => {
+					if (
+						reducedRef.current ||
+						exitingScene ||
+						event.target === canvas ||
+						window.scrollY > window.innerHeight
+					) {
+						return;
+					}
+					pointerX = (event.clientX / Math.max(1, window.innerWidth)) * 2 - 1;
+					pointerY = -((event.clientY / Math.max(1, window.innerHeight)) * 2 - 1);
+					render();
+				};
+
 				const onPointerMove = (event: globalThis.PointerEvent) => {
 					const bounds = canvas.getBoundingClientRect();
 					pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
@@ -639,7 +653,23 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						});
 					}
 				};
+				let entryRevealFrame = 0;
+				const updateEntryReveal = () => {
+					entryRevealFrame = 0;
+					const viewportHeight = Math.max(1, window.innerHeight);
+					const rootTop = root.getBoundingClientRect().top;
+					const reveal = clamp01((viewportHeight * 0.05 - rootTop) / (viewportHeight * 0.16));
+					root.style.setProperty('--entry-copy-opacity', reveal.toFixed(3));
+				};
+				const requestEntryReveal = () => {
+					if (!entryRevealFrame) entryRevealFrame = requestAnimationFrame(updateEntryReveal);
+				};
+				updateEntryReveal();
 
+
+				window.addEventListener('pointermove', onSharedPointerMove, { passive: true });
+				window.addEventListener('scroll', requestEntryReveal, { passive: true });
+				window.addEventListener('resize', requestEntryReveal);
 				canvas.addEventListener('pointermove', onPointerMove, { passive: true });
 				canvas.addEventListener('pointerleave', onPointerLeave);
 				canvas.addEventListener('click', onPointerClick);
@@ -668,6 +698,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				resize();
 
 				dispose = () => {
+					if (entryRevealFrame) cancelAnimationFrame(entryRevealFrame);
 					exitTransitionRef.current = null;
 					cancelExit();
 					selectionTurn?.cancel();
@@ -677,6 +708,9 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					canvas.removeEventListener('pointerleave', onPointerLeave);
 					canvas.removeEventListener('click', onPointerClick);
 					canvas.removeEventListener('webglcontextlost', onContextLost);
+					window.removeEventListener('scroll', requestEntryReveal);
+					window.removeEventListener('resize', requestEntryReveal);
+					window.removeEventListener('pointermove', onSharedPointerMove);
 					window.removeEventListener('scroll', clearManualSelection);
 					blockGeometry.dispose();
 					studGeometry.dispose();
