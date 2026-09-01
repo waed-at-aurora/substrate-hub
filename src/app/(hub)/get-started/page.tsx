@@ -19,14 +19,42 @@ export default function GetStarted() {
 				</p>
 				<h1 style={{ fontSize: 'clamp(2rem, 3.6vw, 3.2rem)' }}>From zero to a rendered component.</h1>
 				<p className="cover-standfirst">
-					Six steps: check the environment, install the package, wire styles and theme, render a
-					component, connect the tooling, and verify. Nothing here duplicates the API docs —
-					component-level detail lives in Storybook.
+					Start with your coding agent, then use the remaining steps to understand or complete the
+					same setup yourself: check the environment, install the package, wire styles and theme,
+					render a component, and verify. Component-level detail stays in Storybook.
 				</p>
 			</div>
 
 			<Exhibit label="Setup — six steps" id="steps">
 				<ol className="steps" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+					<li className="step step-agent">
+						<div>
+							<h3>Ask your agent to set up Substrate</h3>
+							<p className="agent-lede">
+								Paste this into Claude Code or opencode. Your agent will inspect the project first,
+								then follow the guided CLI path detailed below.
+							</p>
+							<CopyBlock
+								label="Prompt for your coding agent"
+								copyLabel="copy prompt"
+								prompt
+								code={`Set up Substrate in this project. Inspect the stack and existing theme first. Run \`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 doctor\`, then preview the install with \`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 install --dry-run\`. If the checks pass, run \`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 install --yes\`, import \`@aurora-ui/components-v2/style.css\` at the app root, preserve the existing light or dark theme, render a basic \`Button\`, and verify that it is styled. Explain every file you change. If GitHub, AWS, or private-registry authentication is unavailable, stop and tell me exactly what is missing.`}
+							/>
+							<p className="note agent-skill-note">
+								For repeat use, install the CLI&rsquo;s agent skill once. Claude-compatible agents
+								then discover Substrate automatically in any project.
+							</p>
+							<CopyBlock
+								label="Install the Substrate agent skill"
+								code={`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 skill install`}
+							/>
+							<p className="note" style={{ marginTop: '0.7rem' }}>
+								The private CLI repository requires <code>gh auth login</code>. Prefer to drive the
+								tool yourself? Continue with the prerequisites and guided install below;
+								documentation and feedback workflows are in <Link href="/tools">Tools &amp; resources → 07</Link>.
+							</p>
+						</div>
+					</li>
 					<li className="step">
 						<div>
 							<h3>Prerequisites and supported environments</h3>
@@ -90,37 +118,6 @@ export default function GetStarted() {
 							<p className="note" style={{ marginTop: '0.7rem' }}>
 								Steer it live in <Link href="/#live">Fig. 2 on the overview</Link> — every option
 								change re-renders the real package.
-							</p>
-						</div>
-					</li>
-					<li className="step">
-						<div>
-							<h3>Install and configure the CLI</h3>
-							<p>
-								<a href={site.cliUrl} target="_blank" rel="noreferrer">
-									substrate-cli
-								</a>{' '}
-								(prototype) does three things: installs the design system, raises feedback as GitHub
-								issues, and reads component documentation offline from a bundled snapshot — usage
-								prose and real prop tables without opening Storybook.
-							</p>
-							<CopyBlock
-								label="Run via npx — always tracks main, no install step"
-								code={`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 doctor`}
-							/>
-							<CopyBlock
-								label="Or put a `substrate` binary on your PATH — packaged release"
-								code={`gh release download v0.1.0 --repo AuroraEnergyResearch/substrate-cli-v2 --pattern '*.tgz'\nnpm install -g ./aurora-ui-substrate-cli-0.1.0.tgz`}
-							/>
-							<CopyBlock
-								label="Read docs from the terminal"
-								code={`substrate docs component --list\nsubstrate docs component Button\nsubstrate docs topic design-principles`}
-							/>
-							<p className="note" style={{ marginTop: '0.7rem' }}>
-								Working with a coding agent? <code>substrate skill install</code> copies the CLI&rsquo;s
-								agent skill into <code>~/.claude/skills/substrate-cli/</code> so Claude-compatible
-								agents drive it automatically. Avoid <code>npm install -g github:…</code> — a known npm
-								bug breaks global git installs; use npx or the release tarball above.
 							</p>
 						</div>
 					</li>

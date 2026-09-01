@@ -36,6 +36,14 @@ export const Catalog = dynamic(() => import('./catalog').then((m) => m.Catalog),
 	loading: () => <Loading minHeight="32rem" label="loading component gallery…" />,
 });
 
+export const FormsPatternShowcase = dynamic(
+	() => import('./forms-pattern-showcase').then((m) => m.FormsPatternShowcase),
+	{
+		ssr: false,
+		loading: () => <Loading minHeight="48rem" label="loading form specimens…" />,
+	}
+);
+
 export const Troubleshooting = dynamic(() => import('./troubleshooting').then((m) => m.Troubleshooting), {
 	ssr: false,
 	loading: () => <Loading minHeight="10rem" label="loading checks…" />,

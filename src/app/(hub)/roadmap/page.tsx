@@ -92,8 +92,7 @@ export default function Roadmap() {
 					))}
 				</div>
 				<p className="note" style={{ marginTop: '1.4rem' }}>
-					What shipped most recently is on <Link href="/releases">releases → 05</Link>; day-to-day
-					movement is on <Link href="/updates">updates → 08</Link>.
+					What shipped most recently is on <Link href="/releases">releases → 05</Link>.
 				</p>
 			</Exhibit>
 		</>

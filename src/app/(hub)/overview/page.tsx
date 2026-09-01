@@ -35,12 +35,8 @@ export default function Home() {
 
 
 				<div className="stage-body">
-					<p className="stage-position">The shared layer behind consistent EOS experiences.</p>
-					<p className="stage-copy">
-						Substrate provides the reusable composite components and interaction patterns EOS
-						products are built from — consistent, high quality, faster to ship, with room for
-						product-level differentiation above the shared system.
-					</p>
+					<p className="stage-position">The foundational medium from which experiences emerge.</p>
+					<p className="stage-copy">An agent-first, modern design system.</p>
 					<div className="stage-actions">
 						<Link className="action action-primary" href="/get-started">
 							Install Substrate
@@ -58,7 +54,7 @@ export default function Home() {
 			</section>
 
 			{/* 3 — how Substrate fits */}
-			<Exhibit label="Fig. 1 — the system pyramid" meta="where Substrate sits" id="fits">
+			<Exhibit label="Fig. 1 — where Substrate creates leverage" meta="foundation included · UX core prioritized" id="fits">
 				<PyramidFigure composites={data.counts.composites} primitives={data.counts.primitives} />
 			</Exhibit>
 
@@ -84,12 +80,17 @@ export default function Home() {
 				</p>
 			</Exhibit>
 
-			{/* the live figure — real components, recalculating as you steer them */}
+			{/* the live figure — configure the real component before you build with it */}
 			<Exhibit
-				label="Fig. 2 — live render · Investment Case Selection Card"
+				label="Fig. 2 — configure a live component · Investment Case Selection Card"
 				meta="rendered by the installed package, not a screenshot"
 				id="live"
 			>
+				<h2>See how a component adapts before you build.</h2>
+				<p className="lede live-demo-copy">
+					Change the state and content to see how this composite flexes for your product. Reusable
+					components make it quicker to scaffold consistent solutions without starting from scratch.
+				</p>
 				<Playground />
 			</Exhibit>
 
@@ -135,7 +136,7 @@ export default function Home() {
 			</Exhibit>
 
 			{/* 6 — what's happening */}
-			<Exhibit label="What's happening" meta={<Link href="/updates">full feed → 08</Link>} id="happening">
+			<Exhibit label="What's happening" meta="latest source changes" id="happening">
 				<ul className="feed">
 					{latest.map((h, i) => (
 						<li key={h.hash}>

@@ -213,11 +213,8 @@ export function LandingStage({
 
 			<div className="landing-body">
 				<div className="landing-pitch">
-					<p className="landing-position">The shared layer behind consistent EOS experiences.</p>
-					<p className="landing-copy">
-						Reusable composite components and interaction patterns — {composites} composites,{' '}
-						{primitives} primitives, one shared system with room to differ above it.
-					</p>
+					<p className="landing-position">The foundational medium from which experiences emerge.</p>
+					<p className="landing-copy">An agent-first, modern design system.</p>
 					<div className="landing-actions">
 						<Link className="action action-primary" href="/overview" onClick={openOverview}>
 							Open overview

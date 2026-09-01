@@ -116,7 +116,7 @@ Color is rationed by law. Aurora yellow (#ffcc00) appears exactly three times in
 - **Key Characteristics:**
   - Dark-first (`color-scheme: dark`, html carries `.dark`); no light theme exists.
   - One hairline rule grid; borders do the structural work, not shadows or fills.
-  - Editorial exhibit grammar: mono uppercase captions, ruled sections, numbered contents rail with keyboard direct address (1–8).
+  - Editorial exhibit grammar: mono uppercase captions, ruled sections, numbered contents rail with keyboard direct address (1–7).
   - Variable-font display voice; the landing turns the `wght` axis into a direct response to light.
   - Accent color is law-bound (yellow = primary action + new + active-section chip; cyan = live; amber = provisional).
   - Real components rendered live from `@aurora-ui/components-v2` are content and follow the DS's own palette, not the hub's laws.
@@ -146,7 +146,7 @@ A zinc-neutral night ramp with three law-bound accents; the ground is the design
 - **Rule Soft** (#1b1b20): the quieter hairline — row separators, rail borders, internal panel dividers.
 
 ### Named Rules
-**The Yellow Law.** In hub chrome, #ffcc00 may appear only on the one primary action of a surface, on the `new` signal, and on the contents rail's active-section number chip. Dark yellow **washes** (10–22% mixes into Paper) additionally ground Substrate-owned exhibits: the pyramid's Substrate layer and code blocks. Content rendered by `@aurora-ui/components-v2` (e.g. the `eos` Button variant) is content, not chrome — its yellow is exempt.
+**The Yellow Law.** In hub chrome, #ffcc00 may appear only on the one primary action of a surface, on the `new` signal, and on the contents rail's active-section number chip. A dark yellow **wash** (22% Yellow into Paper) additionally grounds the pyramid's highest-leverage UX layer. Code panels use one restrained treatment: a 2% Yellow wash with a 24% Yellow Rule border. It keeps implementation material recognizable without competing with the primary action. Content rendered by `@aurora-ui/components-v2` (e.g. the `eos` Button variant) is content, not chrome — its yellow is exempt.
 
 **The Cyan-Live Rule.** Cyan marks things that are genuinely live or newly landed (landing coordinate readout, recalc tick, `feat` feed type). Never use it decoratively.
 
@@ -178,9 +178,9 @@ A zinc-neutral night ramp with three law-bound accents; the ground is the design
 
 The root `/` route deliberately sits outside the document shell. Its landing stage is exactly one small viewport tall (`100svh`) on larger screens, clips overflow, and uses a vertical composition: ruled dateline, flexible centered wordmark field, then a seamless bottom body band. The band holds the pitch and actions at left and the live lamp-coordinate readout at right without drawing a divider through the illuminated grid. The primary `Open overview` action hands off to `/overview`; the other actions go directly to components, installation, and patterns.
 
-Inside `/overview` and the numbered hub routes, the document frame is a two-column grid — a 15.5rem sticky contents rail plus a fluid page column — capped at 90rem and padded by a fluid gutter (`clamp(1.25rem, 3.5vw, 3rem)`). A sticky, blur-backed masthead (paper at 88% opacity, backdrop blur 10px, hairline bottom) sits above; the rail sticks at 3.4rem below it and carries the eight numbered sections (01–08) with a `kbd` hint — keys 1–8 navigate directly. A colophon footer reuses the frame grid with an empty rail cell.
+Inside `/overview` and the numbered hub routes, the document frame is a two-column grid — a 15.5rem sticky contents rail plus a fluid page column — capped at 90rem and padded by a fluid gutter (`clamp(1.25rem, 3.5vw, 3rem)`). A sticky, blur-backed masthead (paper at 88% opacity, backdrop blur 10px, hairline bottom) sits above; the rail sticks at 3.4rem below it and carries the seven numbered sections (01–07) with a `kbd` hint — keys 1–7 navigate directly. A colophon footer reuses the frame grid with an empty rail cell.
 
-Hub pages are stacks of **exhibits**: each opens with a 1px Rule top border, a mono caption row (designation left, meta/cross-link right), then content; 2.2rem separates exhibits and 2.8rem pads their bottoms. `/overview` preserves the original bordered, spotlit drafting stage before its pyramid, quick start, live playground, coverage, updates, and resources; other inner pages open with a **cover** (mono issue line, oversized h1, standfirst). Vertical rhythm is rem-based; there is no spacing scale beyond the gutter — hairline rules, not whitespace blocks, delimit content.
+Hub pages are stacks of **exhibits**: each opens with a 1px Rule top border, a mono caption row (designation left, meta/cross-link right), then content; 2.2rem separates exhibits and 2.8rem pads their bottoms. `/overview` preserves the original bordered, spotlit drafting stage before its pyramid, quick start, live playground, coverage, latest-source feed, and resources; other inner pages open with a **cover** (mono issue line, oversized h1, standfirst). Vertical rhythm is rem-based; there is no spacing scale beyond the gutter — hairline rules, not whitespace blocks, delimit content.
 
 Responsive: at 64rem the playground, pyramid, roadmap, and resource columns collapse to one column. At 52rem the hub frame goes single-column, the rail flattens into a horizontal wrap (borders and hint dropped), the masthead subtitle and overview-stage ghost disappear, and feed rows shed their type and hash columns. At the same breakpoint the root landing becomes scroll-safe (`height: auto; min-height: 100svh`), hides its ghost and coordinate readout, gives the wordmark field a bounded 18–25rem / 43svh height, stacks the dateline, and turns actions into a two-column grid with the yellow primary spanning both columns. The install line fills the width and its command may scroll horizontally.
 
@@ -232,19 +232,19 @@ Near-square geometry: radii run 2px (actions, chips, copy buttons, filter groups
 - 1px Rule top border; mono caption row: `strong` designation in Ink (e.g. "Fig. 2 — live render · Investment Case Selection Card" — compound names are spaced for the uppercase caption), meta flush right in Muted (often a numbered cross-link like "full index → 03"). The cyan `●` caption dot was retired at the user's request (2026-08-26); liveness now reads through the recalc tick alone.
 
 ### Contents Rail
-- Sticky ordered list; each item a hairline-separated row of mono two-digit number + Archivo title (0.9rem). Hover fills Surface; the current page fills Surface with a 650-weight title and its two-digit number set as a yellow chip (On-Yellow text, 2px radius, 0 0.25rem padding). Footer hint documents the 1–8 direct-address keys with bordered `kbd` caps.
+- Sticky ordered list; each item is a hairline-separated row of mono two-digit number + Archivo title (0.9rem). Hover fills Surface; the current page fills Surface with a 650-weight title and its two-digit number set as a yellow chip (On-Yellow text, 2px radius, 0 0.25rem padding). Footer hint documents the 1–7 direct-address keys with bordered `kbd` caps.
 
 ### Code blocks & Install line
-- **CopyBlock:** yellow-washed panel (10% Yellow into Paper, border 40% Yellow into Rule — user-accepted 2026-08-26), 3px radius, mono uppercase label in an 80% Yellow mix, 0.82rem code in Ink, absolute `copy` button top-right (its button tints to the wash: 8% Yellow fill, 45% Yellow border). The button is mono uppercase 0.7rem on Paper; on success it turns OK Green and reads `copied` for 1.6s.
-- **InstallLine:** the compact single-command variant — inline flex, the code-block yellow wash kept translucent (10% Yellow into Paper, then 80% via color-mix so the stage ground shows through; border 40% Yellow into Rule; command in Ink — user-accepted 2026-08-26), non-selectable muted `$` prompt, and a fixed-width inline copy button. Success reads `copied` for 1.6s and is announced politely; when the Clipboard API is unavailable, the command is selected in place and the button reads `selected` so manual copy remains obvious.
+- **CopyBlock:** Paper Raised with the shared 2% Yellow wash, a 24% Yellow Rule border, and a 3px radius. Its mono uppercase label is a 45% Yellow mix into Ink-2; 0.82rem code uses Ink; the absolute `copy` button stays Paper with a Rule border. The button is mono uppercase 0.7rem; on success it turns OK Green and reads `copied` for 1.6s. The Get started agent prompt uses the same plate and copy behavior, but wraps in Archivo because it is an instruction to read and paste rather than source code.
+- **InstallLine:** the compact single-command variant — inline flex on the same restrained 2% Yellow-washed Paper Raised panel with a 24% Yellow Rule border, a non-selectable muted `$` prompt, and a fixed-width inline copy button. Success reads `copied` for 1.6s and is announced politely; when the Clipboard API is unavailable, the command is selected in place and the button reads `selected` so manual copy remains obvious.
 
 ### Tables
 - Full-width, collapsed borders, 0.9rem, tabular-nums. Headers are mono uppercase 0.66rem Muted over a 1px **Ink** rule (the strong rule); body rows separate with Rule Soft and hover-fill Surface. Numeric columns right-align (`.num`). Wide tables wrap in `.table-scroll` (min-width 40rem, contained overscroll). Deprecated rows strike through.
 
 ### Status marks
-- `Status` = 9px drawn mark + lowercase status word in mono 0.72rem Ink-2. Shapes per the Mark-Not-Tint Rule; color is inherited, never semantic.
+- `StatusMark` is a 9px physical mark used where status is part of the task, such as roadmap commitment versus exploration. The adjacent label names that route-specific state in mono Ink-2. Proposed metadata remains in source data but never renders as a page label.
 
-### Feed (updates)
+### Feed (overview)
 - Hairline-separated grid rows: mono date (Muted) · type tag (mono, cyan when `feat`) · summary (first entry gets the yellow `new` signal) · mono hash link. Collapses to date + summary at 52rem.
 
 ### Release notes
@@ -254,7 +254,7 @@ Near-square geometry: radii run 2px (actions, chips, copy buttons, filter groups
 - Inline mono uppercase chip, Amber text, 1px dashed amber-mixed border, reading `provisional · <what>`. Every render corresponds to a TODO on the replacement list; it is honest signage, not decoration.
 
 ### Playground (signature component)
-- Two-panel bordered figure: render stage (min 23rem, faint 2.2rem two-axis gridline wash over Paper Raised, centered live DS component) beside a controls column on Paper driven by real DS `Select`/`Input`/`Checkbox`. A mono readout bar states provenance ("rendered from @aurora-ui/components-v2 · dist") and stamps `recalc HH:MM:SS.mmm` in Live Cyan on every option change, flashing Live Bright. Below the controls, a generated import snippet mirrors the current props inside a washed code panel (6% Yellow into Paper, border 30% Yellow into Rule, 3px radius).
+- Two-panel bordered figure: render stage (min 23rem, faint 2.2rem two-axis gridline wash over Paper Raised, centered live DS component) beside a controls column on Paper driven by real DS `Select`/`Input`/`Checkbox`. A mono readout bar states provenance ("rendered from @aurora-ui/components-v2 · dist") and stamps `recalc HH:MM:SS.mmm` in Live Cyan on every option change, flashing Live Bright. Below the controls, a generated import snippet mirrors the current props inside the same restrained 2% Yellow-washed Paper Raised panel with a 24% Yellow Rule border and 3px radius.
 
 ### Filter group (component gallery)
 - Search and segmented mono-uppercase layer controls sit in one opaque sticky ruled bar above the gallery; pressed filters invert Ink-on-Paper. The flush-right mono `aria-live` readout reports the number of visible live specimens rather than the package export total.
@@ -265,9 +265,14 @@ Near-square geometry: radii run 2px (actions, chips, copy buttons, filter groups
 - Specimen stages use Paper Raised and the established drafting grid. The hub frames but does not visually rewrite package components. Search empty state offers one explicit gallery reset; no source rows or code snippets appear.
 - Gallery interaction specimens stay functional: the slider is controlled and announces its live percentage, while the tabs use the package's line variant inside a ruled dark data panel with yellow active indication, compact mono navigation, and context/value/detail hierarchy.
 
+### Forms pattern overview
+- `/patterns/forms` is a high-level, code-free pattern map. It renders three representative moments from `@aurora-ui/components-v2` — ordinary entry, validation and recovery, and a sensitive confirmation — instead of duplicating Storybook's chapter, component, and example inventories.
+- A full-width structure specimen leads; the two supporting states use a container-responsive `auto-fit` grid so they become one column whenever the document column cannot hold both. Every stage uses the established ruled Paper Raised field, while captions stay in separate bands and preserve lead → validation → sensitive DOM order.
+- The specimens remain functional: visitors can repair the invalid market release and exercise the sensitive-action state. One final ruled handoff carries the page's yellow primary action and sends visitors to the complete Storybook chapters, examples, accessibility checks, and interaction tests.
+
 ### Pyramid (signature figure)
-- Inline SVG report exhibit drawn entirely in the token palette via `var(--…)`: hollow-dashed top layer (products), a yellow-washed Substrate layer (fill 22% Yellow into Paper, Yellow stroke and title, Ink-2 sublines — the "active layer is yellow" reading, user-accepted 2026-08-26), Surface base, with the mono dimension callout ("THIS SYSTEM") in drafting style tinted yellow (lines 55%, text 70% Yellow mixes).
-- **Interactive (user-accepted 2026-08-26; revised same day per user):** each layer is an SVG anchor button (`.pyr-btn`, hover brightens 1.3, focus-visible 2px Ink outline) driving local client state (`PyramidFigure`) — no hash change and no scroll jump. Exactly one note is open at a time; **The shared layer opens by default**. Notes mirror the pyramid order top-to-bottom. The exchange is a staged handoff (user-tuned 2026-08-26): the closing note collapses at 380/240ms, the opening one expands at 550/450ms after a 120ms delay, all on the shared ease; the open note's mono label inverts Ink-on-Paper (its own 260ms transition), and the selected SVG layer's stroke thickens to 2.3 via `aria-pressed`.
+- Inline SVG report exhibit drawn entirely in the token palette via `var(--…)`: hollow-dashed top layer (products); a yellow-washed middle layer (fill 22% Yellow into Paper, Yellow stroke and title) for composite components and interaction patterns — **Substrate’s highest-leverage UX layer**; and a quieter 7% Yellow-tinted foundation for UI primitives and tokens. A yellow drafting bracket labeled `SUBSTRATE` spans both lower layers, showing that Substrate includes the foundation but doubles down on the UX core.
+- **Interactive (user-accepted 2026-08-26; revised 2026-08-28):** each layer is an SVG anchor button (`.pyr-btn`, hover brightens 1.3, focus-visible 2px Ink outline) driving local client state (`PyramidFigure`) — no hash change and no scroll jump. Exactly one note is open at a time; **the UX core opens by default**. Notes mirror the pyramid order top-to-bottom. They explain where products differentiate, why composite components and interaction patterns are higher leverage than product-specific flows, and how the shared foundation supports that work. The exchange is a staged handoff (user-tuned 2026-08-26): the closing note collapses at 380/240ms, the opening one expands at 550/450ms after a 120ms delay, all on the shared ease; the open note's mono label inverts Ink-on-Paper (its own 260ms transition), and the selected SVG layer's stroke thickens to 2.3 via `aria-pressed`.
 
 ### Theming contract with the DS
 - The hub imports `@aurora-ui/components-v2/style.css` globally and pins `html.dark`, so DS components render in their own dark tokens on the shared #09090b ground. DS styles live in cascade layers; the hub's unlayered CSS wins specificity ties by design. DS-rendered visuals are content: never restyle them to hub laws, and never screenshot them — render the real package. **One user-granted exception (2026-08-26):** DS form controls (`input[data-slot='input']`, `[data-slot='select-trigger']`, `[data-slot='checkbox']`) carry the yellow family site-wide — border color 30% Yellow into Rule plus a 1px inset ring at 15% Yellow; fills stay DS-dark.
@@ -284,7 +289,7 @@ All micro-transitions run 120–160ms on `--ease-out` (`cubic-bezier(0.16, 1, 0.
 - **Do** keep exactly one yellow action per surface, reserve the `new-signal` chip for the newest item only, and let the rail mark the active section with its yellow number chip.
 - **Do** set all captions, datelines, table headers, hashes, and counts in Spline Sans Mono, uppercase, wide-tracked, `tabular-nums`.
 - **Do** express state by inversion (Ink fill, Paper text) for pressed filters and selection; the rail's active item uses Surface fill plus the yellow number chip.
-- **Do** use the five physical status marks plus the status word; deprecated rows also strike through.
+- **Do** use physical status marks with explicit words only when the status helps the visitor act; never surface proposed as a page label.
 - **Do** render DS components live from `@aurora-ui/components-v2` and label their provenance in the readout/caption.
 - **Do** mark every unconfirmed value with the amber `Provisional` chip and a matching replacement-list entry.
 - **Do** keep the lamp, Star Burst, pointer/touch response, and per-letter weight behavior together on `/`; hand visitors into the document at `/overview`.

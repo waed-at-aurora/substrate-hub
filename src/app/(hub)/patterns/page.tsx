@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Exhibit } from '@/components/exhibit';
-import { ExtArrow, Status } from '@/components/marks';
+import { ExtArrow } from '@/components/marks';
 import { storybookHref } from '@/config/site';
 import { data } from '@/lib/data';
 
@@ -64,7 +64,6 @@ export default function Patterns() {
 						Pattern docs in Storybook
 						<ExtArrow />
 					</a>
-					<Status status="proposed" />
 				</div>
 			</Exhibit>
 

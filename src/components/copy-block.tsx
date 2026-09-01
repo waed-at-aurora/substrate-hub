@@ -2,7 +2,17 @@
 
 import { useState, useRef } from 'react';
 
-export function CopyBlock({ label, code }: { label?: string; code: string }) {
+export function CopyBlock({
+	label,
+	code,
+	prompt = false,
+	copyLabel = 'copy',
+}: {
+	label?: string;
+	code: string;
+	prompt?: boolean;
+	copyLabel?: string;
+}) {
 	const [copied, setCopied] = useState(false);
 	const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -18,13 +28,19 @@ export function CopyBlock({ label, code }: { label?: string; code: string }) {
 	};
 
 	return (
-		<div className="codeblock">
+		<div className={prompt ? 'codeblock codeblock--prompt' : 'codeblock'}>
 			{label ? <span className="codeblock-label">{label}</span> : null}
 			<pre>
 				<code>{code}</code>
 			</pre>
-			<button type="button" className="copy-btn" data-copied={copied} onClick={copy}>
-				{copied ? 'copied' : 'copy'}
+			<button
+				type="button"
+				className="copy-btn"
+				data-copied={copied}
+				onClick={copy}
+				aria-live="polite"
+			>
+				{copied ? 'copied' : copyLabel}
 			</button>
 		</div>
 	);

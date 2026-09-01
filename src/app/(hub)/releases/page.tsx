@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import ReactMarkdown from 'react-markdown';
 import { Exhibit } from '@/components/exhibit';
+import { ExtArrow } from '@/components/marks';
 import { data, fmtDate, releasesData } from '@/lib/data';
 export const metadata: Metadata = { title: 'Releases' };
 
@@ -28,6 +29,17 @@ export default function Releases() {
 						? `Published ${fmtDate(latestRelease.publishedAt)}. Release notes are imported automatically after the design-system release succeeds.`
 						: 'No versioned release is published yet. Release notes will appear after the first automated components-v2 release.'}
 				</p>
+				<div className="cover-actions">
+					<a
+						className="action action-primary ext"
+						href="https://eos.auroraer.com/dragonfly/release-notes/substrate?locale=en"
+						target="_blank"
+						rel="noreferrer"
+					>
+						Open EOS release notes
+						<ExtArrow />
+					</a>
+				</div>
 			</div>
 
 
