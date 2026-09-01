@@ -7,7 +7,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const repository = process.env.AURORA_UI_REPOSITORY ?? 'AuroraEnergyResearch/aurora-ui';
 const requiredTag = process.env.SUBSTRATE_RELEASE_TAG ?? null;
 const token = process.env.AURORA_UI_TOKEN ?? process.env.GH_TOKEN ?? process.env.GITHUB_TOKEN;
-const tagPrefix = 'packages/substrate/';
+const tagPrefixes = ['packages/substrate/', 'packages/components-v2/'];
 
 if (!token) {
 	console.error('GitHub access token not found; set AURORA_UI_TOKEN, GH_TOKEN, or GITHUB_TOKEN');
@@ -36,21 +36,28 @@ for (let page = 1; ; page += 1) {
 	if (pageReleases.length < 100) break;
 }
 
-const componentReleases = releases
-	.filter((release) => !release.draft && release.tag_name.startsWith(tagPrefix))
-	.map((release) => ({
-		version: release.tag_name.slice(tagPrefix.length),
-		tag: release.tag_name,
-		name: release.name || `v${release.tag_name.slice(tagPrefix.length)}`,
-		url: release.html_url,
-		publishedAt: release.published_at ?? release.created_at,
-		body: release.body ?? '',
-		prerelease: release.prerelease,
-		breaking: /(^|\n)#{1,3}\s+breaking changes?\b/i.test(release.body ?? ''),
-	}))
+const substrateReleases = releases
+	.filter((release) => !release.draft)
+	.map((release) => {
+		const tagPrefix = tagPrefixes.find((prefix) => release.tag_name.startsWith(prefix));
+		if (!tagPrefix) return null;
+
+		const version = release.tag_name.slice(tagPrefix.length);
+		return {
+			version,
+			tag: release.tag_name,
+			name: release.name || `v${version}`,
+			url: release.html_url,
+			publishedAt: release.published_at ?? release.created_at,
+			body: release.body ?? '',
+			prerelease: release.prerelease,
+			breaking: /(^|\n)#{1,3}\s+breaking changes?\b/i.test(release.body ?? ''),
+		};
+	})
+	.filter(Boolean)
 	.sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
 
-if (requiredTag && !componentReleases.some((release) => release.tag === requiredTag)) {
+if (requiredTag && !substrateReleases.some((release) => release.tag === requiredTag)) {
 	console.error(`Published release ${requiredTag} was not returned by the GitHub Releases API`);
 	process.exit(1);
 }
@@ -58,9 +65,9 @@ if (requiredTag && !componentReleases.some((release) => release.tag === required
 const output = {
 	syncedAt: new Date().toISOString(),
 	source: `https://github.com/${repository}/releases`,
-	releases: componentReleases,
+	releases: substrateReleases,
 };
 const outputPath = join(here, '..', 'src', 'data', 'releases.json');
 mkdirSync(dirname(outputPath), { recursive: true });
 writeFileSync(outputPath, `${JSON.stringify(output, null, '\t')}\n`);
-console.log(`synced: ${componentReleases.length} Substrate releases`);
+console.log(`synced: ${substrateReleases.length} Substrate releases`);

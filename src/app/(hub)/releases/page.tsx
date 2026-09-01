@@ -5,8 +5,14 @@ import { ExtArrow } from '@/components/marks';
 import { data, fmtDate, releasesData } from '@/lib/data';
 export const metadata: Metadata = { title: 'Releases' };
 
+const releaseSummaryComponents = {
+	h3: () => null,
+	ol: () => null,
+	ul: () => null,
+};
+
 export default function Releases() {
-	const releases = releasesData.releases.filter((release) => release.tag.startsWith('packages/substrate/'));
+	const releases = releasesData.releases;
 	const latestRelease = releases[0];
 	const previousRelease = releases[1];
 	const currentVersion = latestRelease?.version ?? data.source.version;
@@ -42,7 +48,6 @@ export default function Releases() {
 				</div>
 			</div>
 
-
 			<Exhibit
 				label={latestRelease ? `Latest release — v${latestRelease.version}` : 'Latest release'}
 				meta={
@@ -57,7 +62,7 @@ export default function Releases() {
 				{latestRelease ? (
 					latestRelease.body.trim() ? (
 						<article className="release-notes">
-							<ReactMarkdown>{latestRelease.body}</ReactMarkdown>
+							<ReactMarkdown components={releaseSummaryComponents}>{latestRelease.body}</ReactMarkdown>
 						</article>
 					) : (
 						<p className="lede">
@@ -86,7 +91,7 @@ export default function Releases() {
 				{previousRelease ? (
 					previousRelease.body.trim() ? (
 						<article className="release-notes">
-							<ReactMarkdown>{previousRelease.body}</ReactMarkdown>
+							<ReactMarkdown components={releaseSummaryComponents}>{previousRelease.body}</ReactMarkdown>
 						</article>
 					) : (
 						<p className="lede">
@@ -98,7 +103,6 @@ export default function Releases() {
 					<p className="lede">No previous Substrate release is published.</p>
 				)}
 			</Exhibit>
-
 		</>
 	);
 }

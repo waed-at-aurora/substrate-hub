@@ -78,8 +78,6 @@ export function OverviewMotion() {
 				'#quick-start .codeblock',
 				'#fits .pyramid-note',
 				'#coverage tbody tr',
-				'#happening .feed li',
-				'#resources .resources li',
 			];
 
 			for (const selector of listGroups) {

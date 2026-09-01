@@ -6,15 +6,12 @@ import { ExtArrow } from '@/components/marks';
 import { Playground } from '@/components/islands';
 import { OverviewMotion } from '@/components/overview-motion';
 import { PyramidFigure } from '@/components/pyramid-figure';
-import { Provisional } from '@/components/provisional';
 import { site, storybookHref } from '@/config/site';
 import { data, fmtDate } from '@/lib/data';
 
 export const metadata = { title: 'Overview' };
 
 export default function Home() {
-	const latest = data.history.slice(0, 3);
-
 	return (
 		<>
 			<OverviewMotion />
@@ -135,97 +132,6 @@ export default function Home() {
 				</p>
 			</Exhibit>
 
-			{/* 6 — what's happening */}
-			<Exhibit label="What's happening" meta="latest source changes" id="happening">
-				<ul className="feed">
-					{latest.map((h, i) => (
-						<li key={h.hash}>
-							<span className="mono dim">{fmtDate(h.date)}</span>
-							<span className="type" data-t={h.type ?? undefined}>
-								{h.type ?? 'change'}
-							</span>
-							<span>
-								{i === 0 ? <span className="new-signal">new</span> : null} {h.summary}
-							</span>
-							<a
-								className="mono dim hash"
-								href={`${site.repoUrl}/commit/${h.hash}`}
-								target="_blank"
-								rel="noreferrer"
-							>
-								{h.hash}
-							</a>
-						</li>
-					))}
-				</ul>
-				<div style={{ display: 'flex', gap: '2.5rem', flexWrap: 'wrap', marginTop: '1.2rem' }}>
-					<p className="note">
-						Current priorities: cascade-layer contract hardening and the forms pattern rollout —
-						detail in <Link href="/roadmap">roadmap → 06</Link>. <Provisional what="confirm against planning source" />
-					</p>
-					<p className="note">
-						Upcoming session: none scheduled here yet. <Provisional what="events feed" />
-					</p>
-				</div>
-			</Exhibit>
-
-			{/* 7 — resources */}
-			<Exhibit label="Resources" meta={<Link href="/tools">all tools → 07</Link>} id="resources">
-				<ul className="resources">
-					<li>
-						<span className="mono">Repository</span>
-						<p>
-							<a href={site.repoUrl} target="_blank" rel="noreferrer">
-								AuroraEnergyResearch/aurora-ui
-							</a>{' '}
-							— packages/substrate is the source of truth.
-						</p>
-					</li>
-					<li>
-						<span className="mono">Storybook</span>
-						<p>
-							The canonical component documentation.{' '}
-							<a className="ext" href={storybookHref(null)} target="_blank" rel="noreferrer">
-								storybook-substrate
-								<ExtArrow />
-							</a>
-						</p>
-					</li>
-					<li>
-						<span className="mono">CLI &amp; AI skills</span>
-						<p>
-							<a href={site.cliUrl} target="_blank" rel="noreferrer">
-								substrate-cli
-							</a>{' '}
-							installs the system, files feedback, and reads docs offline;{' '}
-							<a href={site.atlasUrl} target="_blank" rel="noreferrer">
-								atlas
-							</a>{' '}
-							materializes Aurora&rsquo;s agent skills into consuming repos.
-						</p>
-					</li>
-					<li>
-						<span className="mono">Contribution</span>
-						<p>
-							Source-link and snapshot workflows:{' '}
-							<a
-								href={`${site.repoUrl}/blob/main/${site.contributionDocPath}`}
-								target="_blank"
-								rel="noreferrer"
-							>
-								DesignSystemConsumerWorkflows
-							</a>
-							.
-						</p>
-					</li>
-					<li>
-						<span className="mono">Support</span>
-						<p>
-							{site.supportChannel.value} <Provisional what="confirm channel" />
-						</p>
-					</li>
-				</ul>
-			</Exhibit>
 		</>
 	);
 }

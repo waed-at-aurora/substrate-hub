@@ -1883,34 +1883,7 @@ input[data-slot='input'],
 	stroke-width: 2.3;
 }
 
-/* ── feed / releases ────────────────────────────────────────── */
-
-.feed {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-
-.feed li {
-	display: grid;
-	grid-template-columns: 7.5rem 5rem minmax(0, 1fr) auto;
-	gap: 1rem;
-	align-items: baseline;
-	padding: 0.55rem 0;
-	border-bottom: 1px solid var(--rule-soft);
-	font-size: 0.9rem;
-}
-
-.feed .type {
-	font-family: var(--font-mono), monospace;
-	font-size: 0.7rem;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	color: var(--muted);
-}
-.feed .type[data-t='feat'] {
-	color: var(--live);
-}
+/* ── release notes ──────────────────────────────────────────── */
 
 .release-notes {
 	max-width: 76ch;
@@ -1932,27 +1905,8 @@ input[data-slot='input'],
 	letter-spacing: -0.015em;
 	line-height: 1.2;
 }
-.release-notes h3 {
-	margin: 1.6rem 0 0.55rem;
-	color: var(--ink);
-	font-family: var(--font-mono), monospace;
-	font-size: 0.72rem;
-	font-weight: 500;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-}
-.release-notes p,
-.release-notes ul,
-.release-notes ol {
+.release-notes p {
 	margin: 0.7rem 0;
-}
-.release-notes ul,
-.release-notes ol {
-	padding-inline-start: 1.25rem;
-}
-.release-notes li {
-	margin: 0.35rem 0;
-	padding-inline-start: 0.2rem;
 }
 .release-notes code {
 	border: 1px solid var(--rule);
@@ -1962,33 +1916,6 @@ input[data-slot='input'],
 	padding: 0.08rem 0.28rem;
 	font-family: var(--font-mono), monospace;
 	font-size: 0.85em;
-}
-
-/* ── resource list ──────────────────────────────────────────── */
-
-.resources {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	columns: 2;
-	column-gap: var(--gutter);
-}
-.resources li {
-	break-inside: avoid;
-	border-top: 1px solid var(--rule-soft);
-	padding: 0.7rem 0 1rem;
-}
-.resources .mono {
-	color: var(--muted);
-	font-size: 0.7rem;
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
-	display: block;
-	margin-bottom: 0.25rem;
-}
-.resources p {
-	font-size: 0.86rem;
-	color: var(--ink-2);
 }
 
 /* ── roadmap columns ────────────────────────────────────────── */
@@ -2662,9 +2589,6 @@ input[data-slot='input'],
 	.roadmap {
 		grid-template-columns: 1fr;
 	}
-	.resources {
-		columns: 1;
-	}
 }
 
 @media (max-width: 52rem) {
@@ -2692,13 +2616,6 @@ input[data-slot='input'],
 		display: none;
 	}
 	.masthead-sub {
-		display: none;
-	}
-	.feed li {
-		grid-template-columns: 6rem minmax(0, 1fr);
-	}
-	.feed .type,
-	.feed .hash {
 		display: none;
 	}
 	.stage-ghost {
