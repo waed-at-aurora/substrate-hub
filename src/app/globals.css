@@ -518,6 +518,16 @@ button {
 	user-select: none;
 }
 
+.landing-home {
+	position: relative;
+	isolation: isolate;
+	overflow: clip;
+	background:
+		linear-gradient(var(--rule-soft) 1px, transparent 1px) 0 0 / 100% 25svh,
+		linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px) 0 0 / 12.5% 100%,
+		var(--paper);
+}
+
 /* ── landing: the stage grown to the whole viewport ─────────── */
 
 .landing {
@@ -526,14 +536,32 @@ button {
 	--pnx: -0.2;
 	--pny: -0.26;
 	--enter-y: 75%;
+	--tether-opacity: 0.055;
 	position: relative;
+	z-index: 2;
 	height: 100svh;
-	overflow: hidden;
+	overflow: visible;
 	display: flex;
 	flex-direction: column;
 	background:
-		radial-gradient(140% 120% at var(--lx) var(--ly), transparent 46%, rgba(0, 0, 0, 0.62) 100%),
-		radial-gradient(82% 68% at var(--lx) var(--ly), color-mix(in srgb, var(--rule) 88%, var(--ink)) 0%, color-mix(in srgb, var(--paper) 88%, var(--rule)) 54%, var(--paper) 100%);
+		radial-gradient(140% 120% at var(--lx) var(--ly), transparent 44%, rgba(0, 0, 0, 0.58) 100%),
+		radial-gradient(
+			82% 68% at var(--lx) var(--ly),
+			color-mix(in srgb, var(--rule) 88%, var(--ink)) 0%,
+			color-mix(in srgb, var(--paper) 76%, transparent) 56%,
+			transparent 100%
+		);
+}
+.landing::after {
+	content: '';
+	position: absolute;
+	z-index: 1;
+	left: 0;
+	bottom: 0;
+	width: min(62rem, 72vw);
+	height: 48%;
+	pointer-events: none;
+	background: radial-gradient(ellipse 98% 94% at 0 100%, color-mix(in srgb, var(--paper) 97%, transparent) 0%, color-mix(in srgb, var(--paper) 82%, transparent) 58%, transparent 100%);
 }
 
 /* the drafting grid lives only where the lamp reaches */
@@ -551,10 +579,38 @@ button {
 
 .landing-starburst {
 	position: absolute;
-	inset: 0;
+	top: 0;
+	left: 0;
+	z-index: 0;
+	width: 100%;
+	height: 118svh;
 	overflow: hidden;
 	pointer-events: none;
-	z-index: 0;
+	transform: translate3d(calc(var(--pnx) * -8px), calc(var(--pny) * -5px), 0);
+	-webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 16%, #000 100%);
+	mask-image: linear-gradient(to bottom, transparent 0%, #000 16%, #000 100%);
+}
+
+.landing-tether {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	display: block;
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+	opacity: var(--tether-opacity);
+	pointer-events: none;
+}
+.landing-tether line {
+	fill: none;
+	stroke: color-mix(in srgb, var(--ink) 72%, var(--rule));
+	stroke-width: 1;
+	vector-effect: non-scaling-stroke;
+}
+.landing-tether line:last-child {
+	stroke-dasharray: 3 7;
+	stroke: color-mix(in srgb, var(--ink) 42%, var(--rule));
 }
 /* The clicked CTA sends one feathered drafting-grid wave across the stage. */
 .landing-enter-wave {
@@ -750,8 +806,7 @@ button {
 	.landing {
 		height: auto;
 		min-height: 100svh;
-		overflow-x: hidden;
-		overflow-y: auto;
+		overflow: visible;
 	}
 	.landing-dateline {
 		align-items: flex-start;
@@ -767,10 +822,6 @@ button {
 	.landing-word-wrap {
 		flex: 0 0 clamp(14rem, 28svh, 19rem);
 		padding-block: 1.5rem;
-	}
-	.landing-starburst {
-		bottom: auto;
-		height: calc(clamp(14rem, 28svh, 19rem) + 4rem);
 	}
 	.landing-word {
 		font-size: clamp(2.65rem, 13vw, 4.5rem);
@@ -822,7 +873,14 @@ button {
 		flex: none;
 		min-block-size: 2.75rem;
 	}
+	.landing-starburst {
+		left: -50%;
+		width: 150%;
+		opacity: 0.72;
+		transform: translate3d(calc(var(--pnx) * -5px), calc(var(--pny) * -3px), 0);
+	}
 }
+
 
 
 /* ── landing continuation: an explorable Three.js system ───── */
@@ -831,10 +889,12 @@ button {
 	--build-progress: 0%;
 	--focus-opacity: 0.14;
 	--ending-progress: 0;
+	--entry-copy-opacity: 0;
 	position: relative;
-	height: 760svh;
-	border-top: 1px solid var(--rule);
-	background: var(--paper);
+	z-index: 1;
+	height: 778svh;
+	margin-top: -18svh;
+	background: transparent;
 }
 
 .foundation-sticky {
@@ -848,10 +908,7 @@ button {
 	grid-template-rows: minmax(0, 1fr) auto;
 	padding: clamp(2rem, 5vh, 4.5rem) var(--gutter) 3.2rem;
 	isolation: isolate;
-	background:
-		linear-gradient(var(--rule-soft) 1px, transparent 1px) 0 0 / 100% 25%,
-		linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px) 0 0 / 12.5% 100%,
-		var(--paper);
+	background: transparent;
 }
 
 .foundation-sticky::after {
@@ -907,7 +964,7 @@ button {
 	grid-column: 1 / span 5;
 	grid-row: 1;
 	align-self: start;
-	opacity: 1;
+	opacity: var(--entry-copy-opacity);
 	transform: translate3d(0, 0, 0);
 	transition: opacity 320ms var(--ease-out), transform 420ms var(--ease-out);
 }
@@ -1291,7 +1348,8 @@ button {
 
 @media (max-width: 52rem) {
 	.foundation-scroll {
-		height: 680svh;
+		height: 690svh;
+		margin-top: -10svh;
 	}
 	.foundation-sticky {
 		min-height: 40rem;
@@ -1405,6 +1463,9 @@ button {
 
 @media (hover: none) {
 	.foundation-inspect-hint {
+		display: none;
+	}
+	.landing-tether {
 		display: none;
 	}
 }
@@ -2218,8 +2279,13 @@ input[data-slot='input'],
 	.landing-ghost {
 		transform: none;
 	}
+	.landing-starburst {
+		opacity: 0.42;
+		transform: none;
+	}
 	.foundation-scroll {
 		height: auto;
+		margin-top: 0;
 	}
 	.foundation-sticky {
 		position: relative;

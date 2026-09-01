@@ -33,7 +33,7 @@ export default function HubLayout({ children }: { children: React.ReactNode }) {
 						<a href={site.repoUrl} target="_blank" rel="noreferrer">
 							aurora-ui
 						</a>
-						/packages/components-v2
+						/packages/substrate
 					</span>
 					<span>catalog synced {fmtDate(data.syncedAt)} · regenerate with `npm run sync`</span>
 				</div>

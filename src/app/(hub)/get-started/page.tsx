@@ -57,7 +57,7 @@ export default function GetStarted() {
 							/>
 							<CopyBlock
 								label="Manual — inside the monorepo, package.json"
-								code={`"dependencies": {\n\t"@aurora-ui/components-v2": "workspace:packages/components-v2"\n}`}
+								code={`"dependencies": {\n\t"@aurora-ui/substrate": "workspace:packages/substrate"\n}`}
 							/>
 							<p className="note" style={{ marginTop: '0.7rem' }}>
 								Outside the monorepo, use the guided CLI install — it handles the private-registry
@@ -76,7 +76,7 @@ export default function GetStarted() {
 							</p>
 							<CopyBlock
 								label="Root of your app"
-								code={`import '@aurora-ui/components-v2/style.css';\n\n<html className="dark"> … </html>`}
+								code={`import '@aurora-ui/substrate/style.css';\n\n<html className="dark"> … </html>`}
 							/>
 						</div>
 					</li>
@@ -85,7 +85,7 @@ export default function GetStarted() {
 							<h3>Render a first component</h3>
 							<CopyBlock
 								label="Anywhere in your tree"
-								code={`import { Button } from '@aurora-ui/components-v2';\n\n<Button variant="eos">Run scenario</Button>`}
+								code={`import { Button } from '@aurora-ui/substrate';\n\n<Button variant="eos">Run scenario</Button>`}
 							/>
 							<p className="note" style={{ marginTop: '0.7rem' }}>
 								Steer it live in <Link href="/#live">Fig. 2 on the overview</Link> — every option

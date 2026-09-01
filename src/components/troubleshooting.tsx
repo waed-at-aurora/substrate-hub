@@ -5,7 +5,7 @@ import {
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
-} from '@aurora-ui/components-v2/components';
+} from '@aurora-ui/substrate/components';
 
 const items = [
 	{
@@ -14,7 +14,7 @@ const items = [
 		a: (
 			<>
 				The stylesheet import is missing or loads after an aggressive reset. Import{' '}
-				<code>@aurora-ui/components-v2/style.css</code> once at the app root. Its rules live in
+				<code>@aurora-ui/substrate/style.css</code> once at the app root. Its rules live in
 				cascade layers, so unlayered app CSS intentionally wins ties — check you are not overriding
 				tokens by accident.
 			</>

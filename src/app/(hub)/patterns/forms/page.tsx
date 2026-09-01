@@ -79,7 +79,7 @@ export default function FormsPattern() {
 				</p>
 			</Exhibit>
 
-			<Exhibit label="Table 1 — chapters" meta="documented in storybook-v2" id="chapters">
+			<Exhibit label="Table 1 — chapters" meta="documented in storybook-substrate" id="chapters">
 				<div className="table-scroll">
 <table style={{ maxWidth: '46rem' }}>
 					<thead>
@@ -143,11 +143,11 @@ export default function FormsPattern() {
 					Product variants belong above the shared pattern: keep the structure and validation voice,
 					differentiate presentation at the product layer. Source:{' '}
 					<a
-						href={`${site.repoUrl}/tree/main/storybook-v2/src/patterns/forms`}
+						href={`${site.repoUrl}/tree/main/storybook-substrate/src/patterns/forms`}
 						target="_blank"
 						rel="noreferrer"
 					>
-						storybook-v2/src/patterns/forms
+						storybook-substrate/src/patterns/forms
 					</a>
 					.
 				</p>
