@@ -64,6 +64,8 @@ export const releasesData = substrateReleases as unknown as {
 	releases: ReleaseEntry[];
 };
 
+export const latestReleaseVersion = releasesData.releases[0]?.version ?? data.source.version;
+
 export const catalog: CatalogEntry[] = [...data.composites, ...data.primitives];
 
 export const fmtDate = (iso: string) =>

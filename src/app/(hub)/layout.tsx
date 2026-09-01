@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ContentsRail } from '@/components/contents-rail';
 import { site } from '@/config/site';
-import { data, fmtDate } from '@/lib/data';
+import { data, fmtDate, latestReleaseVersion } from '@/lib/data';
 
 /** The hub chrome: masthead, contents rail, and colophon around every numbered section. */
 export default function HubLayout({ children }: { children: React.ReactNode }) {
@@ -17,7 +17,7 @@ export default function HubLayout({ children }: { children: React.ReactNode }) {
 					</span>
 					<span className="masthead-spacer" />
 					<span className="masthead-meta">
-						{data.source.package} v{data.source.version} · synced {fmtDate(data.syncedAt)}
+						{data.source.package} v{latestReleaseVersion} · synced {fmtDate(data.syncedAt)}
 					</span>
 				</div>
 			</header>

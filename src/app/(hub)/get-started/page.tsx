@@ -5,7 +5,7 @@ import { CopyBlock } from '@/components/copy-block';
 import { Exhibit } from '@/components/exhibit';
 import { ExtArrow } from '@/components/marks';
 import { site, storybookHref } from '@/config/site';
-import { data } from '@/lib/data';
+import { data, latestReleaseVersion } from '@/lib/data';
 
 export const metadata: Metadata = { title: 'Get started' };
 
@@ -15,7 +15,7 @@ export default function GetStarted() {
 			<div className="cover" style={{ paddingBottom: '1.6rem' }}>
 				<p className="cover-issue">
 					<span>02 · Get started</span>
-					<span>{data.source.package} v{data.source.version}</span>
+					<span>{data.source.package} v{latestReleaseVersion}</span>
 				</p>
 				<h1 style={{ fontSize: 'clamp(2rem, 3.6vw, 3.2rem)' }}>From zero to a rendered component.</h1>
 				<p className="cover-standfirst">

@@ -7,7 +7,7 @@ import { Playground } from '@/components/islands';
 import { OverviewMotion } from '@/components/overview-motion';
 import { PyramidFigure } from '@/components/pyramid-figure';
 import { site, storybookHref } from '@/config/site';
-import { data, fmtDate } from '@/lib/data';
+import { data, fmtDate, latestReleaseVersion } from '@/lib/data';
 
 export const metadata = { title: 'Overview' };
 
@@ -20,7 +20,7 @@ export default function Home() {
 				<p className="stage-dateline">
 					<span>Substrate Hub · internal edition</span>
 					<span>
-						{data.source.package} v{data.source.version} · last change {fmtDate(data.history[0].date)}
+						{data.source.package} v{latestReleaseVersion} · last change {fmtDate(data.history[0].date)}
 					</span>
 				</p>
 				<span className="stage-ghost" aria-hidden="true">
@@ -33,7 +33,10 @@ export default function Home() {
 
 				<div className="stage-body">
 					<p className="stage-position">The foundational medium from which experiences emerge.</p>
-					<p className="stage-copy">An agent-first, modern design system.</p>
+					<p className="stage-copy">
+						The shared interaction layer for EOS products, implemented in reusable components and
+						documented patterns.
+					</p>
 					<div className="stage-actions">
 						<Link className="action action-primary" href="/get-started">
 							Install Substrate
@@ -49,6 +52,76 @@ export default function Home() {
 					<InstallLine command="npx --yes github:AuroraEnergyResearch/substrate-cli-v2 install" />
 				</div>
 			</section>
+
+			{/* context before implementation */}
+			<Exhibit
+				label="What Substrate is"
+				meta="shared interaction layer · product-owned experiences"
+				id="what"
+			>
+				<div className="overview-definition">
+					<div className="overview-definition-lead">
+						<h2 className="statement">A common way to solve recurring product interactions.</h2>
+						<p className="lede">
+							Substrate sits between low-level UI foundations and complete EOS experiences. It
+							packages shared decisions into reusable composite components and documented patterns,
+							so teams start from established behavior instead of recreating the same interaction.
+						</p>
+					</div>
+					<dl className="overview-boundary" aria-label="Substrate ownership boundary">
+						<div>
+							<dt>Shared through Substrate</dt>
+							<dd>Interaction behavior, UI foundations, reusable components, and recurring patterns.</dd>
+						</div>
+						<div>
+							<dt>Owned by each product</dt>
+							<dd>
+								Domain workflows, data, content, and the decisions that make an experience distinct.
+							</dd>
+						</div>
+					</dl>
+				</div>
+			</Exhibit>
+
+			<Exhibit label="Why it matters" meta="read the system before you build" id="why">
+				<div className="overview-audiences">
+					<div className="overview-audiences-intro">
+						<h2>Shared decisions become visible before work is committed.</h2>
+						<p className="lede">
+							Substrate gives each role the view it needs to align early, then points to the
+							authoritative place to go deeper.
+						</p>
+					</div>
+					<dl className="overview-audience-list">
+						<div className="overview-audience-row">
+							<dt>Product design</dt>
+							<dd>
+								<strong>Know what already exists—and why.</strong>
+								<span>
+									Check component maturity and pattern intent before specing. Reuse shared
+									interactions; focus design effort where the product needs to differ.
+								</span>
+							</dd>
+							<Link className="overview-audience-link" href="/patterns">
+								Explore patterns
+							</Link>
+						</div>
+						<div className="overview-audience-row">
+							<dt>Product &amp; leadership</dt>
+							<dd>
+								<strong>Understand the shared layer and its direction.</strong>
+								<span>
+									See what Substrate standardizes, what remains product-owned, and what is changing
+									next.
+								</span>
+							</dd>
+							<Link className="overview-audience-link" href="/roadmap">
+								Review the roadmap
+							</Link>
+						</div>
+					</dl>
+				</div>
+			</Exhibit>
 
 			{/* 3 — how Substrate fits */}
 			<Exhibit label="Fig. 1 — where Substrate creates leverage" meta="foundation included · UX core prioritized" id="fits">

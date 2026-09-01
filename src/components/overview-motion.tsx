@@ -75,8 +75,10 @@ export function OverviewMotion() {
 			});
 
 			const listGroups = [
-				'#quick-start .codeblock',
+				'#what .overview-boundary > div',
+				'#why .overview-audience-row',
 				'#fits .pyramid-note',
+				'#quick-start .codeblock',
 				'#coverage tbody tr',
 			];
 

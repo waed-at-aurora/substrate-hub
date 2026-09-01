@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import ReactMarkdown from 'react-markdown';
 import { Exhibit } from '@/components/exhibit';
 import { ExtArrow } from '@/components/marks';
-import { data, fmtDate, releasesData } from '@/lib/data';
+import { fmtDate, latestReleaseVersion, releasesData } from '@/lib/data';
 export const metadata: Metadata = { title: 'Releases' };
 
 const releaseSummaryComponents = {
@@ -15,17 +15,16 @@ export default function Releases() {
 	const releases = releasesData.releases;
 	const latestRelease = releases[0];
 	const previousRelease = releases[1];
-	const currentVersion = latestRelease?.version ?? data.source.version;
 
 	return (
 		<>
 			<div className="cover" style={{ paddingBottom: '1.6rem' }}>
 				<p className="cover-issue">
 					<span>05 · Releases</span>
-					<span>current: v{currentVersion}</span>
+					<span>current: v{latestReleaseVersion}</span>
 				</p>
 				<h1 style={{ fontSize: 'clamp(2rem, 3.6vw, 3.2rem)' }}>
-					v{currentVersion}{' '}
+					v{latestReleaseVersion}{' '}
 					<span className="new-signal" style={{ verticalAlign: 'middle' }}>
 						current
 					</span>
