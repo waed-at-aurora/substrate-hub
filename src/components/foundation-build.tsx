@@ -24,7 +24,7 @@ const LAYERS = [
 		key: 'tokens',
 		number: '01',
 		name: 'Tokens',
-		statement: 'The decisions underneath everything.',
+		statement: 'Decisions beneath every product, made once.',
 		detail: 'Color · type · space · motion',
 		cameraY: 0.25,
 		targetY: -0.35,
@@ -34,7 +34,7 @@ const LAYERS = [
 		key: 'primitives',
 		number: '02',
 		name: 'Primitives',
-		statement: 'Shared components. Build once, reuse everywhere.',
+		statement: 'Shared building blocks mean no team starts from scratch.',
 		detail: '',
 		cameraY: 0.85,
 		targetY: 0.08,
@@ -44,7 +44,7 @@ const LAYERS = [
 		key: 'composites',
 		number: '03',
 		name: 'Composites',
-		statement: 'Complete components, ready to use.',
+		statement: 'Ready-made components save development time.',
 		detail: '',
 		cameraY: 1.45,
 		targetY: 0.52,
@@ -54,7 +54,7 @@ const LAYERS = [
 		key: 'products',
 		number: '04',
 		name: 'Products',
-		statement: 'One unified EOS experience across every product.',
+		statement: 'Every product feels unmistakably EOS.',
 		detail: 'Chronos · Amun · Origin · Solaris · Lumus',
 		cameraY: 2.05,
 		targetY: 1.02,
@@ -755,8 +755,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 			<div className="foundation-sticky">
 				<header className="foundation-copy">
 					<p className="foundation-caption">Fig. 02 · system architecture</p>
-					<h2 id="foundation-title">See how Substrate stacks up.</h2>
-					<p>Scroll to inspect each layer of the system, from shared decisions to distinct products.</p>
+					<h2 id="foundation-title">See what one shared system unlocks.</h2>
+					<p>Fewer repeated decisions, faster delivery, and one consistent EOS experience.</p>
 				</header>
 
 				<div className="foundation-model" ref={modelRef}>
@@ -784,9 +784,9 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							<h3>{layer.statement}</h3>
 							<p>
 								{index === 1
-									? `${primitives} shareable primitives · reuse instead of rebuild`
+									? `${primitives} shared building blocks`
 									: index === 2
-										? `${composites} production-ready composites`
+										? `${composites} ready-made components`
 										: layer.detail}
 							</p>
 						</article>
