@@ -76,7 +76,7 @@ export function OverviewMotion() {
 
 			const listGroups = [
 				'#what .overview-boundary > div',
-				'#why .overview-audience-row',
+				'#why [data-persona-trigger]',
 				'#fits .pyramid-note',
 				'#quick-start .codeblock',
 				'#coverage tbody tr',

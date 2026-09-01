@@ -6,6 +6,7 @@ import { ExtArrow } from '@/components/marks';
 import { Playground } from '@/components/islands';
 import { OverviewMotion } from '@/components/overview-motion';
 import { PyramidFigure } from '@/components/pyramid-figure';
+import { PersonaOverview } from '@/components/persona-overview';
 import { site, storybookHref } from '@/config/site';
 import { data, fmtDate, latestReleaseVersion } from '@/lib/data';
 
@@ -83,44 +84,8 @@ export default function Home() {
 				</div>
 			</Exhibit>
 
-			<Exhibit label="Why it matters" meta="read the system before you build" id="why">
-				<div className="overview-audiences">
-					<div className="overview-audiences-intro">
-						<h2>Shared decisions become visible before work is committed.</h2>
-						<p className="lede">
-							Substrate gives each role the view it needs to align early, then points to the
-							authoritative place to go deeper.
-						</p>
-					</div>
-					<dl className="overview-audience-list">
-						<div className="overview-audience-row">
-							<dt>Product design</dt>
-							<dd>
-								<strong>Know what already exists—and why.</strong>
-								<span>
-									Check component maturity and pattern intent before specing. Reuse shared
-									interactions; focus design effort where the product needs to differ.
-								</span>
-							</dd>
-							<Link className="overview-audience-link" href="/patterns">
-								Explore patterns
-							</Link>
-						</div>
-						<div className="overview-audience-row">
-							<dt>Product &amp; leadership</dt>
-							<dd>
-								<strong>Understand the shared layer and its direction.</strong>
-								<span>
-									See what Substrate standardizes, what remains product-owned, and what is changing
-									next.
-								</span>
-							</dd>
-							<Link className="overview-audience-link" href="/roadmap">
-								Review the roadmap
-							</Link>
-						</div>
-					</dl>
-				</div>
+			<Exhibit label="Choose your view" meta="four roles · one shared system" id="why">
+				<PersonaOverview primitives={data.counts.primitives} composites={data.counts.composites} />
 			</Exhibit>
 
 			{/* 3 — how Substrate fits */}
