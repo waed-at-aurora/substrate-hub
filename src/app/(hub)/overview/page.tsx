@@ -67,11 +67,11 @@ export default function Home() {
 				/>
 				<CopyBlock
 					label="Manual, inside the aurora-ui monorepo — package.json"
-					code={`"dependencies": {\n\t"@aurora-ui/components-v2": "workspace:packages/components-v2"\n}`}
+					code={`"dependencies": {\n\t"@aurora-ui/substrate": "workspace:packages/substrate"\n}`}
 				/>
 				<CopyBlock
 					label="First import"
-					code={`import { Button } from '@aurora-ui/components-v2';\nimport '@aurora-ui/components-v2/style.css';`}
+					code={`import { Button } from '@aurora-ui/substrate';\nimport '@aurora-ui/substrate/style.css';`}
 				/>
 				<p className="note" style={{ marginTop: '0.9rem' }}>
 					The <a href={site.cliUrl} target="_blank" rel="noreferrer">Substrate CLI</a> (prototype) also
@@ -178,7 +178,7 @@ export default function Home() {
 							<a href={site.repoUrl} target="_blank" rel="noreferrer">
 								AuroraEnergyResearch/aurora-ui
 							</a>{' '}
-							— packages/components-v2 is the source of truth.
+							— packages/substrate is the source of truth.
 						</p>
 					</li>
 					<li>
@@ -186,7 +186,7 @@ export default function Home() {
 						<p>
 							The canonical component documentation.{' '}
 							<a className="ext" href={storybookHref(null)} target="_blank" rel="noreferrer">
-								storybook-v2
+								storybook-substrate
 								<ExtArrow />
 							</a>
 						</p>

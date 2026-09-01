@@ -2143,6 +2143,40 @@ input[data-slot='input'],
 	max-width: 13ch;
 	font-size: clamp(3rem, 7vw, 6rem);
 }
+
+.patterns-cover {
+	padding-bottom: clamp(3rem, 7vh, 5.5rem);
+}
+.patterns-cover h1 {
+	max-width: 17ch;
+	font-size: clamp(2.8rem, 5.8vw, 5rem);
+}
+
+.component-gallery-header {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 2rem;
+	align-items: end;
+	padding: 0 0 clamp(1.5rem, 4vw, 2.75rem);
+}
+.component-gallery-header h2 {
+	max-width: 18ch;
+	font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+	line-height: 1.05;
+}
+.component-gallery-header p {
+	max-width: 66ch;
+	margin: 0.75rem 0 0;
+	color: var(--ink-2);
+}
+.component-gallery-header > span {
+	color: var(--muted);
+	font-family: var(--font-mono), monospace;
+	font-size: 0.7rem;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
 .component-gallery-section {
 	padding: 0 0 clamp(4rem, 8vw, 8rem);
 }
@@ -2424,6 +2458,14 @@ input[data-slot='input'],
 	.components-cover h1 {
 		font-size: clamp(2.8rem, 12vw, 4.5rem);
 	}
+	.patterns-cover h1 {
+		font-size: clamp(2.55rem, 11vw, 4rem);
+	}
+	.component-gallery-header {
+		grid-template-columns: 1fr;
+		gap: 1.25rem;
+		align-items: start;
+	}
 	.component-catalog .catalog-bar {
 		position: relative;
 	}
@@ -2454,6 +2496,13 @@ input[data-slot='input'],
 	grid-template-columns: minmax(0, 1fr) minmax(14rem, 0.55fr);
 	gap: 1.5rem clamp(2rem, 5vw, 5rem);
 	align-items: end;
+}
+.forms-index-example {
+	margin-top: clamp(2rem, 5vw, 3.5rem);
+	border-top: 1px solid var(--ink);
+}
+.forms-index-handoff {
+	margin-top: clamp(1.5rem, 4vw, 2.5rem);
 }
 .forms-showcase {
 	margin-top: 2.5rem;

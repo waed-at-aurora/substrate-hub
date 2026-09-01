@@ -37,8 +37,8 @@ Substrate bridges UI primitives and complete product experiences. Its primary re
 ## Capabilities and Constraints
 
 - Confirmed IA (user-specified): Home, Get started, Components, Patterns, Releases, Roadmap, Tools & resources. The standalone Updates page is temporarily omitted; the homepage keeps the lightweight “what’s happening” source-history feed. Homepage sequence: positioning → primary actions → system pyramid → quick start → coverage → what's happening → resources.
-- Substrate = the design system implemented at `~/repo/aurora-ui/packages/components-v2` (`@aurora-ui/components-v2`). The hub renders its components live; the interactive playground renders the `InvestmentCaseSelectionCard` composite (selection states default/selected/active; consumer-composed header, badges, and content).
-- Forms is the one established pattern (`storybook-v2/src/patterns/forms/FormPatterns.stories.tsx`); the Patterns surface leads with it.
+- Substrate = the design system implemented at `~/repo/aurora-ui/packages/substrate` (`@aurora-ui/substrate`). The hub renders its components live; the interactive playground renders the `InvestmentCaseSelectionCard` composite (selection states default/selected/active; consumer-composed header, badges, and content).
+- Forms is the one established pattern (`storybook-substrate/src/patterns/forms/FormPatterns.stories.tsx`); the Patterns surface leads with it.
 - Component detail stays shallow: link into the exact Storybook docs, never duplicate API documentation maintained there.
 - Roadmap: Now/Next/Later, distinguish commitments from exploration, link to the authoritative planning source.
 
@@ -46,17 +46,17 @@ Substrate bridges UI primitives and complete product experiences. Its primary re
 
 - Product name: Substrate; hub name: Substrate Hub. Serves the EOS product family at Aurora Energy Research.
 - Astryx (Meta's design system) binds the **craft bar & tone** (big-company polish: confident, calm, precise) and the **IA/hub structure** (task-first front door). Otherwise loose inspiration: Substrate Hub keeps its own identity.
-- EOS token language exists in the DS itself: Aurora yellow `#FFCC00` brand ramp, zinc neutrals, cyan/purple/green accents, light+dark themes (`packages/components-v2/src/tokens/`).
+- EOS token language exists in the DS itself: Aurora yellow `#FFCC00` brand ramp, zinc neutrals, cyan/purple/green accents, light+dark themes (`packages/substrate/src/tokens/`).
 
 ## Evidence on Hand
 
 Real, verified in `~/repo/aurora-ui`:
 
-- Package `@aurora-ui/components-v2` v0.0.1; workspace dep in-monorepo, private CodeArtifact registry outside. Import: `import { Button } from '@aurora-ui/components-v2'` + `import '@aurora-ui/components-v2/style.css'`. Built dist exists (`dist/components.mjs`, `components.css`).
+- Package `@aurora-ui/substrate` v0.0.1; workspace dep in-monorepo, private CodeArtifact registry outside. Import: `import { Button } from '@aurora-ui/substrate'` + `import '@aurora-ui/substrate/style.css'`. Published builds expose `dist/components.mjs` and `dist/styles.css`.
 - Inventory: ~49 UI primitives (`src/ui/`), 9 composite patterns (`src/components/`: data-table, surface-toolbar, time-range-selector, timeline-scrubber, chart-toolbar, investment-case-selection-card, mode-activator-toggle-group, surface-panel, cms), charts layer, stable/alpha channels, experimental `ux-intent` track.
-- Canonical Storybook: `storybook-v2` (dev port 6007). Production: https://laughing-adventure-e2q2em3.pages.github.io/v2 (private GitHub Pages, auth required; confirmed by user 2026-08-26).
+- Canonical Storybook: `storybook-substrate` (dev port 6007). Production: https://laughing-adventure-e2q2em3.pages.github.io/v2 (private GitHub Pages, auth required; confirmed by user 2026-08-26).
 - CLI: `substrate-cli` (github.com/AuroraEnergyResearch/substrate-cli-v2, prototype) — installs the design system (`install`/`doctor`, real AWS/npm steps), raises feedback as GitHub issues, reads component docs offline from a bundled snapshot; agent-first (every prompt has a flag; `substrate skill install` ships an agent skill). Team path: `npx --yes github:AuroraEnergyResearch/substrate-cli-v2 …` (private repo, needs `gh auth login`). Separately, `atlas` (github.com/AuroraEnergyResearch/atlas) manages Aurora's materialized AI skills and shared context.
-- Releases: semantic-release publishes versioned `components-v2` GitHub releases. The hub imports those notes automatically after the matching release workflow succeeds and retains path-filtered source history for the homepage feed.
+- Releases: semantic-release publishes versioned `packages/substrate/*` GitHub releases. The hub imports those notes automatically after the matching release workflow succeeds and retains path-filtered source history for the homepage feed.
 - Support channel: not found — marked placeholder on replacement list.
 
 No marketing claims, testimonials, or metrics were provided; none may be invented.

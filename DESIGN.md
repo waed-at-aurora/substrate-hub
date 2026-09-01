@@ -119,7 +119,7 @@ Color is rationed by law. Aurora yellow (#ffcc00) appears exactly three times in
   - Editorial exhibit grammar: mono uppercase captions, ruled sections, numbered contents rail with keyboard direct address (1–7).
   - Variable-font display voice; the landing turns the `wght` axis into a direct response to light.
   - Accent color is law-bound (yellow = primary action + new + active-section chip; cyan = live; amber = provisional).
-  - Real components rendered live from `@aurora-ui/components-v2` are content and follow the DS's own palette, not the hub's laws.
+  - Real components rendered live from `@aurora-ui/substrate` are content and follow the DS's own palette, not the hub's laws.
 
 ## Colors
 
@@ -146,7 +146,7 @@ A zinc-neutral night ramp with three law-bound accents; the ground is the design
 - **Rule Soft** (#1b1b20): the quieter hairline — row separators, rail borders, internal panel dividers.
 
 ### Named Rules
-**The Yellow Law.** In hub chrome, #ffcc00 may appear only on the one primary action of a surface, on the `new` signal, and on the contents rail's active-section number chip. A dark yellow **wash** (22% Yellow into Paper) additionally grounds the pyramid's highest-leverage UX layer. Code panels use one restrained treatment: a 2% Yellow wash with a 24% Yellow Rule border. It keeps implementation material recognizable without competing with the primary action. Content rendered by `@aurora-ui/components-v2` (e.g. the `eos` Button variant) is content, not chrome — its yellow is exempt.
+**The Yellow Law.** In hub chrome, #ffcc00 may appear only on the one primary action of a surface, on the `new` signal, and on the contents rail's active-section number chip. A dark yellow **wash** (22% Yellow into Paper) additionally grounds the pyramid's highest-leverage UX layer. Code panels use one restrained treatment: a 2% Yellow wash with a 24% Yellow Rule border. It keeps implementation material recognizable without competing with the primary action. Content rendered by `@aurora-ui/substrate` (e.g. the `eos` Button variant) is content, not chrome — its yellow is exempt.
 
 **The Cyan-Live Rule.** Cyan marks things that are genuinely live or newly landed (landing coordinate readout, recalc tick, `feat` feed type). Never use it decoratively.
 
@@ -254,19 +254,20 @@ Near-square geometry: radii run 2px (actions, chips, copy buttons, filter groups
 - Inline mono uppercase chip, Amber text, 1px dashed amber-mixed border, reading `provisional · <what>`. Every render corresponds to a TODO on the replacement list; it is honest signage, not decoration.
 
 ### Playground (signature component)
-- Two-panel bordered figure: render stage (min 23rem, faint 2.2rem two-axis gridline wash over Paper Raised, centered live DS component) beside a controls column on Paper driven by real DS `Select`/`Input`/`Checkbox`. A mono readout bar states provenance ("rendered from @aurora-ui/components-v2 · dist") and stamps `recalc HH:MM:SS.mmm` in Live Cyan on every option change, flashing Live Bright. Below the controls, a generated import snippet mirrors the current props inside the same restrained 2% Yellow-washed Paper Raised panel with a 24% Yellow Rule border and 3px radius.
+- Two-panel bordered figure: render stage (min 23rem, faint 2.2rem two-axis gridline wash over Paper Raised, centered live DS component) beside a controls column on Paper driven by real DS `Select`/`Input`/`Checkbox`. A mono readout bar states provenance ("rendered from @aurora-ui/substrate · dist") and stamps `recalc HH:MM:SS.mmm` in Live Cyan on every option change, flashing Live Bright. Below the controls, a generated import snippet mirrors the current props inside the same restrained 2% Yellow-washed Paper Raised panel with a 24% Yellow Rule border and 3px radius.
 
 ### Filter group (component gallery)
 - Search and segmented mono-uppercase layer controls sit in one opaque sticky ruled bar above the gallery; pressed filters invert Ink-on-Paper. The flush-right mono `aria-live` readout reports the number of visible live specimens rather than the package export total.
 
 ### Component gallery
-- `/components` is a live, code-free specimen wall rather than a source table. Every displayed object renders from `@aurora-ui/components-v2`; labels and direct Storybook links sit in a separate ruled caption band so the components remain the visual subject.
+- `/components` is a live, code-free specimen wall rather than a source table. Every displayed object renders from `@aurora-ui/substrate`; labels and direct Storybook links sit in a separate ruled caption band so the components remain the visual subject.
 - The wall uses a dense 12-column drafting grid with deliberately mixed 4-, 6-, and 8-column specimens. A hero composite, wider interaction families, and compact primitives create varied pacing without equal-card repetition. At 64rem the wall becomes two columns with the hero full width; at 52rem every specimen becomes a single column.
 - Specimen stages use Paper Raised and the established drafting grid. The hub frames but does not visually rewrite package components. Search empty state offers one explicit gallery reset; no source rows or code snippets appear.
 - Gallery interaction specimens stay functional: the slider is controlled and announces its live percentage, while the tabs use the package's line variant inside a ruled dark data panel with yellow active indication, compact mono navigation, and context/value/detail hierarchy.
 
 ### Forms pattern overview
-- `/patterns/forms` is a high-level, code-free pattern map. It renders three representative moments from `@aurora-ui/components-v2` — ordinary entry, validation and recovery, and a sensitive confirmation — instead of duplicating Storybook's chapter, component, and example inventories.
+- `/patterns` is deliberately singular: it presents Forms as the only established interaction pattern, renders the Storybook structure-and-grouping example with live package components, and sends deeper guidance directly to Storybook. Emerging task-area guidance does not appear on the index.
+- `/patterns/forms` is a high-level, code-free pattern map. It renders three representative moments from `@aurora-ui/substrate` — ordinary entry, validation and recovery, and a sensitive confirmation — instead of duplicating Storybook's chapter, component, and example inventories.
 - A full-width structure specimen leads; the two supporting states use a container-responsive `auto-fit` grid so they become one column whenever the document column cannot hold both. Every stage uses the established ruled Paper Raised field, while captions stay in separate bands and preserve lead → validation → sensitive DOM order.
 - The specimens remain functional: visitors can repair the invalid market release and exercise the sensitive-action state. One final ruled handoff carries the page's yellow primary action and sends visitors to the complete Storybook chapters, examples, accessibility checks, and interaction tests.
 
@@ -275,7 +276,7 @@ Near-square geometry: radii run 2px (actions, chips, copy buttons, filter groups
 - **Interactive (user-accepted 2026-08-26; revised 2026-08-28):** each layer is an SVG anchor button (`.pyr-btn`, hover brightens 1.3, focus-visible 2px Ink outline) driving local client state (`PyramidFigure`) — no hash change and no scroll jump. Exactly one note is open at a time; **the UX core opens by default**. Notes mirror the pyramid order top-to-bottom. They explain where products differentiate, why composite components and interaction patterns are higher leverage than product-specific flows, and how the shared foundation supports that work. The exchange is a staged handoff (user-tuned 2026-08-26): the closing note collapses at 380/240ms, the opening one expands at 550/450ms after a 120ms delay, all on the shared ease; the open note's mono label inverts Ink-on-Paper (its own 260ms transition), and the selected SVG layer's stroke thickens to 2.3 via `aria-pressed`.
 
 ### Theming contract with the DS
-- The hub imports `@aurora-ui/components-v2/style.css` globally and pins `html.dark`, so DS components render in their own dark tokens on the shared #09090b ground. DS styles live in cascade layers; the hub's unlayered CSS wins specificity ties by design. DS-rendered visuals are content: never restyle them to hub laws, and never screenshot them — render the real package. **One user-granted exception (2026-08-26):** DS form controls (`input[data-slot='input']`, `[data-slot='select-trigger']`, `[data-slot='checkbox']`) carry the yellow family site-wide — border color 30% Yellow into Rule plus a 1px inset ring at 15% Yellow; fills stay DS-dark.
+- The hub imports `@aurora-ui/substrate/style.css` globally and pins `html.dark`, so DS components render in their own dark tokens on the shared #09090b ground. DS styles live in cascade layers; the hub's unlayered CSS wins specificity ties by design. DS-rendered visuals are content: never restyle them to hub laws, and never screenshot them — render the real package. **One user-granted exception (2026-08-26):** DS form controls (`input[data-slot='input']`, `[data-slot='select-trigger']`, `[data-slot='checkbox']`) carry the yellow family site-wide — border color 30% Yellow into Rule plus a 1px inset ring at 15% Yellow; fills stay DS-dark.
 
 ### Motion
 All micro-transitions run 120–160ms on `--ease-out` (`cubic-bezier(0.16, 1, 0.3, 1)`). Motion is sparse and role-bound: identity uses the 1100ms variable-weight settle; the root stage adds direct lamp/Star Burst/letter response as one inseparable authored moment; System Construction uses proportional native scrolling with Anime.js `0.35` eased synchronization and its Three adapter for the four-chapter camera tour; `/overview` retains its 18s alternating ghost drift and adds a Motion-driven stage exit plus Anime.js caption/list assembly; the playground uses a 700ms cyan recalc flash; the contents rail answers navigation in ~200ms; and the pyramid uses its measured 380/240ms close then 550/450ms open handoff.
@@ -290,7 +291,7 @@ All micro-transitions run 120–160ms on `--ease-out` (`cubic-bezier(0.16, 1, 0.
 - **Do** set all captions, datelines, table headers, hashes, and counts in Spline Sans Mono, uppercase, wide-tracked, `tabular-nums`.
 - **Do** express state by inversion (Ink fill, Paper text) for pressed filters and selection; the rail's active item uses Surface fill plus the yellow number chip.
 - **Do** use physical status marks with explicit words only when the status helps the visitor act; never surface proposed as a page label.
-- **Do** render DS components live from `@aurora-ui/components-v2` and label their provenance in the readout/caption.
+- **Do** render DS components live from `@aurora-ui/substrate` and label their provenance in the readout/caption.
 - **Do** mark every unconfirmed value with the amber `Provisional` chip and a matching replacement-list entry.
 - **Do** keep the lamp, Star Burst, pointer/touch response, and per-letter weight behavior together on `/`; hand visitors into the document at `/overview`.
 

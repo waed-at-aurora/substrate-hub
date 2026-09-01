@@ -6,7 +6,7 @@ import { data, fmtDate, releasesData } from '@/lib/data';
 export const metadata: Metadata = { title: 'Releases' };
 
 export default function Releases() {
-	const releases = releasesData.releases;
+	const releases = releasesData.releases.filter((release) => release.tag.startsWith('packages/substrate/'));
 	const latestRelease = releases[0];
 	const previousRelease = releases[1];
 	const currentVersion = latestRelease?.version ?? data.source.version;
@@ -27,7 +27,7 @@ export default function Releases() {
 				<p className="cover-standfirst">
 					{latestRelease
 						? `Published ${fmtDate(latestRelease.publishedAt)}. Release notes are imported automatically after the design-system release succeeds.`
-						: 'No versioned release is published yet. Release notes will appear after the first automated components-v2 release.'}
+						: 'No versioned Substrate release is published yet. Release notes will appear after the first automated release.'}
 				</p>
 				<div className="cover-actions">
 					<a
@@ -67,8 +67,7 @@ export default function Releases() {
 					)
 				) : (
 					<p className="lede">
-						Release notes will appear here after the first automated components-v2 release is
-						published.
+						Release notes will appear here after the first automated Substrate release is published.
 					</p>
 				)}
 			</Exhibit>
@@ -96,7 +95,7 @@ export default function Releases() {
 						</p>
 					)
 				) : (
-					<p className="lede">No previous components-v2 release is published.</p>
+					<p className="lede">No previous Substrate release is published.</p>
 				)}
 			</Exhibit>
 

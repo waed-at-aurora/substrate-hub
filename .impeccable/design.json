@@ -74,7 +74,7 @@
 			"kind": "input",
 			"refersTo": "install-line",
 			"description": "Compact one-line copyable command; the stage's quiet workhorse.",
-			"html": "<div class=\"ds-install\"><span class=\"ds-install-prompt\">$</span><code>npm install @aurora-ui/components-v2</code><button class=\"ds-copy\" type=\"button\">copy</button></div>",
+			"html": "<div class=\"ds-install\"><span class=\"ds-install-prompt\">$</span><code>npm install @aurora-ui/substrate</code><button class=\"ds-copy\" type=\"button\">copy</button></div>",
 			"css": ".ds-install { display: inline-flex; align-items: center; gap: 0.9rem; border: 1px solid var(--rule, #26262b); border-radius: 3px; background: rgba(15, 15, 18, 0.8); padding: 0.5rem 0.55rem 0.5rem 0.9rem; font-family: 'Spline Sans Mono', monospace; font-size: 0.8rem; color: var(--ink-2, #c9c9cf); white-space: nowrap; } .ds-install-prompt { color: var(--muted, #9c9ca6); user-select: none; } .ds-copy { font-family: 'Spline Sans Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3rem 0.6rem; border: 1px solid var(--rule, #26262b); border-radius: 2px; background: var(--paper, #09090b); color: var(--ink-2, #c9c9cf); cursor: pointer; transition: border-color 140ms cubic-bezier(0.16,1,0.3,1), color 140ms cubic-bezier(0.16,1,0.3,1); } .ds-copy:hover { border-color: var(--ink, #f4f4f5); color: var(--ink, #f4f4f5); } .ds-copy[data-copied='true'] { border-color: var(--ok, #05df72); color: var(--ok, #05df72); }"
 		},
 		{
@@ -124,10 +124,10 @@
 			"Editorial exhibit grammar: mono uppercase captions, ruled sections, numbered contents rail with keyboard direct address (1–8).",
 			"Variable-font display voice; the landing turns the wght axis into a direct response to light.",
 			"Accent color is law-bound (yellow = primary action + new + active-section chip; cyan = live; amber = provisional).",
-			"Real components rendered live from @aurora-ui/components-v2 are content and follow the DS's own palette, not the hub's laws."
+			"Real components rendered live from @aurora-ui/substrate are content and follow the DS's own palette, not the hub's laws."
 		],
 		"rules": [
-			{ "name": "The Yellow Law", "body": "In hub chrome, #ffcc00 may appear only on the one primary action of a surface, on the new signal, and on the contents rail's active-section number chip. Dark yellow washes (10–22% mixes into Paper) additionally ground Substrate-owned exhibits: the pyramid's Substrate layer and code blocks. Content rendered by @aurora-ui/components-v2 (e.g. the eos Button variant) is content, not chrome — its yellow is exempt.", "section": "colors" },
+			{ "name": "The Yellow Law", "body": "In hub chrome, #ffcc00 may appear only on the one primary action of a surface, on the new signal, and on the contents rail's active-section number chip. Dark yellow washes (10–22% mixes into Paper) additionally ground Substrate-owned exhibits: the pyramid's Substrate layer and code blocks. Content rendered by @aurora-ui/substrate (e.g. the eos Button variant) is content, not chrome — its yellow is exempt.", "section": "colors" },
 			{ "name": "The Cyan-Live Rule", "body": "Cyan marks things that are genuinely live or newly landed (landing coordinate readout, recalc tick, feat feed type). Never use it decoratively.", "section": "colors" },
 			{ "name": "The Inversion Rule", "body": "Emphasis and selection flip ink and paper (::selection, aria-pressed filter, the Substrate pyramid layer) rather than introducing a new color; the rail's aria-current item instead fills Surface and carries the yellow number chip.", "section": "colors" },
 			{ "name": "The Mono Caption Rule", "body": "Anything that names, numbers, or timestamps an exhibit is uppercase Spline Sans Mono at ~0.7rem with wide tracking and muted color. Data (versions, dates, counts, hashes) is always tabular-nums.", "section": "typography" },
@@ -142,7 +142,7 @@
 			"Do set all captions, datelines, table headers, hashes, and counts in Spline Sans Mono, uppercase, wide-tracked, tabular-nums.",
 			"Do express state by inversion (Ink fill, Paper text) for pressed filters and selection; the rail's active item uses Surface fill plus the yellow number chip.",
 			"Do use the five physical status marks plus the status word; deprecated rows also strike through.",
-			"Do render DS components live from @aurora-ui/components-v2 and label their provenance in the readout/caption.",
+			"Do render DS components live from @aurora-ui/substrate and label their provenance in the readout/caption.",
 			"Do mark every unconfirmed value with the amber Provisional chip and a matching replacement-list entry.",
 			"Do keep the lamp, dust, pointer/touch response, and per-letter weight behavior together on /; hand visitors into the document at /overview."
 		],

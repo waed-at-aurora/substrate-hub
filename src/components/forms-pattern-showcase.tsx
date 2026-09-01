@@ -18,7 +18,7 @@ import {
 	Input,
 	RadioGroup,
 	RadioGroupItem,
-} from '@aurora-ui/components-v2/components';
+} from '@aurora-ui/substrate/components';
 
 function validateRelease(value: string) {
 	if (!/^\d{4}\sQ[1-4]$/.test(value.trim())) {
@@ -27,7 +27,7 @@ function validateRelease(value: string) {
 	return undefined;
 }
 
-function StructureSpecimen() {
+export function FormPatternExample() {
 	return (
 		<article className="forms-specimen forms-specimen-lead">
 			<div className="forms-specimen-stage">
@@ -38,20 +38,32 @@ function StructureSpecimen() {
 				>
 					<header className="forms-demo-header">
 						<strong>Create market scenario</strong>
-						<span>Set the identity and demand pathway used for this forecast run.</span>
+						<span>Set the identity and demand pathway used for the forecast run.</span>
 					</header>
 					<FieldGroup>
 						<Field>
 							<FieldLabel htmlFor="pattern-scenario-name">Scenario name</FieldLabel>
-							<Input id="pattern-scenario-name" defaultValue="GB Central 2028" autoComplete="off" />
-							<FieldDescription>Use a name analysts can distinguish in My Markets.</FieldDescription>
+							<Input
+								id="pattern-scenario-name"
+								name="scenarioName"
+								autoComplete="off"
+								required
+								aria-describedby="pattern-scenario-name-help"
+							/>
+							<FieldDescription id="pattern-scenario-name-help">
+								Use a name analysts can distinguish in My Markets.
+							</FieldDescription>
+						</Field>
+						<Field>
+							<FieldLabel htmlFor="pattern-scenario-note">Analyst note (optional)</FieldLabel>
+							<Input id="pattern-scenario-note" name="scenarioNote" autoComplete="off" />
 						</Field>
 						<FieldSet>
 							<FieldLegend>Demand pathway</FieldLegend>
 							<FieldDescription id="pattern-pathway-help">
 								Choose the assumption set this scenario starts from.
 							</FieldDescription>
-							<RadioGroup defaultValue="central" aria-describedby="pattern-pathway-help">
+							<RadioGroup name="pathway" defaultValue="central" aria-describedby="pattern-pathway-help">
 								<Field orientation="horizontal">
 									<RadioGroupItem value="central" aria-labelledby="pattern-pathway-central" />
 									<FieldTitle id="pattern-pathway-central">Central demand</FieldTitle>
@@ -71,10 +83,10 @@ function StructureSpecimen() {
 			</div>
 			<footer className="forms-specimen-caption">
 				<div>
-					<span>Ordinary entry</span>
-					<h3 id="forms-structure-title">Structure keeps context visible.</h3>
+					<span>Structure & grouping</span>
+					<h3 id="forms-structure-title">Keep one task in one reading order.</h3>
 				</div>
-				<p>One task, related fields, then a clear action area.</p>
+				<p>Context first, related fields together, then a clear action area.</p>
 			</footer>
 		</article>
 	);
@@ -173,7 +185,7 @@ function SensitiveSpecimen() {
 export function FormsPatternShowcase() {
 	return (
 		<div className="forms-showcase">
-			<StructureSpecimen />
+			<FormPatternExample />
 			<div className="forms-supporting-specimens">
 				<ValidationSpecimen />
 				<SensitiveSpecimen />

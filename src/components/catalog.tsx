@@ -39,7 +39,7 @@ import {
 	Textarea,
 	ToggleGroup,
 	ToggleGroupItem,
-} from '@aurora-ui/components-v2/components';
+} from '@aurora-ui/substrate/components';
 import type { CatalogEntry } from '@/lib/data';
 import { ExtArrow } from '@/components/marks';
 import { storybookHref } from '@/config/site';

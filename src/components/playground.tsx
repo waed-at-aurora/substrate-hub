@@ -13,10 +13,10 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@aurora-ui/components-v2/components';
-import type { InvestmentCaseSelectionCardState } from '@aurora-ui/components-v2/components';
+} from '@aurora-ui/substrate/components';
+import type { InvestmentCaseSelectionCardState } from '@aurora-ui/substrate/components';
 
-/** Real option surface of packages/components-v2/src/components/investment-case-selection-card.tsx. */
+/** Real option surface of packages/substrate/src/components/investment-case-selection-card.tsx. */
 const STATES: readonly InvestmentCaseSelectionCardState[] = ['active', 'selected', 'default'];
 const DURATIONS = ['1h', '2h', '4h'] as const;
 
@@ -162,7 +162,7 @@ export function Playground() {
 		.filter(Boolean)
 		.join(' ');
 
-	const snippet = `import { InvestmentCaseSelectionCard, Badge } from '@aurora-ui/components-v2';
+	const snippet = `import { InvestmentCaseSelectionCard, Badge } from '@aurora-ui/substrate';
 
 <InvestmentCaseSelectionCard.Root${rootProps ? ' ' + rootProps : ''}>
 \t<InvestmentCaseSelectionCard.Header>
@@ -206,7 +206,7 @@ export function Playground() {
 					</div>
 				</div>
 				<div className="playground-readout">
-					<span>rendered from @aurora-ui/components-v2 · dist</span>
+					<span>rendered from @aurora-ui/substrate · dist</span>
 					<span className="tick" data-flash={flash}>
 						{tick ? `recalc ${tick}` : 'awaiting input'}
 					</span>

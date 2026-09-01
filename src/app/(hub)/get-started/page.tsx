@@ -38,7 +38,7 @@ export default function GetStarted() {
 								label="Prompt for your coding agent"
 								copyLabel="copy prompt"
 								prompt
-								code={`Set up Substrate in this project. Inspect the stack and existing theme first. Run \`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 doctor\`, then preview the install with \`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 install --dry-run\`. If the checks pass, run \`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 install --yes\`, import \`@aurora-ui/components-v2/style.css\` at the app root, preserve the existing light or dark theme, render a basic \`Button\`, and verify that it is styled. Explain every file you change. If GitHub, AWS, or private-registry authentication is unavailable, stop and tell me exactly what is missing.`}
+								code={`Set up Substrate in this project. Inspect the stack and existing theme first. Run \`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 doctor\`, then preview the install with \`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 install --dry-run\`. If the checks pass, run \`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 install --yes\`, import \`@aurora-ui/substrate/style.css\` at the app root, preserve the existing light or dark theme, render a basic \`Button\`, and verify it visually. Do not hand-edit registry credentials; report any failed check with its recovery command.`}
 							/>
 							<p className="note agent-skill-note">
 								For repeat use, install the CLI&rsquo;s agent skill once. Claude-compatible agents
@@ -85,7 +85,7 @@ export default function GetStarted() {
 							/>
 							<CopyBlock
 								label="Manual — inside the monorepo, package.json"
-								code={`"dependencies": {\n\t"@aurora-ui/components-v2": "workspace:packages/components-v2"\n}`}
+								code={`"dependencies": {\n\t"@aurora-ui/substrate": "workspace:packages/substrate"\n}`}
 							/>
 							<p className="note" style={{ marginTop: '0.7rem' }}>
 								Outside the monorepo, use the guided CLI install — it handles the private-registry
@@ -104,7 +104,7 @@ export default function GetStarted() {
 							</p>
 							<CopyBlock
 								label="Root of your app"
-								code={`import '@aurora-ui/components-v2/style.css';\n\n<html className="dark"> … </html>`}
+								code={`import '@aurora-ui/substrate/style.css';\n\n<html className="dark"> … </html>`}
 							/>
 						</div>
 					</li>
@@ -113,7 +113,7 @@ export default function GetStarted() {
 							<h3>Render a first component</h3>
 							<CopyBlock
 								label="Anywhere in your tree"
-								code={`import { Button } from '@aurora-ui/components-v2';\n\n<Button variant="eos">Run scenario</Button>`}
+								code={`import { Button } from '@aurora-ui/substrate';\n\n<Button variant="eos">Run scenario</Button>`}
 							/>
 							<p className="note" style={{ marginTop: '0.7rem' }}>
 								Steer it live in <Link href="/#live">Fig. 2 on the overview</Link> — every option

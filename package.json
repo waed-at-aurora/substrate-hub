@@ -10,7 +10,7 @@
 		"sync:releases": "node scripts/sync-releases.mjs"
 	},
 	"dependencies": {
-		"@aurora-ui/components-v2": "file:../aurora-ui/packages/components-v2",
+		"@aurora-ui/substrate": "file:../aurora-ui/packages/substrate",
 		"animejs": "^4.5.0",
 		"i18next": "^24.2.0",
 		"motion": "^13.1.1",

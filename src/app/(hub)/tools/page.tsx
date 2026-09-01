@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Exhibit } from '@/components/exhibit';
 import { ExtArrow } from '@/components/marks';
-import { Provisional } from '@/components/provisional';
 import { site, storybookHref } from '@/config/site';
 
 export const metadata: Metadata = { title: 'Tools & resources' };
@@ -15,8 +14,8 @@ export default function Tools() {
 				</p>
 				<h1 style={{ fontSize: 'clamp(2rem, 3.6vw, 3.2rem)' }}>Everything around the system.</h1>
 				<p className="cover-standfirst">
-					The tooling, documentation, and channels that surround Substrate — where to look things up,
-					how to contribute, and where to ask.
+					The tooling and documentation around Substrate — where to look things up and how to
+					contribute improvements back to the system.
 				</p>
 			</div>
 
@@ -78,9 +77,9 @@ export default function Tools() {
 								<strong>Storybook</strong>
 							</td>
 							<td className="dim">
-								storybook-v2 is the canonical component documentation; run locally with{' '}
-								<code className="mono">yarn workspace @aurora-ui/storybook-v2 run storybook</code> (port
-								6007).
+								storybook-substrate is the canonical component documentation; run locally with{' '}
+								<code className="mono">yarn workspace @aurora-ui/storybook-substrate run storybook</code>{' '}
+								(port 6007).
 							</td>
 							<td>
 								<a className="ext" href={storybookHref(null)} target="_blank" rel="noreferrer">
@@ -94,8 +93,8 @@ export default function Tools() {
 								<strong>Repositories</strong>
 							</td>
 							<td className="dim">
-								<code className="mono">aurora-ui/packages/components-v2</code> is the design system
-								source of truth; <code className="mono">storybook-v2</code> its documentation.
+								<code className="mono">aurora-ui/packages/substrate</code> is the design system
+								source of truth; <code className="mono">storybook-substrate</code> its documentation.
 							</td>
 							<td>
 								<a className="ext" href={site.repoUrl} target="_blank" rel="noreferrer">
@@ -112,7 +111,7 @@ export default function Tools() {
 			<Exhibit label="Contribution" id="contribute">
 				<p className="lede">
 					Reusable primitives, composites, patterns, styling, and shared documentation belong in{' '}
-					<code className="mono">packages/components-v2</code>; product screens, data adapters, and
+					<code className="mono">packages/substrate</code>; product screens, data adapters, and
 					routes stay in the consuming app. For DS contribution and validation there are two opt-in
 					workflows — source-link mode (bundler resolves the package to live DS source) and
 					snapshot/package mode (pinned dist artifacts with a shared snapshot ID) — documented in{' '}
@@ -123,22 +122,6 @@ export default function Tools() {
 				</p>
 			</Exhibit>
 
-			<Exhibit label="Support & events" id="support">
-				<ul className="resources">
-					<li>
-						<span className="mono">Support</span>
-						<p>
-							{site.supportChannel.value} <Provisional what="confirm channel" />
-						</p>
-					</li>
-					<li>
-						<span className="mono">Events &amp; recordings</span>
-						<p>
-							No sessions recorded here yet. <Provisional what="events feed owner" />
-						</p>
-					</li>
-				</ul>
-			</Exhibit>
 		</>
 	);
 }

@@ -29,7 +29,7 @@ export default function FormsPattern() {
 				</p>
 			</div>
 
-			<Exhibit label="Live pattern · package render" meta="@aurora-ui/components-v2" id="pattern">
+			<Exhibit label="Live pattern · package render" meta="@aurora-ui/substrate" id="pattern">
 				<h2 className="statement">One pattern from first input to final action.</h2>
 				<div className="forms-intro">
 					<p className="lede">
@@ -44,7 +44,7 @@ export default function FormsPattern() {
 				<FormsPatternShowcase />
 			</Exhibit>
 
-			<Exhibit label="Full guidance" meta="maintained in storybook-v2" id="storybook">
+			<Exhibit label="Full guidance" meta="maintained in storybook-substrate" id="storybook">
 				<div className="forms-storybook-handoff">
 					<div>
 						<h2>Take the full pattern into Storybook.</h2>

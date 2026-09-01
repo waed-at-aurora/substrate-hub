@@ -13,8 +13,8 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const AURORA = process.env.AURORA_UI_WORKTREE ?? join(here, '..', '..', 'aurora-ui');
-const DS = join(AURORA, 'packages', 'components-v2');
-const SB = join(AURORA, 'storybook-v2', 'src');
+const DS = join(AURORA, 'packages', 'substrate');
+const SB = join(AURORA, 'storybook-substrate', 'src');
 const EXPECTED_REF = process.env.AURORA_UI_EXPECTED_REF ?? 'origin/release';
 const git = (args) => execFileSync('git', args, { cwd: AURORA, encoding: 'utf8' }).trim();
 
@@ -38,7 +38,7 @@ try {
 	process.exit(1);
 }
 
-const dirtySource = git(['status', '--porcelain', '--', 'packages/components-v2', 'storybook-v2']);
+const dirtySource = git(['status', '--porcelain', '--', 'packages/substrate', 'storybook-substrate']);
 if (dirtySource) {
 	console.error('aurora-ui has uncommitted design-system changes; sync only from a clean release checkout');
 	process.exit(1);
@@ -90,7 +90,7 @@ const primitives = readdirSync(join(DS, 'src', 'ui'))
 		return {
 			name,
 			layer: 'primitive',
-			source: `packages/components-v2/src/ui/${f}`,
+			source: `packages/substrate/src/ui/${f}`,
 			importName: name,
 			status: story ? statusFromTags(story.tags) : 'stable',
 			storybook: story ? storyDocsPath(story.title) : null,
@@ -108,7 +108,7 @@ const composites = readdirSync(join(DS, 'src', 'components'))
 		return {
 			name,
 			layer: 'composite',
-			source: `packages/components-v2/src/components/${f}`,
+			source: `packages/substrate/src/components/${f}`,
 			importName: f === 'cms' ? 'CMSContentBlocks' : name,
 			status: story ? statusFromTags(story.tags) : 'stable',
 			storybook: story ? storyDocsPath(story.title) : null,
@@ -125,7 +125,7 @@ if (existsSync(expDir)) {
 	experimental = sub.flatMap((d) =>
 		readdirSync(join(expDir, d))
 			.filter((f) => f.endsWith('.tsx') || statSync(join(expDir, d, f)).isDirectory())
-			.map((f) => ({ name: pascal(f.replace('.tsx', '')), track: d, source: `packages/components-v2/src/experimental/${d}/${f}` }))
+			.map((f) => ({ name: pascal(f.replace('.tsx', '')), track: d, source: `packages/substrate/src/experimental/${d}/${f}` }))
 	);
 }
 
@@ -147,7 +147,7 @@ const formsDocsPath = formsChapters.includes('Overview')
 		: null;
 
 /* ---- Releases / history from git ---- */
-const logRaw = git(['log', '-60', '--date=iso-strict', '--pretty=%h%x09%ad%x09%s', '--', 'packages/components-v2', 'storybook-v2']);
+const logRaw = git(['log', '-60', '--date=iso-strict', '--pretty=%h%x09%ad%x09%s', '--', 'packages/substrate', 'storybook-substrate']);
 const history = logRaw.split('\n').filter(Boolean).map((line) => {
 	const [hash, date, ...rest] = line.split('\t');
 	const subject = rest.join('\t');
