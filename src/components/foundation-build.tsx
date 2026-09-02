@@ -653,18 +653,20 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						});
 					}
 				};
+				const landingBody = root.previousElementSibling?.querySelector<HTMLElement>('.landing-body');
 				let entryRevealFrame = 0;
 				const updateEntryReveal = () => {
 					entryRevealFrame = 0;
 					const viewportHeight = Math.max(1, window.innerHeight);
-					const rootTop = root.getBoundingClientRect().top;
-					const reveal = clamp01((viewportHeight * 0.05 - rootTop) / (viewportHeight * 0.16));
+					const handoffBottom =
+						landingBody?.getBoundingClientRect().bottom ?? root.getBoundingClientRect().top;
+					const reveal = clamp01(-handoffBottom / (viewportHeight * 0.14));
 					root.style.setProperty('--entry-copy-opacity', reveal.toFixed(3));
 				};
 				const requestEntryReveal = () => {
 					if (!entryRevealFrame) entryRevealFrame = requestAnimationFrame(updateEntryReveal);
 				};
-				updateEntryReveal();
+				requestEntryReveal();
 
 
 				window.addEventListener('pointermove', onSharedPointerMove, { passive: true });

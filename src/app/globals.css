@@ -520,12 +520,13 @@ button {
 }
 
 .landing-home {
+	--portal-grid-unit: 2.6rem;
 	position: relative;
 	isolation: isolate;
 	overflow: clip;
 	background:
-		linear-gradient(var(--rule-soft) 1px, transparent 1px) 0 0 / 100% 25svh,
-		linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px) 0 0 / 12.5% 100%,
+		linear-gradient(var(--rule-soft) 1px, transparent 1px) 0 0 / 100% var(--portal-grid-unit),
+		linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px) 0 0 / var(--portal-grid-unit) 100%,
 		var(--paper);
 }
 
@@ -571,8 +572,8 @@ button {
 	inset: 0;
 	pointer-events: none;
 	background:
-		linear-gradient(#454553 1px, transparent 1px) 0 0 / 100% 2.6rem,
-		linear-gradient(90deg, #454553 1px, transparent 1px) 0 0 / 2.6rem 100%;
+		linear-gradient(#454553 1px, transparent 1px) 0 0 / 100% var(--portal-grid-unit),
+		linear-gradient(90deg, #454553 1px, transparent 1px) 0 0 / var(--portal-grid-unit) 100%;
 	opacity: 0.5;
 	-webkit-mask-image: radial-gradient(120% 100% at var(--lx) var(--ly), #000 0%, rgba(0, 0, 0, 0.25) 45%, transparent 80%);
 	mask-image: radial-gradient(120% 100% at var(--lx) var(--ly), #000 0%, rgba(0, 0, 0, 0.25) 45%, transparent 80%);
@@ -633,9 +634,9 @@ button {
 			transparent 76%
 		),
 		linear-gradient(color-mix(in srgb, var(--ink) 28%, transparent) 1px, transparent 1px) 0 0 /
-			100% 2.6rem,
+			100% var(--portal-grid-unit),
 		linear-gradient(90deg, color-mix(in srgb, var(--ink) 28%, transparent) 1px, transparent 1px) 0 0 /
-			2.6rem 100%;
+			var(--portal-grid-unit) 100%;
 	-webkit-mask-image: linear-gradient(
 		90deg,
 		transparent 0%,
@@ -1015,6 +1016,8 @@ button {
 }
 
 .foundation-model {
+	--pyramid-ground-axis: 46%;
+	--pyramid-shadow-x: 62%;
 	position: relative;
 	z-index: 1;
 	grid-column: 4 / -1;
@@ -1028,6 +1031,27 @@ button {
 		scale(calc(1 - var(--ending-progress) * 0.12));
 	transform-origin: center;
 	transition: opacity 180ms linear;
+}
+
+.foundation-model::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background:
+		radial-gradient(
+			ellipse 78% 70% at var(--pyramid-shadow-x) 50%,
+			var(--paper) 0 50%,
+			color-mix(in srgb, var(--paper) 94%, transparent) 66%,
+			color-mix(in srgb, var(--paper) 70%, transparent) 80%,
+			transparent 100%
+		),
+		linear-gradient(
+			to bottom,
+			transparent 0 var(--pyramid-ground-axis),
+			color-mix(in srgb, var(--paper) 68%, transparent) calc(var(--pyramid-ground-axis) + 12%),
+			var(--paper) calc(var(--pyramid-ground-axis) + 30%)
+		);
 }
 
 .foundation-model canvas {
@@ -1360,10 +1384,6 @@ button {
 		grid-template-columns: 1fr;
 		grid-template-rows: auto minmax(0, 1fr) auto;
 		padding: 1.35rem var(--gutter) 3rem;
-		background:
-			linear-gradient(var(--rule-soft) 1px, transparent 1px) 0 0 / 100% 25%,
-			linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px) 0 0 / 25% 100%,
-			var(--paper);
 	}
 	.foundation-copy {
 		grid-column: 1;
@@ -1382,6 +1402,7 @@ button {
 		line-height: 1.5;
 	}
 	.foundation-model {
+		--pyramid-shadow-x: 50%;
 		position: absolute;
 		grid-column: auto;
 		grid-row: auto;
