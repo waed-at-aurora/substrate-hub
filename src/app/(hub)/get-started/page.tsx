@@ -3,8 +3,7 @@ import Link from 'next/link';
 import { Troubleshooting } from '@/components/islands';
 import { CopyBlock } from '@/components/copy-block';
 import { Exhibit } from '@/components/exhibit';
-import { ExtArrow } from '@/components/marks';
-import { site, storybookHref } from '@/config/site';
+import { site } from '@/config/site';
 import { data, latestReleaseVersion } from '@/lib/data';
 
 export const metadata: Metadata = { title: 'Get started' };
@@ -137,22 +136,6 @@ export default function GetStarted() {
 				<Troubleshooting />
 			</Exhibit>
 
-			<Exhibit label="Upgrades & migration" id="upgrades">
-				<p className="lede" style={{ maxWidth: '58ch' }}>
-					Substrate is pre-1.0: minor versions may move fast. Before upgrading, read{' '}
-					<Link href="/releases">releases → 05</Link> for breaking changes and migration actions, and
-					validate against the{' '}
-					<a className="ext" href={storybookHref(null)} target="_blank" rel="noreferrer">
-						canonical Storybook
-						<ExtArrow />
-					</a>
-					. For contribution and cross-repo validation workflows (source-link, snapshots), follow{' '}
-					<a href={`${site.repoUrl}/blob/main/${site.contributionDocPath}`} target="_blank" rel="noreferrer">
-						DesignSystemConsumerWorkflows
-					</a>
-					.
-				</p>
-			</Exhibit>
 		</>
 	);
 }
