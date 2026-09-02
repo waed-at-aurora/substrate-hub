@@ -14,8 +14,7 @@ export default function Tools() {
 				</p>
 				<h1 style={{ fontSize: 'clamp(2rem, 3.6vw, 3.2rem)' }}>Everything around the system.</h1>
 				<p className="cover-standfirst">
-					The tooling and documentation around Substrate — where to look things up and how to
-					contribute improvements back to the system.
+					The tooling and documentation around Substrate — where to look things up and how to use them.
 				</p>
 			</div>
 
@@ -108,19 +107,6 @@ export default function Tools() {
 </div>
 			</Exhibit>
 
-			<Exhibit label="Contribution" id="contribute">
-				<p className="lede">
-					Reusable primitives, composites, patterns, styling, and shared documentation belong in{' '}
-					<code className="mono">packages/substrate</code>; product screens, data adapters, and
-					routes stay in the consuming app. For DS contribution and validation there are two opt-in
-					workflows — source-link mode (bundler resolves the package to live DS source) and
-					snapshot/package mode (pinned dist artifacts with a shared snapshot ID) — documented in{' '}
-					<a href={`${site.repoUrl}/blob/main/${site.contributionDocPath}`} target="_blank" rel="noreferrer">
-						DesignSystemConsumerWorkflows
-					</a>
-					.
-				</p>
-			</Exhibit>
 
 		</>
 	);

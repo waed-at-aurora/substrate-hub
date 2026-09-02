@@ -2328,22 +2328,6 @@ input[data-slot='input'],
 	}
 }
 
-/* ── footer ─────────────────────────────────────────────────── */
-
-.colophon {
-	border-top: 1px solid var(--rule);
-	margin-top: 3rem;
-	padding: 1.2rem 0 2.5rem;
-	display: flex;
-	justify-content: space-between;
-	gap: 1.5rem;
-	flex-wrap: wrap;
-	font-family: var(--font-mono), monospace;
-	font-size: 0.7rem;
-	color: var(--muted);
-	letter-spacing: 0.04em;
-	font-variant-numeric: tabular-nums;
-}
 
 /* ── steps (get started) ────────────────────────────────────── */
 
