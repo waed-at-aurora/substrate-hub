@@ -1182,6 +1182,13 @@ button {
 	opacity: 0.72;
 }
 
+/* The exit blackout must not inherit the ready-state hint opacity. */
+.foundation-scroll[data-exiting='true'] .foundation-inspect-hint {
+	visibility: hidden;
+	opacity: 0;
+	transition: none;
+}
+
 .foundation-narrative {
 	position: relative;
 	z-index: 5;
