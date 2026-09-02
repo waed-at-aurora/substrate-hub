@@ -412,6 +412,7 @@ button {
 
 .stage {
 	position: relative;
+	container-type: inline-size;
 	overflow: hidden;
 	border: 1px solid var(--rule);
 	border-radius: 4px;
@@ -567,42 +568,14 @@ button {
 }
 
 .landing-home {
+	--portal-grid-unit: 2.6rem;
 	position: relative;
 	isolation: isolate;
 	overflow: clip;
-	background: var(--paper);
-}
-
-.landing-home::before {
-	content: '';
-	position: absolute;
-	z-index: 0;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 150svh;
-	pointer-events: none;
 	background:
-		linear-gradient(var(--rule-soft) 1px, transparent 1px) 0 0 / 100% 25svh,
-		linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px) 0 0 / 12.5% 100%;
-	-webkit-mask-image: linear-gradient(
-		to bottom,
-		#000 0%,
-		#000 48%,
-		rgba(0, 0, 0, 0.92) 58%,
-		rgba(0, 0, 0, 0.58) 70%,
-		rgba(0, 0, 0, 0.24) 82%,
-		transparent 100%
-	);
-	mask-image: linear-gradient(
-		to bottom,
-		#000 0%,
-		#000 48%,
-		rgba(0, 0, 0, 0.92) 58%,
-		rgba(0, 0, 0, 0.58) 70%,
-		rgba(0, 0, 0, 0.24) 82%,
-		transparent 100%
-	);
+		linear-gradient(var(--rule-soft) 1px, transparent 1px) 0 0 / 100% var(--portal-grid-unit),
+		linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px) 0 0 / var(--portal-grid-unit) 100%,
+		var(--paper);
 }
 
 /* ── landing: the stage grown to the whole viewport ─────────── */
@@ -646,8 +619,8 @@ button {
 	inset: 0;
 	pointer-events: none;
 	background:
-		linear-gradient(#454553 1px, transparent 1px) 0 0 / 100% 2.6rem,
-		linear-gradient(90deg, #454553 1px, transparent 1px) 0 0 / 2.6rem 100%;
+		linear-gradient(#454553 1px, transparent 1px) 0 0 / 100% var(--portal-grid-unit),
+		linear-gradient(90deg, #454553 1px, transparent 1px) 0 0 / var(--portal-grid-unit) 100%;
 	opacity: 0.5;
 	-webkit-mask-image:
 		radial-gradient(120% 100% at var(--lx) var(--ly), #000 0%, rgba(0, 0, 0, 0.25) 45%, transparent 80%),
@@ -696,9 +669,9 @@ button {
 			transparent 76%
 		),
 		linear-gradient(color-mix(in srgb, var(--ink) 28%, transparent) 1px, transparent 1px) 0 0 /
-			100% 2.6rem,
+			100% var(--portal-grid-unit),
 		linear-gradient(90deg, color-mix(in srgb, var(--ink) 28%, transparent) 1px, transparent 1px) 0 0 /
-			2.6rem 100%;
+			var(--portal-grid-unit) 100%;
 	-webkit-mask-image: linear-gradient(
 		90deg,
 		transparent 0%,
@@ -924,6 +897,9 @@ button {
 		text-align: center;
 		white-space: normal;
 	}
+	.landing-actions .action-primary {
+		grid-column: 1 / -1;
+	}
 	.landing .install-line {
 		display: flex;
 		width: 100%;
@@ -996,7 +972,7 @@ button {
 	min-height: 0;
 	align-self: stretch;
 	justify-self: stretch;
-	opacity: 1;
+	--pyramid-model-opacity: 1;
 	transform: none;
 	z-index: 1;
 }
@@ -1073,6 +1049,9 @@ button {
 }
 
 .foundation-model {
+	--pyramid-ground-axis: 46%;
+	--pyramid-shadow-x: 62%;
+	--pyramid-model-opacity: calc(1 - var(--ending-progress) * 0.28);
 	position: relative;
 	z-index: 1;
 	grid-column: 4 / -1;
@@ -1081,11 +1060,30 @@ button {
 	justify-self: stretch;
 	height: min(82svh, 58rem);
 	min-height: 34rem;
-	opacity: calc(1 - var(--ending-progress) * 0.28);
 	transform: translate3d(calc(var(--ending-progress) * 8vw), 0, 0)
 		scale(calc(1 - var(--ending-progress) * 0.12));
 	transform-origin: center;
-	transition: opacity 180ms linear;
+}
+
+.foundation-model::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background:
+		radial-gradient(
+			ellipse 78% 70% at var(--pyramid-shadow-x) 50%,
+			var(--paper) 0 50%,
+			color-mix(in srgb, var(--paper) 94%, transparent) 66%,
+			color-mix(in srgb, var(--paper) 70%, transparent) 80%,
+			transparent 100%
+		),
+		linear-gradient(
+			to bottom,
+			transparent 0 var(--pyramid-ground-axis),
+			color-mix(in srgb, var(--paper) 68%, transparent) calc(var(--pyramid-ground-axis) + 12%),
+			var(--paper) calc(var(--pyramid-ground-axis) + 30%)
+		);
 }
 
 .foundation-model canvas {
@@ -1095,13 +1093,14 @@ button {
 	width: 100%;
 	height: 100%;
 	opacity: 0;
+	transition: opacity 180ms linear;
 	outline: none;
 	touch-action: pan-y;
 	cursor: grab;
 }
 
 .foundation-scroll[data-three-ready='true'] .foundation-model canvas {
-	opacity: 1;
+	opacity: var(--pyramid-model-opacity);
 }
 
 .foundation-model canvas[data-interactive='true'] {
@@ -1116,7 +1115,8 @@ button {
 	align-items: center;
 	justify-content: center;
 	gap: 0.22rem;
-	opacity: 1;
+	opacity: var(--pyramid-model-opacity);
+	transition: opacity 180ms linear;
 }
 
 .foundation-scroll[data-three-ready='true'] .foundation-fallback {
@@ -1444,6 +1444,7 @@ button {
 		line-height: 1.5;
 	}
 	.foundation-model {
+		--pyramid-shadow-x: 50%;
 		position: absolute;
 		grid-column: auto;
 		grid-row: auto;
@@ -3010,6 +3011,7 @@ input[data-slot='input'],
 		min-height: min(72svh, 44rem);
 	}
 	.stage-word {
+		font-size: clamp(2.5rem, 14cqw, 7.5rem);
 		margin-top: 1rem;
 		padding-left: 1.1rem;
 	}
@@ -3116,7 +3118,7 @@ input[data-slot='input'],
 		grid-row: 1;
 		height: min(68svh, 42rem);
 		min-height: 30rem;
-		opacity: 1;
+		--pyramid-model-opacity: 1;
 		transform: none;
 	}
 	.foundation-inspect-hint {

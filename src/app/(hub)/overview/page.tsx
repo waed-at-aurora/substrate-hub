@@ -34,10 +34,7 @@ export default function Home() {
 
 				<div className="stage-body">
 					<p className="stage-position">The foundational medium from which experiences emerge.</p>
-					<p className="stage-copy">
-						The shared interaction layer for EOS products, implemented in reusable components and
-						documented patterns.
-					</p>
+					<p className="stage-copy">An agent-first, modern design system.</p>
 					<div className="stage-actions">
 						<Link className="action action-primary" href="/get-started">
 							Install Substrate
@@ -169,6 +166,7 @@ export default function Home() {
 					{data.forms.examples.length} worked examples across {data.forms.chapters.length} chapters.
 				</p>
 			</Exhibit>
+
 
 		</>
 	);

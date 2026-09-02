@@ -84,7 +84,7 @@ export function LandingStage({
 		if (!root || !word) return;
 
 		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		if (reduced) return; // static stage: CSS defaults hold; StarBurst renders one still frame
+		if (reduced) return;
 
 		const autopilot = window.matchMedia('(hover: none)').matches;
 		const letters = Array.from(word.querySelectorAll<HTMLSpanElement>('.landing-l'));
@@ -98,6 +98,8 @@ export function LandingStage({
 		let idle = true;
 		let raf = 0;
 		let lastReadout = '';
+		let lastLightX = '';
+		let lastLightY = '';
 		let letterMetrics: Array<{ element: HTMLSpanElement; x: number; y: number; weight: number }> = [];
 
 		const measure = () => {
@@ -144,10 +146,18 @@ export function LandingStage({
 			lx += (tx - lx) * 0.07;
 			ly += (ty - ly) * 0.07;
 
-			root.style.setProperty('--lx', `${((lx / width) * 100).toFixed(2)}%`);
-			root.style.setProperty('--ly', `${((ly / height) * 100).toFixed(2)}%`);
-			root.style.setProperty('--pnx', ((lx / width) - 0.5).toFixed(3));
-			root.style.setProperty('--pny', ((ly / height) - 0.5).toFixed(3));
+			const normalizedX = lx / width;
+			const normalizedY = ly / height;
+			const lightX = (normalizedX * 100).toFixed(2);
+			const lightY = (normalizedY * 100).toFixed(2);
+			if (lightX !== lastLightX || lightY !== lastLightY) {
+				root.style.setProperty('--lx', `${lightX}%`);
+				root.style.setProperty('--ly', `${lightY}%`);
+				lastLightX = lightX;
+				lastLightY = lightY;
+			}
+			root.style.setProperty('--pnx', (normalizedX - 0.5).toFixed(3));
+			root.style.setProperty('--pny', (normalizedY - 0.5).toFixed(3));
 
 			for (const metric of letterMetrics) {
 				const distance = Math.hypot(metric.x - lx, metric.y - ly);
@@ -182,7 +192,7 @@ export function LandingStage({
 		<section
 			className="landing"
 			ref={rootRef}
-			aria-label="Substrate — the EOS design system"
+			aria-label="Substrate"
 			data-entering={isEntering}
 		>
 			{/* Main-branch StarBurst settings (component DEFAULTS); only centerY is

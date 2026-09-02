@@ -12,7 +12,7 @@ const releaseSummaryComponents = {
 };
 
 export default function Releases() {
-	const releases = releasesData.releases;
+	const releases = releasesData.releases.filter((release) => release.tag.startsWith('packages/substrate/'));
 	const latestRelease = releases[0];
 	const previousRelease = releases[1];
 
@@ -102,6 +102,7 @@ export default function Releases() {
 					<p className="lede">No previous Substrate release is published.</p>
 				)}
 			</Exhibit>
+
 		</>
 	);
 }

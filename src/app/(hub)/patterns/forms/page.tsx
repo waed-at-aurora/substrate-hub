@@ -65,6 +65,7 @@ export default function FormsPattern() {
 						<ExtArrow />
 					</a>
 				</div>
+
 			</Exhibit>
 		</>
 	);
