@@ -15,9 +15,8 @@ const ENTER_DURATION_MS = 640;
 /**
  * The landing is the illuminated face of the same drafting plate used by the
  * construction tour. The lamp follows the cursor, the wordmark's variable
- * weight answers it per letter, and restrained shooting lines share the real
- * model's assembly point beneath the fold. Touch receives a slow autopilot;
- * reduced motion resolves to one still frame.
+ * weight answers it per letter, while the shooting lines keep a fixed
+ * half-circle origin at the landing's lower-right corner.
  */
 export function LandingStage({
 	pkg,
@@ -196,17 +195,9 @@ export function LandingStage({
 			aria-label="Substrate"
 			data-entering={isEntering}
 		>
-			<StarBurst
-				className="landing-starburst"
-				centerX={68}
-				centerY={85}
-				starCount={22}
-				speed={1.15}
-				starSize={8}
-				opacity={38}
-				flowerIntensity={8}
-				twinkleSpeed={8}
-			/>
+			{/* Main-branch StarBurst settings (component DEFAULTS); only centerY is
+			    overridden to hold the origin at the first component's corner. */}
+			<StarBurst className="landing-starburst" centerY={85} />
 			<div className="landing-grid" aria-hidden="true" />
 			<div className="landing-enter-wave" aria-hidden="true" />
 

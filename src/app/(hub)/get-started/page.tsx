@@ -3,9 +3,8 @@ import Link from 'next/link';
 import { Troubleshooting } from '@/components/islands';
 import { CopyBlock } from '@/components/copy-block';
 import { Exhibit } from '@/components/exhibit';
-import { ExtArrow } from '@/components/marks';
-import { site, storybookHref } from '@/config/site';
-import { data } from '@/lib/data';
+import { site } from '@/config/site';
+import { data, latestReleaseVersion } from '@/lib/data';
 
 export const metadata: Metadata = { title: 'Get started' };
 
@@ -15,18 +14,46 @@ export default function GetStarted() {
 			<div className="cover" style={{ paddingBottom: '1.6rem' }}>
 				<p className="cover-issue">
 					<span>02 · Get started</span>
-					<span>{data.source.package} v{data.source.version}</span>
+					<span>{data.source.package} v{latestReleaseVersion}</span>
 				</p>
 				<h1 style={{ fontSize: 'clamp(2rem, 3.6vw, 3.2rem)' }}>From zero to a rendered component.</h1>
 				<p className="cover-standfirst">
-					Six steps: check the environment, install the package, wire styles and theme, render a
-					component, connect the tooling, and verify. Nothing here duplicates the API docs —
-					component-level detail lives in Storybook.
+					Start with your coding agent, then use the remaining steps to understand or complete the
+					same setup yourself: check the environment, install the package, wire styles and theme,
+					render a component, and verify. Component-level detail stays in Storybook.
 				</p>
 			</div>
 
 			<Exhibit label="Setup — six steps" id="steps">
 				<ol className="steps" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+					<li className="step step-agent">
+						<div>
+							<h3>Ask your agent to set up Substrate</h3>
+							<p className="agent-lede">
+								Paste this into Claude Code or opencode. Your agent will inspect the project first,
+								then follow the guided CLI path detailed below.
+							</p>
+							<CopyBlock
+								label="Prompt for your coding agent"
+								copyLabel="copy prompt"
+								prompt
+								code={`Set up Substrate in this project. Inspect the stack and existing theme first. Run \`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 doctor\`, then preview the install with \`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 install --dry-run\`. If the checks pass, run \`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 install --yes\`, import \`@aurora-ui/substrate/style.css\` at the app root, preserve the existing light or dark theme, render a basic \`Button\`, and verify it visually. Do not hand-edit registry credentials; report any failed check with its recovery command.`}
+							/>
+							<p className="note agent-skill-note">
+								For repeat use, install the CLI&rsquo;s agent skill once. Claude-compatible agents
+								then discover Substrate automatically in any project.
+							</p>
+							<CopyBlock
+								label="Install the Substrate agent skill"
+								code={`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 skill install`}
+							/>
+							<p className="note" style={{ marginTop: '0.7rem' }}>
+								The private CLI repository requires <code>gh auth login</code>. Prefer to drive the
+								tool yourself? Continue with the prerequisites and guided install below;
+								documentation and feedback workflows are in <Link href="/tools">Tools &amp; resources → 07</Link>.
+							</p>
+						</div>
+					</li>
 					<li className="step">
 						<div>
 							<h3>Prerequisites and supported environments</h3>
@@ -95,37 +122,6 @@ export default function GetStarted() {
 					</li>
 					<li className="step">
 						<div>
-							<h3>Install and configure the CLI</h3>
-							<p>
-								<a href={site.cliUrl} target="_blank" rel="noreferrer">
-									substrate-cli
-								</a>{' '}
-								(prototype) does three things: installs the design system, raises feedback as GitHub
-								issues, and reads component documentation offline from a bundled snapshot — usage
-								prose and real prop tables without opening Storybook.
-							</p>
-							<CopyBlock
-								label="Run via npx — always tracks main, no install step"
-								code={`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 doctor`}
-							/>
-							<CopyBlock
-								label="Or put a `substrate` binary on your PATH — packaged release"
-								code={`gh release download v0.1.0 --repo AuroraEnergyResearch/substrate-cli-v2 --pattern '*.tgz'\nnpm install -g ./aurora-ui-substrate-cli-0.1.0.tgz`}
-							/>
-							<CopyBlock
-								label="Read docs from the terminal"
-								code={`substrate docs component --list\nsubstrate docs component Button\nsubstrate docs topic design-principles`}
-							/>
-							<p className="note" style={{ marginTop: '0.7rem' }}>
-								Working with a coding agent? <code>substrate skill install</code> copies the CLI&rsquo;s
-								agent skill into <code>~/.claude/skills/substrate-cli/</code> so Claude-compatible
-								agents drive it automatically. Avoid <code>npm install -g github:…</code> — a known npm
-								bug breaks global git installs; use npx or the release tarball above.
-							</p>
-						</div>
-					</li>
-					<li className="step">
-						<div>
 							<h3>Verify</h3>
 							<p>
 								The button renders in EOS yellow, form fields pick up zinc borders, and no custom CSS
@@ -140,22 +136,6 @@ export default function GetStarted() {
 				<Troubleshooting />
 			</Exhibit>
 
-			<Exhibit label="Upgrades & migration" id="upgrades">
-				<p className="lede" style={{ maxWidth: '58ch' }}>
-					Substrate is pre-1.0: minor versions may move fast. Before upgrading, read{' '}
-					<Link href="/releases">releases → 05</Link> for breaking changes and migration actions, and
-					validate against the{' '}
-					<a className="ext" href={storybookHref(null)} target="_blank" rel="noreferrer">
-						canonical Storybook
-						<ExtArrow />
-					</a>
-					. For contribution and cross-repo validation workflows (source-link, snapshots), follow{' '}
-					<a href={`${site.repoUrl}/blob/main/${site.contributionDocPath}`} target="_blank" rel="noreferrer">
-						DesignSystemConsumerWorkflows
-					</a>
-					.
-				</p>
-			</Exhibit>
 		</>
 	);
 }

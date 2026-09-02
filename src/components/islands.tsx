@@ -33,8 +33,24 @@ export const Playground = dynamic(() => import('./playground').then((m) => m.Pla
 
 export const Catalog = dynamic(() => import('./catalog').then((m) => m.Catalog), {
 	ssr: false,
-	loading: () => <Loading minHeight="24rem" label="loading index…" />,
+	loading: () => <Loading minHeight="32rem" label="loading component gallery…" />,
 });
+
+export const FormPatternExample = dynamic(
+	() => import('./forms-pattern-showcase').then((m) => m.FormPatternExample),
+	{
+		ssr: false,
+		loading: () => <Loading minHeight="36rem" label="loading form example…" />,
+	}
+);
+
+export const FormsPatternShowcase = dynamic(
+	() => import('./forms-pattern-showcase').then((m) => m.FormsPatternShowcase),
+	{
+		ssr: false,
+		loading: () => <Loading minHeight="48rem" label="loading form specimens…" />,
+	}
+);
 
 export const Troubleshooting = dynamic(() => import('./troubleshooting').then((m) => m.Troubleshooting), {
 	ssr: false,
