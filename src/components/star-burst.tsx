@@ -67,8 +67,8 @@ function makeRng(seed: number) {
 }
 
 /**
- * Originkit Star Burst, adapted into shooting assembly lines that originate at
- * the entering pyramid's screen position and travel through the Night Portal.
+ * Originkit Star Burst, adapted as a transparent decorative layer so the
+ * landing's pointer-responsive lamp and drafting grid remain visible.
  */
 export default function StarBurst({
 	speed = DEFAULTS.speed,
@@ -262,18 +262,13 @@ export default function StarBurst({
 			for (let frame = 0; frame < 60; frame += 1) drawFrame(1 / 60);
 			return () => resizeObserver.disconnect();
 		}
-		let isVisible = true;
-		const intersectionObserver = new IntersectionObserver((entries) => {
-			isVisible = entries[0]?.isIntersecting ?? false;
-		});
-		intersectionObserver.observe(container);
 
 		let animationFrame = 0;
 		let previousTime = performance.now();
 		const loop = (time: number) => {
 			const delta = (time - previousTime) / 1000;
 			previousTime = time;
-			if (!document.hidden && isVisible) drawFrame(delta);
+			if (!document.hidden) drawFrame(delta);
 			animationFrame = requestAnimationFrame(loop);
 		};
 		animationFrame = requestAnimationFrame(loop);
@@ -281,7 +276,6 @@ export default function StarBurst({
 		return () => {
 			cancelAnimationFrame(animationFrame);
 			resizeObserver.disconnect();
-			intersectionObserver.disconnect();
 		};
 	}, [speed, starCount, color, centerX, centerY, starSize, opacity, flowerIntensity, twinkleSpeed]);
 
