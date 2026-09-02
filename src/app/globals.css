@@ -538,7 +538,6 @@ button {
 	--pnx: -0.2;
 	--pny: -0.26;
 	--enter-y: 75%;
-	--tether-opacity: 0.055;
 	position: relative;
 	z-index: 2;
 	height: 100svh;
@@ -593,27 +592,6 @@ button {
 	mask-image: linear-gradient(to bottom, transparent 0%, #000 16%, #000 100%);
 }
 
-.landing-tether {
-	position: absolute;
-	inset: 0;
-	z-index: 1;
-	display: block;
-	width: 100%;
-	height: 100%;
-	overflow: visible;
-	opacity: var(--tether-opacity);
-	pointer-events: none;
-}
-.landing-tether line {
-	fill: none;
-	stroke: color-mix(in srgb, var(--ink) 72%, var(--rule));
-	stroke-width: 1;
-	vector-effect: non-scaling-stroke;
-}
-.landing-tether line:last-child {
-	stroke-dasharray: 3 7;
-	stroke: color-mix(in srgb, var(--ink) 42%, var(--rule));
-}
 /* The clicked CTA sends one feathered drafting-grid wave across the stage. */
 .landing-enter-wave {
 	position: absolute;
@@ -939,7 +917,7 @@ button {
 	min-height: 0;
 	align-self: stretch;
 	justify-self: stretch;
-	opacity: 1;
+	--pyramid-model-opacity: 1;
 	transform: none;
 	z-index: 1;
 }
@@ -1018,6 +996,7 @@ button {
 .foundation-model {
 	--pyramid-ground-axis: 46%;
 	--pyramid-shadow-x: 62%;
+	--pyramid-model-opacity: calc(1 - var(--ending-progress) * 0.28);
 	position: relative;
 	z-index: 1;
 	grid-column: 4 / -1;
@@ -1026,11 +1005,9 @@ button {
 	justify-self: stretch;
 	height: min(82svh, 58rem);
 	min-height: 34rem;
-	opacity: calc(1 - var(--ending-progress) * 0.28);
 	transform: translate3d(calc(var(--ending-progress) * 8vw), 0, 0)
 		scale(calc(1 - var(--ending-progress) * 0.12));
 	transform-origin: center;
-	transition: opacity 180ms linear;
 }
 
 .foundation-model::before {
@@ -1061,13 +1038,14 @@ button {
 	width: 100%;
 	height: 100%;
 	opacity: 0;
+	transition: opacity 180ms linear;
 	outline: none;
 	touch-action: pan-y;
 	cursor: grab;
 }
 
 .foundation-scroll[data-three-ready='true'] .foundation-model canvas {
-	opacity: 1;
+	opacity: var(--pyramid-model-opacity);
 }
 
 .foundation-model canvas[data-interactive='true'] {
@@ -1082,7 +1060,8 @@ button {
 	align-items: center;
 	justify-content: center;
 	gap: 0.22rem;
-	opacity: 1;
+	opacity: var(--pyramid-model-opacity);
+	transition: opacity 180ms linear;
 }
 
 .foundation-scroll[data-three-ready='true'] .foundation-fallback {
@@ -1488,9 +1467,6 @@ button {
 
 @media (hover: none) {
 	.foundation-inspect-hint {
-		display: none;
-	}
-	.landing-tether {
 		display: none;
 	}
 }
@@ -2334,7 +2310,7 @@ input[data-slot='input'],
 		grid-row: 1;
 		height: min(68svh, 42rem);
 		min-height: 30rem;
-		opacity: 1;
+		--pyramid-model-opacity: 1;
 		transform: none;
 	}
 	.foundation-inspect-hint {

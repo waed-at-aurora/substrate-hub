@@ -15,9 +15,9 @@ const ENTER_DURATION_MS = 640;
 /**
  * The landing is the illuminated face of the same drafting plate used by the
  * construction tour. The lamp follows the cursor, the wordmark's variable
- * weight answers it per letter, and restrained shooting lines share the two
- * ghost tethers' assembly point above the real model entering beneath the fold.
- * Touch receives a slow autopilot; reduced motion resolves to one still frame.
+ * weight answers it per letter, and restrained shooting lines share the real
+ * model's assembly point beneath the fold. Touch receives a slow autopilot;
+ * reduced motion resolves to one still frame.
  */
 export function LandingStage({
 	pkg,
@@ -38,8 +38,6 @@ export function LandingStage({
 	const enterTimerRef = useRef<number | null>(null);
 	const rootRef = useRef<HTMLElement | null>(null);
 	const wordRef = useRef<HTMLHeadingElement | null>(null);
-	const tetherPrimaryRef = useRef<SVGLineElement | null>(null);
-	const tetherSecondaryRef = useRef<SVGLineElement | null>(null);
 	const readoutRef = useRef<HTMLSpanElement | null>(null);
 
 	useEffect(
@@ -101,9 +99,8 @@ export function LandingStage({
 		let idle = true;
 		let raf = 0;
 		let lastReadout = '';
-		let lastTetherX = '';
-		let lastTetherY = '';
-		let lastTetherOpacity = '';
+		let lastLightX = '';
+		let lastLightY = '';
 		let letterMetrics: Array<{ element: HTMLSpanElement; x: number; y: number; weight: number }> = [];
 
 		const measure = () => {
@@ -152,27 +149,16 @@ export function LandingStage({
 
 			const normalizedX = lx / width;
 			const normalizedY = ly / height;
-			const tetherX = (normalizedX * 100).toFixed(2);
-			const tetherY = (normalizedY * 100).toFixed(2);
-			root.style.setProperty('--lx', `${tetherX}%`);
-			root.style.setProperty('--ly', `${tetherY}%`);
+			const lightX = (normalizedX * 100).toFixed(2);
+			const lightY = (normalizedY * 100).toFixed(2);
+			if (lightX !== lastLightX || lightY !== lastLightY) {
+				root.style.setProperty('--lx', `${lightX}%`);
+				root.style.setProperty('--ly', `${lightY}%`);
+				lastLightX = lightX;
+				lastLightY = lightY;
+			}
 			root.style.setProperty('--pnx', (normalizedX - 0.5).toFixed(3));
 			root.style.setProperty('--pny', (normalizedY - 0.5).toFixed(3));
-			if (tetherX !== lastTetherX || tetherY !== lastTetherY) {
-				tetherPrimaryRef.current?.setAttribute('x1', tetherX);
-				tetherPrimaryRef.current?.setAttribute('y1', tetherY);
-				tetherSecondaryRef.current?.setAttribute('x1', tetherX);
-				tetherSecondaryRef.current?.setAttribute('y1', tetherY);
-				lastTetherX = tetherX;
-				lastTetherY = tetherY;
-			}
-
-			const handoff = Math.max(0, Math.min(1, window.scrollY / Math.max(1, height * 0.82)));
-			const tetherOpacity = (0.055 + handoff * 0.2).toFixed(3);
-			if (tetherOpacity !== lastTetherOpacity) {
-				root.style.setProperty('--tether-opacity', tetherOpacity);
-				lastTetherOpacity = tetherOpacity;
-			}
 
 			for (const metric of letterMetrics) {
 				const distance = Math.hypot(metric.x - lx, metric.y - ly);
@@ -221,10 +207,6 @@ export function LandingStage({
 				flowerIntensity={8}
 				twinkleSpeed={8}
 			/>
-			<svg className="landing-tether" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-				<line ref={tetherPrimaryRef} x1="30" y1="24" x2="66" y2="100" />
-				<line ref={tetherSecondaryRef} x1="30" y1="24" x2="74" y2="100" />
-			</svg>
 			<div className="landing-grid" aria-hidden="true" />
 			<div className="landing-enter-wave" aria-hidden="true" />
 
