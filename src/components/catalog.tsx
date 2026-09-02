@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Input } from '@aurora-ui/components-v2/components';
+import { Input } from '@aurora-ui/substrate/components';
 import type { CatalogEntry } from '@/lib/data';
 import { Status, ExtArrow } from '@/components/marks';
 import { storybookHref } from '@/config/site';

@@ -6,7 +6,7 @@ import { data, fmtDate, releasesData } from '@/lib/data';
 export const metadata: Metadata = { title: 'Releases' };
 
 export default function Releases() {
-	const releases = releasesData.releases;
+	const releases = releasesData.releases.filter((release) => release.tag.startsWith('packages/substrate/'));
 	const latestRelease = releases[0];
 	const previousReleases = releases.slice(1);
 	const breakingReleases = releases.filter((release) => release.breaking);
@@ -79,8 +79,7 @@ export default function Releases() {
 					)
 				) : (
 					<p className="lede">
-						Release notes will appear here after the first automated components-v2 release is
-						published.
+						Release notes will appear here after the first automated Substrate release is published.
 					</p>
 				)}
 			</Exhibit>
@@ -95,7 +94,7 @@ export default function Releases() {
 				id="previous"
 			>
 				{previousReleases.length === 0 ? (
-					<p className="lede">No previous components-v2 releases are published.</p>
+					<p className="lede">No previous Substrate releases are published.</p>
 				) : (
 					<ul className="feed">
 						{previousReleases.map((release) => (
@@ -119,7 +118,7 @@ export default function Releases() {
 				label={`Recent source history (${data.history.length} changes)`}
 				meta={
 					<a
-						href={`${site.repoUrl}/commits/release/packages/components-v2`}
+						href={`${site.repoUrl}/commits/release/packages/substrate`}
 						target="_blank"
 						rel="noreferrer"
 					>

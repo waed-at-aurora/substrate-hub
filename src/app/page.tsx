@@ -5,7 +5,7 @@ import { data, fmtDate } from '@/lib/data';
 /** The Night Portal followed by a scroll-built view of the system underneath it. */
 export default function Landing() {
 	return (
-		<main>
+		<main className="landing-home">
 			<LandingStage
 				pkg={data.source.package}
 				version={data.source.version}

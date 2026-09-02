@@ -45,7 +45,7 @@ export default function Components() {
 			>
 				<Catalog entries={catalog} />
 				<p className="note" style={{ marginTop: '1rem' }}>
-					All entries import from <code className="mono">@aurora-ui/components-v2</code>. The{' '}
+					All entries import from <code className="mono">@aurora-ui/substrate</code>. The{' '}
 					{data.counts.experimental} experimental ux-intent explorations are excluded from this index
 					until they graduate; they ship only on the alpha channel.
 				</p>

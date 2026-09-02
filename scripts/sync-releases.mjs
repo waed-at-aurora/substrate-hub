@@ -7,7 +7,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const repository = process.env.AURORA_UI_REPOSITORY ?? 'AuroraEnergyResearch/aurora-ui';
 const requiredTag = process.env.SUBSTRATE_RELEASE_TAG ?? null;
 const token = process.env.AURORA_UI_TOKEN ?? process.env.GH_TOKEN ?? process.env.GITHUB_TOKEN;
-const tagPrefix = 'packages/components-v2/';
+const tagPrefix = 'packages/substrate/';
 
 if (!token) {
 	console.error('GitHub access token not found; set AURORA_UI_TOKEN, GH_TOKEN, or GITHUB_TOKEN');
@@ -63,4 +63,4 @@ const output = {
 const outputPath = join(here, '..', 'src', 'data', 'releases.json');
 mkdirSync(dirname(outputPath), { recursive: true });
 writeFileSync(outputPath, `${JSON.stringify(output, null, '\t')}\n`);
-console.log(`synced: ${componentReleases.length} components-v2 releases`);
+console.log(`synced: ${componentReleases.length} Substrate releases`);

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Archivo, Bricolage_Grotesque, Spline_Sans_Mono } from 'next/font/google';
-import '@aurora-ui/components-v2/style.css';
+import '@aurora-ui/substrate/style.css';
 import './globals.css';
 
 const archivo = Archivo({ subsets: ['latin'], variable: '--font-archivo' });

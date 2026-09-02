@@ -363,6 +363,7 @@ button {
 
 .stage {
 	position: relative;
+	container-type: inline-size;
 	overflow: hidden;
 	border: 1px solid var(--rule);
 	border-radius: 4px;
@@ -518,6 +519,17 @@ button {
 	user-select: none;
 }
 
+.landing-home {
+	--portal-grid-unit: 2.6rem;
+	position: relative;
+	isolation: isolate;
+	overflow: clip;
+	background:
+		linear-gradient(var(--rule-soft) 1px, transparent 1px) 0 0 / 100% var(--portal-grid-unit),
+		linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px) 0 0 / var(--portal-grid-unit) 100%,
+		var(--paper);
+}
+
 /* ── landing: the stage grown to the whole viewport ─────────── */
 
 .landing {
@@ -527,13 +539,30 @@ button {
 	--pny: -0.26;
 	--enter-y: 75%;
 	position: relative;
+	z-index: 2;
 	height: 100svh;
-	overflow: hidden;
+	overflow: visible;
 	display: flex;
 	flex-direction: column;
 	background:
-		radial-gradient(140% 120% at var(--lx) var(--ly), transparent 46%, rgba(0, 0, 0, 0.62) 100%),
-		radial-gradient(82% 68% at var(--lx) var(--ly), color-mix(in srgb, var(--rule) 88%, var(--ink)) 0%, color-mix(in srgb, var(--paper) 88%, var(--rule)) 54%, var(--paper) 100%);
+		radial-gradient(140% 120% at var(--lx) var(--ly), transparent 44%, rgba(0, 0, 0, 0.58) 100%),
+		radial-gradient(
+			82% 68% at var(--lx) var(--ly),
+			color-mix(in srgb, var(--rule) 88%, var(--ink)) 0%,
+			color-mix(in srgb, var(--paper) 76%, transparent) 56%,
+			transparent 100%
+		);
+}
+.landing::after {
+	content: '';
+	position: absolute;
+	z-index: 1;
+	left: 0;
+	bottom: 0;
+	width: min(62rem, 72vw);
+	height: 48%;
+	pointer-events: none;
+	background: radial-gradient(ellipse 98% 94% at 0 100%, color-mix(in srgb, var(--paper) 97%, transparent) 0%, color-mix(in srgb, var(--paper) 82%, transparent) 58%, transparent 100%);
 }
 
 /* the drafting grid lives only where the lamp reaches */
@@ -542,8 +571,8 @@ button {
 	inset: 0;
 	pointer-events: none;
 	background:
-		linear-gradient(#454553 1px, transparent 1px) 0 0 / 100% 2.6rem,
-		linear-gradient(90deg, #454553 1px, transparent 1px) 0 0 / 2.6rem 100%;
+		linear-gradient(#454553 1px, transparent 1px) 0 0 / 100% var(--portal-grid-unit),
+		linear-gradient(90deg, #454553 1px, transparent 1px) 0 0 / var(--portal-grid-unit) 100%;
 	opacity: 0.5;
 	-webkit-mask-image: radial-gradient(120% 100% at var(--lx) var(--ly), #000 0%, rgba(0, 0, 0, 0.25) 45%, transparent 80%);
 	mask-image: radial-gradient(120% 100% at var(--lx) var(--ly), #000 0%, rgba(0, 0, 0, 0.25) 45%, transparent 80%);
@@ -551,11 +580,18 @@ button {
 
 .landing-starburst {
 	position: absolute;
-	inset: 0;
+	top: 0;
+	left: 0;
+	z-index: 0;
+	width: 100%;
+	height: 118svh;
 	overflow: hidden;
 	pointer-events: none;
-	z-index: 0;
+	transform: translate3d(calc(var(--pnx) * -8px), calc(var(--pny) * -5px), 0);
+	-webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 16%, #000 100%);
+	mask-image: linear-gradient(to bottom, transparent 0%, #000 16%, #000 100%);
 }
+
 /* The clicked CTA sends one feathered drafting-grid wave across the stage. */
 .landing-enter-wave {
 	position: absolute;
@@ -576,9 +612,9 @@ button {
 			transparent 76%
 		),
 		linear-gradient(color-mix(in srgb, var(--ink) 28%, transparent) 1px, transparent 1px) 0 0 /
-			100% 2.6rem,
+			100% var(--portal-grid-unit),
 		linear-gradient(90deg, color-mix(in srgb, var(--ink) 28%, transparent) 1px, transparent 1px) 0 0 /
-			2.6rem 100%;
+			var(--portal-grid-unit) 100%;
 	-webkit-mask-image: linear-gradient(
 		90deg,
 		transparent 0%,
@@ -750,8 +786,7 @@ button {
 	.landing {
 		height: auto;
 		min-height: 100svh;
-		overflow-x: hidden;
-		overflow-y: auto;
+		overflow: visible;
 	}
 	.landing-dateline {
 		align-items: flex-start;
@@ -767,10 +802,6 @@ button {
 	.landing-word-wrap {
 		flex: 0 0 clamp(14rem, 28svh, 19rem);
 		padding-block: 1.5rem;
-	}
-	.landing-starburst {
-		bottom: auto;
-		height: calc(clamp(14rem, 28svh, 19rem) + 4rem);
 	}
 	.landing-word {
 		font-size: clamp(2.65rem, 13vw, 4.5rem);
@@ -809,6 +840,9 @@ button {
 		text-align: center;
 		white-space: normal;
 	}
+	.landing-actions .action-primary {
+		grid-column: 1 / -1;
+	}
 	.landing .install-line {
 		display: flex;
 		width: 100%;
@@ -822,7 +856,14 @@ button {
 		flex: none;
 		min-block-size: 2.75rem;
 	}
+	.landing-starburst {
+		left: -50%;
+		width: 150%;
+		opacity: 0.72;
+		transform: translate3d(calc(var(--pnx) * -5px), calc(var(--pny) * -3px), 0);
+	}
 }
+
 
 
 /* ── landing continuation: an explorable Three.js system ───── */
@@ -831,10 +872,12 @@ button {
 	--build-progress: 0%;
 	--focus-opacity: 0.14;
 	--ending-progress: 0;
+	--entry-copy-opacity: 0;
 	position: relative;
-	height: 760svh;
-	border-top: 1px solid var(--rule);
-	background: var(--paper);
+	z-index: 1;
+	height: 778svh;
+	margin-top: -18svh;
+	background: transparent;
 }
 
 .foundation-sticky {
@@ -848,10 +891,7 @@ button {
 	grid-template-rows: minmax(0, 1fr) auto;
 	padding: clamp(2rem, 5vh, 4.5rem) var(--gutter) 3.2rem;
 	isolation: isolate;
-	background:
-		linear-gradient(var(--rule-soft) 1px, transparent 1px) 0 0 / 100% 25%,
-		linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px) 0 0 / 12.5% 100%,
-		var(--paper);
+	background: transparent;
 }
 
 .foundation-sticky::after {
@@ -877,7 +917,7 @@ button {
 	min-height: 0;
 	align-self: stretch;
 	justify-self: stretch;
-	opacity: 1;
+	--pyramid-model-opacity: 1;
 	transform: none;
 	z-index: 1;
 }
@@ -907,7 +947,7 @@ button {
 	grid-column: 1 / span 5;
 	grid-row: 1;
 	align-self: start;
-	opacity: 1;
+	opacity: var(--entry-copy-opacity);
 	transform: translate3d(0, 0, 0);
 	transition: opacity 320ms var(--ease-out), transform 420ms var(--ease-out);
 }
@@ -954,6 +994,9 @@ button {
 }
 
 .foundation-model {
+	--pyramid-ground-axis: 46%;
+	--pyramid-shadow-x: 62%;
+	--pyramid-model-opacity: calc(1 - var(--ending-progress) * 0.28);
 	position: relative;
 	z-index: 1;
 	grid-column: 4 / -1;
@@ -962,11 +1005,30 @@ button {
 	justify-self: stretch;
 	height: min(82svh, 58rem);
 	min-height: 34rem;
-	opacity: calc(1 - var(--ending-progress) * 0.28);
 	transform: translate3d(calc(var(--ending-progress) * 8vw), 0, 0)
 		scale(calc(1 - var(--ending-progress) * 0.12));
 	transform-origin: center;
-	transition: opacity 180ms linear;
+}
+
+.foundation-model::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background:
+		radial-gradient(
+			ellipse 78% 70% at var(--pyramid-shadow-x) 50%,
+			var(--paper) 0 50%,
+			color-mix(in srgb, var(--paper) 94%, transparent) 66%,
+			color-mix(in srgb, var(--paper) 70%, transparent) 80%,
+			transparent 100%
+		),
+		linear-gradient(
+			to bottom,
+			transparent 0 var(--pyramid-ground-axis),
+			color-mix(in srgb, var(--paper) 68%, transparent) calc(var(--pyramid-ground-axis) + 12%),
+			var(--paper) calc(var(--pyramid-ground-axis) + 30%)
+		);
 }
 
 .foundation-model canvas {
@@ -976,13 +1038,14 @@ button {
 	width: 100%;
 	height: 100%;
 	opacity: 0;
+	transition: opacity 180ms linear;
 	outline: none;
 	touch-action: pan-y;
 	cursor: grab;
 }
 
 .foundation-scroll[data-three-ready='true'] .foundation-model canvas {
-	opacity: 1;
+	opacity: var(--pyramid-model-opacity);
 }
 
 .foundation-model canvas[data-interactive='true'] {
@@ -997,7 +1060,8 @@ button {
 	align-items: center;
 	justify-content: center;
 	gap: 0.22rem;
-	opacity: 1;
+	opacity: var(--pyramid-model-opacity);
+	transition: opacity 180ms linear;
 }
 
 .foundation-scroll[data-three-ready='true'] .foundation-fallback {
@@ -1291,17 +1355,14 @@ button {
 
 @media (max-width: 52rem) {
 	.foundation-scroll {
-		height: 680svh;
+		height: 690svh;
+		margin-top: -10svh;
 	}
 	.foundation-sticky {
 		min-height: 40rem;
 		grid-template-columns: 1fr;
 		grid-template-rows: auto minmax(0, 1fr) auto;
 		padding: 1.35rem var(--gutter) 3rem;
-		background:
-			linear-gradient(var(--rule-soft) 1px, transparent 1px) 0 0 / 100% 25%,
-			linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px) 0 0 / 25% 100%,
-			var(--paper);
 	}
 	.foundation-copy {
 		grid-column: 1;
@@ -1320,6 +1381,7 @@ button {
 		line-height: 1.5;
 	}
 	.foundation-model {
+		--pyramid-shadow-x: 50%;
 		position: absolute;
 		grid-column: auto;
 		grid-row: auto;
@@ -2186,6 +2248,7 @@ input[data-slot='input'],
 		min-height: min(72svh, 44rem);
 	}
 	.stage-word {
+		font-size: clamp(2.5rem, 14cqw, 7.5rem);
 		margin-top: 1rem;
 		padding-left: 1.1rem;
 	}
@@ -2218,8 +2281,13 @@ input[data-slot='input'],
 	.landing-ghost {
 		transform: none;
 	}
+	.landing-starburst {
+		opacity: 0.42;
+		transform: none;
+	}
 	.foundation-scroll {
 		height: auto;
+		margin-top: 0;
 	}
 	.foundation-sticky {
 		position: relative;
@@ -2242,7 +2310,7 @@ input[data-slot='input'],
 		grid-row: 1;
 		height: min(68svh, 42rem);
 		min-height: 30rem;
-		opacity: 1;
+		--pyramid-model-opacity: 1;
 		transform: none;
 	}
 	.foundation-inspect-hint {
