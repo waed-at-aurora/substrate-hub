@@ -363,6 +363,7 @@ button {
 
 .stage {
 	position: relative;
+	container-type: inline-size;
 	overflow: hidden;
 	border: 1px solid var(--rule);
 	border-radius: 4px;
@@ -2247,6 +2248,7 @@ input[data-slot='input'],
 		min-height: min(72svh, 44rem);
 	}
 	.stage-word {
+		font-size: clamp(2.5rem, 14cqw, 7.5rem);
 		margin-top: 1rem;
 		padding-left: 1.1rem;
 	}
