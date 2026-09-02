@@ -35,12 +35,8 @@ export default function Home() {
 
 
 				<div className="stage-body">
-					<p className="stage-position">The shared layer behind consistent EOS experiences.</p>
-					<p className="stage-copy">
-						Substrate provides the reusable composite components and interaction patterns EOS
-						products are built from — consistent, high quality, faster to ship, with room for
-						product-level differentiation above the shared system.
-					</p>
+					<p className="stage-position">The foundational medium from which experiences emerge.</p>
+					<p className="stage-copy">An agent-first, modern design system.</p>
 					<div className="stage-actions">
 						<Link className="action action-primary" href="/get-started">
 							Install Substrate

@@ -8,9 +8,9 @@ const display = Bricolage_Grotesque({ subsets: ['latin'], variable: '--font-disp
 const mono = Spline_Sans_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 export const metadata: Metadata = {
-	title: { default: 'Substrate — the EOS design system', template: '%s · Substrate' },
+	title: { default: 'Substrate', template: '%s · Substrate' },
 	description:
-		'The shared layer behind consistent EOS experiences: install Substrate, find a component or pattern, and see what is changing.',
+		'The foundational medium from which experiences emerge. An agent-first, modern design system.',
 };
 
 const CONTRACT = `
@@ -18,7 +18,7 @@ impeccable direction contract — brief-pinned replacement world (2026-08-26), s
 THESIS: a night-edition design-system portal with Astryx-like energy — dark-first, minimalist, editorial, slightly experimental; it refuses both the light docs-site default and the previous light report rendition.
 OWN-WORLD: DS dark canvas #09090B, near-white ink #F4F4F5, hairline zinc rules with mono captions (FIG./TABLE) carried over from the report grammar; Aurora yellow #FFCC00 law-bound to primary action and new-signal, electric on night; cyan marks live figures; Bricolage Grotesque display (variable wght/opsz) over restrained Archivo UI and Spline Sans Mono; physical status marks.
 STORY: a visitor lands inside the full-viewport Night Portal stage — the light follows them, the wordmark answers their pointer — then enters the hub and works the numbered sections mid-task.
-FIRST VIEWPORT: the landing at / is the stage grown to the whole viewport: cursor-following lamp on the drafting grid, monumental SUBSTRATE responding per letter, dateline band above, positioning + three actions (yellow Enter the hub leading) + install line below. The in-depth hub lives at /overview.
+FIRST VIEWPORT: the landing at / is the stage grown to the whole viewport: cursor-following lamp on the drafting grid, monumental SUBSTRATE responding per letter, dateline band above, the exact positioning “The foundational medium from which experiences emerge.” and “An agent-first, modern design system.”, four task-first actions led by yellow Open overview, and the install line below. The /overview stage repeats the same positioning verbatim.
 FORM: user-pinned direction (dark editorial-experimental portal); no roll — a brief-pinned direction beats the roll.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 `;
