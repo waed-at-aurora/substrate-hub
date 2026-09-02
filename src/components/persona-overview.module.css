@@ -78,18 +78,30 @@
 	transition: transform 260ms var(--ease-out);
 }
 
+@keyframes rail-draw {
+	from {
+		background-size: 0 4px, auto;
+	}
+	to {
+		background-size: 100% 4px, auto;
+	}
+}
+
 .trigger:hover {
 	background: var(--surface);
 	color: var(--ink);
 }
 
 .trigger[aria-selected='true'] {
-	background: var(--ink);
-	color: var(--paper);
+	background:
+		linear-gradient(var(--yellow), var(--yellow)) left bottom / 100% 4px no-repeat,
+		color-mix(in srgb, var(--yellow) 16%, var(--paper));
+	color: var(--yellow);
+	animation: rail-draw 280ms var(--ease-out) both;
 }
 
 .trigger[aria-selected='true']::after {
-	transform: scaleX(1);
+	transform: scaleX(0);
 }
 
 .trigger:focus-visible {
@@ -98,7 +110,7 @@
 }
 
 .trigger[aria-selected='true']:focus-visible {
-	outline-color: var(--paper);
+	outline-color: var(--ink);
 }
 
 .trigger span {
@@ -407,5 +419,9 @@
 	.trigger::after,
 	.action {
 		transition: none;
+	}
+
+	.trigger[aria-selected='true'] {
+		animation: none;
 	}
 }

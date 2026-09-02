@@ -32,7 +32,7 @@ const PERSONAS: readonly Persona[] = [
 		id: 'developers',
 		name: 'Dev teams',
 		promise: 'Build sooner',
-		headline: 'Go from setup to a working product flow—fast.',
+		headline: 'Go from setup to a working product flow, fast.',
 		summary:
 			'Install once, find the right component, and plug proven interactions into the workflows your team already uses.',
 		path: ['Install', 'Discover', 'Compose', 'Ship'],
@@ -260,6 +260,8 @@ export function PersonaOverview({ primitives, composites }: { primitives: number
 						);
 					})}
 				</div>
+
+
 
 				<div
 					key={activePersona.id}
