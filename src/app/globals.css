@@ -861,6 +861,9 @@ button {
 		text-align: center;
 		white-space: normal;
 	}
+	.landing-actions .action-primary {
+		grid-column: 1 / -1;
+	}
 	.landing .install-line {
 		display: flex;
 		width: 100%;
