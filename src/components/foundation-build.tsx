@@ -324,13 +324,21 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					windNacelle: new RoundedBoxGeometry(0.3, 0.14, 0.17, 3, 0.035),
 					windHub: new THREE.CylinderGeometry(0.074, 0.074, 0.1, 20),
 					windBlade: windBladeGeometry,
-					solarFrame: new RoundedBoxGeometry(1.26, 0.72, 0.075, 2, 0.028),
-					solarBack: new RoundedBoxGeometry(1.18, 0.64, 0.065, 2, 0.02),
-					solarCell: new RoundedBoxGeometry(0.128, 0.095, 0.018, 1, 0.008),
-					solarRail: new RoundedBoxGeometry(1.2, 0.012, 0.012, 1, 0.004),
-					solarStand: new RoundedBoxGeometry(0.055, 0.52, 0.055, 1, 0.014),
-					solarReflection: new RoundedBoxGeometry(0.06, 0.61, 0.012, 1, 0.004),
-					sunRay: new RoundedBoxGeometry(0.018, 0.09, 0.018, 1, 0.006),
+					solarFoundation: new RoundedBoxGeometry(0.92, 0.1, 0.48, 4, 0.04),
+					solarFoot: new RoundedBoxGeometry(0.22, 0.045, 0.16, 2, 0.016),
+					solarOuterFrame: new RoundedBoxGeometry(1.28, 0.72, 0.09, 4, 0.028),
+					solarBacking: new RoundedBoxGeometry(1.2, 0.64, 0.035, 3, 0.018),
+					solarGlass: new RoundedBoxGeometry(1.19, 0.63, 0.01, 2, 0.012),
+					solarCell: new RoundedBoxGeometry(0.134, 0.132, 0.012, 2, 0.007),
+					solarSupportBeam: new RoundedBoxGeometry(0.055, 0.58, 0.055, 2, 0.014),
+					solarCrossBrace: new RoundedBoxGeometry(0.62, 0.045, 0.05, 2, 0.012),
+					solarPivot: new THREE.CylinderGeometry(0.055, 0.055, 0.07, 18),
+					solarMountClip: new RoundedBoxGeometry(0.06, 0.04, 0.035, 2, 0.008),
+					solarJunctionBox: new RoundedBoxGeometry(0.28, 0.16, 0.075, 3, 0.018),
+					solarConnector: new THREE.CylinderGeometry(0.025, 0.025, 0.05, 14),
+					solarFastener: new THREE.CylinderGeometry(0.012, 0.012, 0.014, 12),
+					solarIndicator: new RoundedBoxGeometry(0.045, 0.018, 0.012, 1, 0.004),
+					solarReflection: new RoundedBoxGeometry(0.09, 0.6, 0.008, 1, 0.004),
 					batteryCase: new RoundedBoxGeometry(0.86, 0.64, 0.3, 4, 0.055),
 					batteryLid: new RoundedBoxGeometry(0.82, 0.075, 0.28, 3, 0.025),
 					batteryPanel: new RoundedBoxGeometry(0.7, 0.43, 0.035, 3, 0.022),
@@ -631,33 +639,38 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				const energyMaterials = {
 					dark: makeEnergySurface(substrateColors.secondary, 0.72, 0.12),
 					zinc: makeEnergySurface(substrateColors.border, 0.5, 0.28, 0.24),
-					metal: makeEnergySurface(substrateColors.muted, 0.28, 0.72, 0.4),
 					warm: makeEnergySurface(substrateColors.text, 0.38, 0.26, 0.34),
-					panel: makeEnergySurface(substrateColors.panelCell, 0.24, 0.18, 0.72),
-					cell: makeEnergySurface(substrateColors.cyanDim, 0.24, 0.14, 0.7),
-					grid: makeEnergySurface(substrateColors.cyan, 0.24, 0.3, 0.5),
 					cyan: makeEnergySurface(substrateColors.cyan, 0.24, 0.12, 0.48),
 					yellow: makeEnergySurface(substrateColors.primary, 0.3, 0.14, 0.52),
-					sun: makeEnergySurface(substrateColors.primary, 0.18, 0.04, 0.68),
-					reflection: makeEnergySurface(substrateColors.cyanBright, 0.16, 0.08, 0.76, 0.28),
-					charge: makeEnergySurface(substrateColors.cyan, 0.2, 0.08, 0.58),
 				};
-				energyMaterials.panel.emissive.set(substrateColors.panelCell);
-				energyMaterials.panel.emissiveIntensity = 0.1;
-				energyMaterials.cell.emissive.set(substrateColors.cyanDim);
-				energyMaterials.cell.emissiveIntensity = 0.18;
-				energyMaterials.grid.emissive.set(substrateColors.cyan);
-				energyMaterials.grid.emissiveIntensity = 0.3;
 				energyMaterials.cyan.emissive.set(substrateColors.cyan);
 				energyMaterials.cyan.emissiveIntensity = 0.34;
 				energyMaterials.yellow.emissive.set(substrateColors.primary);
 				energyMaterials.yellow.emissiveIntensity = 0.12;
-				energyMaterials.sun.emissive.set(substrateColors.primary);
-				energyMaterials.sun.emissiveIntensity = 0.85;
-				energyMaterials.reflection.emissive.set(substrateColors.cyanBright);
-				energyMaterials.reflection.emissiveIntensity = 0.52;
-				energyMaterials.charge.emissive.set(substrateColors.cyan);
-				energyMaterials.charge.emissiveIntensity = 0.58;
+
+				const solarMaterials = {
+					foundation: makeEnergySurface('#031827', 0.8, 0.08, 0.12),
+					support: makeEnergySurface('#073244', 0.42, 0.42, 0.28),
+					frame: makeEnergySurface('#041c2b', 0.3, 0.58, 0.34),
+					backing: makeEnergySurface('#073a43', 0.62, 0.04, 0.18),
+					glass: makeEnergySurface('#062b3a', 0.16, 0.04, 0.82, 0.16),
+					cellA: makeEnergySurface('#055968', 0.24, 0.04, 0.54),
+					cellB: makeEnergySurface('#076c79', 0.22, 0.04, 0.58),
+					cellC: makeEnergySurface('#064a5a', 0.28, 0.04, 0.48),
+					copper: makeEnergySurface('#b86d43', 0.3, 0.76, 0.24),
+					brass: makeEnergySurface('#d09b48', 0.28, 0.7, 0.28),
+					rubber: makeEnergySurface('#10262d', 0.92, 0.01, 0.02),
+					cyan: makeEnergySurface(substrateColors.cyanBright, 0.18, 0.04, 0.44),
+					yellow: makeEnergySurface(substrateColors.primary, 0.38, 0.04, 0.24),
+					reflection: makeEnergySurface('#e0b862', 0.18, 0.04, 0.62, 0.16),
+				};
+				solarMaterials.cyan.emissive.set(substrateColors.cyanBright);
+				solarMaterials.cyan.emissiveIntensity = 0.26;
+				solarMaterials.yellow.emissive.set(substrateColors.primary);
+				solarMaterials.yellow.emissiveIntensity = 0.04;
+				solarMaterials.reflection.emissive.set('#8b6729');
+				solarMaterials.reflection.emissiveIntensity = 0.08;
+				const solarCableGeometries: InstanceType<typeof THREE.BufferGeometry>[] = [];
 
 				const batteryMaterials = {
 					casing: makeEnergySurface('#031d31', 0.46, 0.06, 0.34),
@@ -678,30 +691,6 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				batteryMaterials.yellow.emissive.set(substrateColors.primary);
 				batteryMaterials.yellow.emissiveIntensity = 0.08;
 
-				const sunHaloCanvas = document.createElement('canvas');
-				sunHaloCanvas.width = 96;
-				sunHaloCanvas.height = 96;
-				const sunHaloContext = sunHaloCanvas.getContext('2d')!;
-				const sunRgb = new THREE.Color(substrateColors.primary);
-				const sunRed = Math.round(sunRgb.r * 255);
-				const sunGreen = Math.round(sunRgb.g * 255);
-				const sunBlue = Math.round(sunRgb.b * 255);
-				const sunGradient = sunHaloContext.createRadialGradient(48, 48, 3, 48, 48, 48);
-				sunGradient.addColorStop(0, `rgba(${sunRed}, ${sunGreen}, ${sunBlue}, 0.44)`);
-				sunGradient.addColorStop(0.42, `rgba(${sunRed}, ${sunGreen}, ${sunBlue}, 0.2)`);
-				sunGradient.addColorStop(1, `rgba(${sunRed}, ${sunGreen}, ${sunBlue}, 0)`);
-				sunHaloContext.fillStyle = sunGradient;
-				sunHaloContext.fillRect(0, 0, 96, 96);
-				const sunHaloTexture = new THREE.CanvasTexture(sunHaloCanvas);
-				sunHaloTexture.colorSpace = THREE.SRGBColorSpace;
-				const sunHaloMaterial = new THREE.SpriteMaterial({
-					map: sunHaloTexture,
-					color: 0xffffff,
-					transparent: true,
-					opacity: 0,
-					depthWrite: false,
-					blending: THREE.AdditiveBlending,
-				});
 
 				const microgridSurfaceMaterials: InstanceType<typeof THREE.MeshPhysicalMaterial>[] = [];
 				const makeMicrogridSurface = (
@@ -1132,85 +1121,181 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							break;
 						}
 						case 'solar': {
-							const foot = new THREE.Mesh(miniGeometries.energyBase, energyMaterials.dark);
-							foot.scale.set(0.78, 0.72, 0.72);
-							foot.position.y = -0.42;
-							group.add(foot);
+							const foundation = new THREE.Mesh(
+								miniGeometries.solarFoundation,
+								solarMaterials.foundation,
+							);
+							foundation.position.y = -0.41;
+							foundation.receiveShadow = true;
+							group.add(foundation);
 
-							[-0.27, 0.27].forEach((x, index) => {
-								const support = new THREE.Mesh(miniGeometries.solarStand, energyMaterials.metal);
-								support.position.set(x, -0.16, -0.11);
-								support.rotation.z = index === 0 ? -0.32 : 0.32;
-								support.rotation.x = -0.12;
-								group.add(support);
+							([-0.32, 0.32] as const).forEach((x, index) => {
+								const foot = new THREE.Mesh(
+									miniGeometries.solarFoot,
+									solarMaterials.foundation,
+								);
+								foot.position.set(x, -0.37, -0.075);
+								group.add(foot);
+
+								const upright = new THREE.Mesh(
+									miniGeometries.solarSupportBeam,
+									solarMaterials.support,
+								);
+								upright.scale.y = 0.74;
+								upright.position.set(x, -0.19, -0.09);
+								upright.rotation.z = index === 0 ? -0.16 : 0.16;
+								upright.rotation.x = -0.12;
+								group.add(upright);
+
+								const rearBrace = new THREE.Mesh(
+									miniGeometries.solarSupportBeam,
+									solarMaterials.support,
+								);
+								rearBrace.scale.y = 0.62;
+								rearBrace.position.set(x, -0.21, 0.04);
+								rearBrace.rotation.x = 0.58;
+								group.add(rearBrace);
+
+								const pivot = new THREE.Mesh(
+									miniGeometries.solarPivot,
+									solarMaterials.brass,
+								);
+								pivot.rotation.x = Math.PI / 2;
+								pivot.position.set(x, -0.055, -0.02);
+								group.add(pivot);
+
+								const fastener = new THREE.Mesh(
+									miniGeometries.solarFastener,
+									solarMaterials.copper,
+								);
+								fastener.rotation.x = Math.PI / 2;
+								fastener.position.set(x, -0.055, 0.022);
+								group.add(fastener);
 							});
+							const crossBrace = new THREE.Mesh(
+								miniGeometries.solarCrossBrace,
+								solarMaterials.support,
+							);
+							crossBrace.position.set(0, -0.34, -0.08);
+							group.add(crossBrace);
 
 							const panel = new THREE.Group();
-							panel.position.set(0, 0.08, 0.07);
-							panel.rotation.x = -Math.PI / 6;
-							const frame = new THREE.Mesh(miniGeometries.solarFrame, energyMaterials.metal);
-							frame.castShadow = true;
-							panel.add(frame);
-							const back = new THREE.Mesh(miniGeometries.solarBack, energyMaterials.panel);
-							back.position.z = 0.045;
-							panel.add(back);
+							panel.position.set(0, 0.12, 0.045);
+							panel.rotation.x = -Math.PI / 7;
+							const outerFrame = new THREE.Mesh(
+								miniGeometries.solarOuterFrame,
+								solarMaterials.frame,
+							);
+							outerFrame.castShadow = true;
+							panel.add(outerFrame);
+							const backing = new THREE.Mesh(
+								miniGeometries.solarBacking,
+								solarMaterials.backing,
+							);
+							backing.position.z = 0.052;
+							panel.add(backing);
 
-							const cellXs = Array.from({ length: 8 }, (_, index) => (index - 3.5) * 0.142);
-							const cellYs = Array.from({ length: 5 }, (_, index) => (index - 2) * 0.112);
-							cellYs.forEach((y) => {
-								cellXs.forEach((x) => {
-									const cell = new THREE.Mesh(miniGeometries.solarCell, energyMaterials.cell);
-									cell.position.set(x, y, 0.092);
+							const cellMaterials = [
+								solarMaterials.cellA,
+								solarMaterials.cellB,
+								solarMaterials.cellC,
+							] as const;
+							for (let row = 0; row < 4; row += 1) {
+								for (let column = 0; column < 8; column += 1) {
+									const cell = new THREE.Mesh(
+										miniGeometries.solarCell,
+										cellMaterials[(row * 5 + column * 3) % cellMaterials.length],
+									);
+									cell.position.set(
+										(column - 3.5) * 0.146,
+										(row - 1.5) * 0.15,
+										0.078,
+									);
 									panel.add(cell);
+								}
+							}
+
+							const glass = new THREE.Mesh(
+								miniGeometries.solarGlass,
+								solarMaterials.glass,
+							);
+							glass.position.z = 0.094;
+							panel.add(glass);
+							([-0.58, 0.58] as const).forEach((x) => {
+								([-0.3, 0.3] as const).forEach((y) => {
+									const clip = new THREE.Mesh(
+										miniGeometries.solarMountClip,
+										solarMaterials.brass,
+									);
+									clip.position.set(x, y, 0.094);
+									panel.add(clip);
 								});
 							});
 
-							[-0.224, -0.112, 0, 0.112, 0.224].forEach((y) => {
-								const gridLine = new THREE.Mesh(miniGeometries.solarRail, energyMaterials.grid);
-								gridLine.position.set(0, y, 0.106);
-								panel.add(gridLine);
-							});
-							[-0.497, -0.355, -0.213, -0.071, 0.071, 0.213, 0.355, 0.497].forEach((x) => {
-								const gridLine = new THREE.Mesh(miniGeometries.solarRail, energyMaterials.metal);
-								gridLine.rotation.z = Math.PI / 2;
-								gridLine.scale.x = 0.5;
-								gridLine.position.set(x, 0, 0.107);
-								panel.add(gridLine);
+							const junctionBox = new THREE.Mesh(
+								miniGeometries.solarJunctionBox,
+								solarMaterials.foundation,
+							);
+							junctionBox.position.set(0.34, -0.255, -0.075);
+							panel.add(junctionBox);
+							([-0.045, 0.045] as const).forEach((x) => {
+								const connector = new THREE.Mesh(
+									miniGeometries.solarConnector,
+									solarMaterials.copper,
+								);
+								connector.position.set(0.34 + x, -0.35, -0.075);
+								panel.add(connector);
 							});
 
 							const reflection = new THREE.Mesh(
 								miniGeometries.solarReflection,
-								energyMaterials.reflection,
+								solarMaterials.reflection,
 							);
-							reflection.position.set(-0.52, 0, 0.122);
-							reflection.rotation.z = -0.2;
+							reflection.position.set(-0.52, 0, 0.105);
+							reflection.rotation.z = -0.16;
 							panel.add(reflection);
+							const indicator = new THREE.Mesh(
+								miniGeometries.solarIndicator,
+								solarMaterials.cyan,
+							);
+							indicator.position.set(0.53, -0.255, 0.105);
+							panel.add(indicator);
 							group.add(panel);
 
-							const sun = new THREE.Group();
-							sun.position.set(0.5, 0.47, 0.18);
-							const sunCore = new THREE.Mesh(miniGeometries.knob, energyMaterials.sun);
-							sunCore.scale.setScalar(0.5);
-							sun.add(sunCore);
-							for (let rayIndex = 0; rayIndex < 8; rayIndex += 1) {
-								const angle = (rayIndex * Math.PI) / 4;
-								const ray = new THREE.Mesh(miniGeometries.sunRay, energyMaterials.yellow);
-								ray.position.set(Math.sin(angle) * 0.105, Math.cos(angle) * 0.105, 0);
-								ray.rotation.z = -angle;
-								sun.add(ray);
-							}
-							const halo = new THREE.Sprite(sunHaloMaterial);
-							halo.scale.setScalar(0.32);
-							halo.position.z = -0.015;
-							sun.add(halo);
-							const sunlight = new THREE.PointLight(substrateColors.primary, 0.42, 2.2, 2);
-							sunlight.position.z = 0.18;
-							sun.add(sunlight);
-							group.add(sun);
+							const cableCurve = new THREE.CatmullRomCurve3([
+								new THREE.Vector3(0.44, -0.125, 0.02),
+								new THREE.Vector3(0.45, -0.22, 0.075),
+								new THREE.Vector3(0.38, -0.31, 0.12),
+								new THREE.Vector3(0.3, -0.37, 0.14),
+							]);
+							const cableGeometry = new THREE.TubeGeometry(cableCurve, 24, 0.012, 6, false);
+							solarCableGeometries.push(cableGeometry);
+							group.add(new THREE.Mesh(cableGeometry, solarMaterials.rubber));
+							const cableTerminal = new THREE.Mesh(
+								miniGeometries.solarConnector,
+								solarMaterials.copper,
+							);
+							cableTerminal.rotation.x = Math.PI / 2;
+							cableTerminal.position.set(0.3, -0.37, 0.155);
+							group.add(cableTerminal);
+
+							const warning = new THREE.Mesh(
+								miniGeometries.batteryWarning,
+								solarMaterials.yellow,
+							);
+							warning.scale.setScalar(0.34);
+							warning.position.set(-0.33, -0.355, 0.248);
+							group.add(warning);
+							const warningBolt = new THREE.Mesh(
+								miniGeometries.batteryBolt,
+								solarMaterials.foundation,
+							);
+							warningBolt.scale.setScalar(0.34);
+							warningBolt.position.set(-0.33, -0.355, 0.252);
+							group.add(warningBolt);
+
 							group.userData.solarReflection = reflection;
-							group.userData.solarSun = sun;
-							group.userData.solarHalo = halo;
-							group.userData.solarLight = sunlight;
+							group.userData.solarIndicator = indicator;
 							break;
 						}
 						case 'battery': {
@@ -2618,22 +2703,22 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 								const reflection = item.group.userData.solarReflection as
 									| InstanceType<typeof THREE.Mesh>
 									| undefined;
-								const sun = item.group.userData.solarSun as InstanceType<typeof THREE.Group> | undefined;
-								const halo = item.group.userData.solarHalo as InstanceType<typeof THREE.Sprite> | undefined;
-								const sunlight = item.group.userData.solarLight as
-									| InstanceType<typeof THREE.PointLight>
+								const indicator = item.group.userData.solarIndicator as
+									| InstanceType<typeof THREE.Mesh>
 									| undefined;
-								const sunPulse = 0.5 + Math.sin(time * 0.00072 + item.floatPhase) * 0.5;
+								const solarResponse =
+									0.5 + Math.sin(time * 0.00072 + item.floatPhase) * 0.5;
 								if (reflection) {
-									const sweep = (time * 0.000075 + item.floatPhase / (Math.PI * 2)) % 1;
-									reflection.position.x = -0.54 + sweep * 1.08;
-									energyMaterials.reflection.opacity =
-										layerOpacity * (0.1 + Math.sin(sweep * Math.PI) * 0.18);
+									const sweep =
+										(time * 0.000075 + item.floatPhase / (Math.PI * 2)) % 1;
+									reflection.position.x = -0.52 + sweep * 1.04;
+									solarMaterials.reflection.opacity =
+										layerOpacity * (0.04 + Math.sin(sweep * Math.PI) * 0.1);
 								}
-								if (sun) sun.rotation.z = -time * 0.00006;
-								if (halo) halo.scale.setScalar(0.3 + sunPulse * 0.045);
-								sunHaloMaterial.opacity = layerOpacity * (0.5 + sunPulse * 0.14);
-								if (sunlight) sunlight.intensity = layerOpacity * (0.34 + sunPulse * 0.14);
+								if (indicator) {
+									indicator.scale.x = 0.72 + solarResponse * 0.28;
+									solarMaterials.cyan.emissiveIntensity = 0.2 + solarResponse * 0.14;
+								}
 							}
 							if (isPrimitivesModel && item.kind === 'battery') {
 								const chargeSegments = item.group.userData.batteryChargeSegments as
@@ -3248,13 +3333,12 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					productSurfaceMaterials.forEach((material) => material.dispose());
 					productTextures.forEach((texture) => texture.dispose());
 					energySurfaceMaterials.forEach((material) => material.dispose());
+					solarCableGeometries.forEach((geometry) => geometry.dispose());
 					microgridSurfaceMaterials.forEach((material) => material.dispose());
 					microgridCableMaterials.forEach((material) => material.dispose());
 					microgridCableGeometries.forEach((geometry) => geometry.dispose());
 					microgridShadowTexture.dispose();
 					microgridShadowMaterial.dispose();
-					sunHaloTexture.dispose();
-					sunHaloMaterial.dispose();
 					contactShadowTexture.dispose();
 					contactShadowMaterials.forEach((material) => material.dispose());
 					nonPyramidEnvironment.dispose();
