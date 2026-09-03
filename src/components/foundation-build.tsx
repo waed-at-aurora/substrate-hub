@@ -350,25 +350,41 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					batteryLabelLine: new RoundedBoxGeometry(0.13, 0.008, 0.006, 1, 0.003),
 					batteryWarning: new THREE.ShapeGeometry(batteryWarningShape),
 					batteryBolt: new THREE.ShapeGeometry(batteryBoltShape),
-					microPlatform: new RoundedBoxGeometry(2.4, 0.08, 0.68, 3, 0.03),
-					microPlatformInset: new RoundedBoxGeometry(2.18, 0.018, 0.54, 2, 0.015),
-					microEquipmentPad: new RoundedBoxGeometry(0.34, 0.025, 0.28, 2, 0.012),
-					microBuilding: new RoundedBoxGeometry(0.32, 0.34, 0.22, 2, 0.022),
-					microBuildingWing: new RoundedBoxGeometry(0.16, 0.2, 0.2, 2, 0.018),
-					microWindowBand: new RoundedBoxGeometry(0.21, 0.032, 0.012, 1, 0.004),
-					microPylonPost: new THREE.CylinderGeometry(0.012, 0.022, 0.54, 8),
-					microPylonBrace: new RoundedBoxGeometry(0.18, 0.012, 0.012, 1, 0.004),
-					microCrossarm: new RoundedBoxGeometry(0.34, 0.022, 0.022, 1, 0.006),
-					microInsulator: new THREE.CylinderGeometry(0.009, 0.014, 0.045, 8),
-					microTransformer: new RoundedBoxGeometry(0.24, 0.2, 0.2, 3, 0.022),
-					microCoolingFin: new RoundedBoxGeometry(0.018, 0.14, 0.11, 1, 0.005),
-					microSolarFrame: new RoundedBoxGeometry(0.42, 0.24, 0.025, 2, 0.012),
-					microSolarCell: new RoundedBoxGeometry(0.064, 0.052, 0.007, 1, 0.003),
-					microBatteryCase: new RoundedBoxGeometry(0.42, 0.34, 0.2, 3, 0.022),
-					microBatteryDoor: new RoundedBoxGeometry(0.17, 0.25, 0.014, 2, 0.007),
-					microVent: new RoundedBoxGeometry(0.085, 0.01, 0.012, 1, 0.003),
+					microPlatform: new RoundedBoxGeometry(2.4, 0.11, 0.74, 4, 0.035),
+					microPlatformInset: new RoundedBoxGeometry(2.2, 0.032, 0.58, 2, 0.014),
+					microPlatformRail: new RoundedBoxGeometry(2.14, 0.025, 0.028, 1, 0.007),
+					microEquipmentPad: new RoundedBoxGeometry(0.38, 0.04, 0.3, 2, 0.014),
+					microMountFoot: new RoundedBoxGeometry(0.12, 0.045, 0.1, 2, 0.012),
+					microWindTower: new THREE.CylinderGeometry(0.024, 0.066, 0.64, 16),
+					microWindFlange: new THREE.CylinderGeometry(0.078, 0.086, 0.045, 16),
+					microWindNacelle: new RoundedBoxGeometry(0.24, 0.115, 0.14, 3, 0.028),
+					microWindHub: new THREE.CylinderGeometry(0.048, 0.048, 0.065, 20),
+					microWindShaft: new THREE.CylinderGeometry(0.018, 0.018, 0.085, 16),
+					microSolarFrame: new RoundedBoxGeometry(0.46, 0.27, 0.038, 3, 0.014),
+					microSolarBack: new RoundedBoxGeometry(0.42, 0.23, 0.018, 2, 0.009),
+					microSolarCell: new RoundedBoxGeometry(0.07, 0.055, 0.008, 1, 0.003),
+					microSolarRail: new RoundedBoxGeometry(0.41, 0.009, 0.01, 1, 0.003),
+					microSolarLeg: new RoundedBoxGeometry(0.025, 0.23, 0.025, 1, 0.007),
+					microInverterCase: new RoundedBoxGeometry(0.44, 0.42, 0.24, 4, 0.028),
+					microInverterDoor: new RoundedBoxGeometry(0.38, 0.35, 0.018, 3, 0.012),
+					microStorageCase: new RoundedBoxGeometry(0.36, 0.4, 0.23, 4, 0.026),
+					microStorageDoor: new RoundedBoxGeometry(0.31, 0.34, 0.016, 3, 0.01),
+					microHandle: new RoundedBoxGeometry(0.018, 0.09, 0.024, 1, 0.006),
+					microHinge: new RoundedBoxGeometry(0.018, 0.055, 0.02, 1, 0.005),
+					microVent: new RoundedBoxGeometry(0.09, 0.01, 0.012, 1, 0.003),
+					microFastener: new THREE.CylinderGeometry(0.008, 0.008, 0.012, 10),
 					microIndicator: new RoundedBoxGeometry(0.04, 0.018, 0.012, 1, 0.004),
-					microBatteryCell: new RoundedBoxGeometry(0.032, 0.085, 0.011, 1, 0.004),
+					microStatusSegment: new RoundedBoxGeometry(0.026, 0.062, 0.011, 1, 0.004),
+					microCableEntry: new THREE.CylinderGeometry(0.016, 0.021, 0.035, 12),
+					microTerminalBlock: new RoundedBoxGeometry(0.105, 0.04, 0.035, 2, 0.008),
+					microBatteryCell: new RoundedBoxGeometry(0.026, 0.07, 0.011, 1, 0.004),
+					microTowerLeg: new RoundedBoxGeometry(0.024, 0.56, 0.024, 1, 0.006),
+					microPylonBrace: new RoundedBoxGeometry(0.2, 0.014, 0.014, 1, 0.004),
+					microCrossarm: new RoundedBoxGeometry(0.42, 0.026, 0.03, 1, 0.007),
+					microInsulator: new THREE.CylinderGeometry(0.011, 0.017, 0.06, 10),
+					microInsulatorCap: new THREE.CylinderGeometry(0.017, 0.017, 0.012, 10),
+					microTransformer: new RoundedBoxGeometry(0.24, 0.22, 0.2, 3, 0.022),
+					microCoolingFin: new RoundedBoxGeometry(0.018, 0.15, 0.11, 1, 0.005),
 					microCablePulse: new THREE.CapsuleGeometry(0.0035, 0.024, 2, 5),
 					productBadge: new THREE.CylinderGeometry(0.29, 0.29, 0.085, 32),
 					productRim: new THREE.TorusGeometry(0.268, 0.018, 8, 32),
@@ -702,7 +718,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						clearcoat,
 						clearcoatRoughness: 0.32,
 						envMap: nonPyramidEnvironment,
-						envMapIntensity: 0.74,
+						envMapIntensity: 0.58,
 						transparent: true,
 						opacity: 0,
 						depthWrite: false,
@@ -712,29 +728,31 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					return material;
 				};
 				const microgridMaterials = {
-					platform: makeMicrogridSurface(substrateColors.canvas, 0.84, 0.16),
-					platformInset: makeMicrogridSurface(substrateColors.elevated, 0.72, 0.2, 0.18),
-					graphite: makeMicrogridSurface(substrateColors.secondary, 0.66, 0.24, 0.2),
-					zinc: makeMicrogridSurface(substrateColors.border, 0.48, 0.34, 0.28),
-					aluminium: makeMicrogridSurface(substrateColors.muted, 0.3, 0.74, 0.44),
-					warm: makeMicrogridSurface(substrateColors.text, 0.42, 0.22, 0.28),
-					panel: makeMicrogridSurface(substrateColors.panelCell, 0.22, 0.2, 0.68),
-					cell: makeMicrogridSurface(substrateColors.cyanDim, 0.2, 0.14, 0.62),
-					cyan: makeMicrogridSurface(substrateColors.cyan, 0.18, 0.08, 0.48),
-					accent: makeMicrogridSurface(substrateColors.primary, 0.32, 0.16, 0.4),
-					window: makeMicrogridSurface(substrateColors.text, 0.24, 0.04, 0.54),
+					foundation: makeMicrogridSurface('#00111f', 0.84, 0.06, 0.08),
+					deck: makeMicrogridSurface('#003748', 0.72, 0.06, 0.16),
+					housing: makeMicrogridSurface('#002b4e', 0.52, 0.06, 0.28),
+					frame: makeMicrogridSurface('#004760', 0.38, 0.44, 0.24),
+					panel: makeMicrogridSurface('#00616a', 0.6, 0.03, 0.18),
+					solarGlass: makeMicrogridSurface('#003747', 0.18, 0.06, 0.68),
+					solarCell: makeMicrogridSurface('#005362', 0.24, 0.04, 0.52),
+					offWhite: makeMicrogridSurface('#e7ebe3', 0.44, 0.02, 0.22),
+					copper: makeMicrogridSurface('#b96f43', 0.3, 0.78, 0.24),
+					brass: makeMicrogridSurface('#d0a04c', 0.28, 0.72, 0.3),
+					rubber: makeMicrogridSurface('#08171b', 0.92, 0.01, 0.02),
+					insulator: makeMicrogridSurface('#c8dcd5', 0.3, 0.03, 0.62),
+					cyan: makeMicrogridSurface(substrateColors.cyanBright, 0.18, 0.04, 0.48),
+					cyanOff: makeMicrogridSurface('#083740', 0.54, 0.02, 0.14),
+					yellow: makeMicrogridSurface(substrateColors.primary, 0.36, 0.04, 0.3),
 					charge: makeMicrogridSurface(substrateColors.cyanBright, 0.14, 0.04, 0.62),
 				};
-				microgridMaterials.cell.emissive.set(substrateColors.cyanDim);
-				microgridMaterials.cell.emissiveIntensity = 0.12;
-				microgridMaterials.cyan.emissive.set(substrateColors.cyan);
-				microgridMaterials.cyan.emissiveIntensity = 0.28;
-				microgridMaterials.accent.emissive.set(substrateColors.primary);
-				microgridMaterials.accent.emissiveIntensity = 0.08;
-				microgridMaterials.window.emissive.set(substrateColors.text);
-				microgridMaterials.window.emissiveIntensity = 0.42;
+				microgridMaterials.cyan.emissive.set(substrateColors.cyanBright);
+				microgridMaterials.cyan.emissiveIntensity = 0.34;
+				microgridMaterials.cyanOff.emissive.set(substrateColors.cyanDim);
+				microgridMaterials.cyanOff.emissiveIntensity = 0.06;
+				microgridMaterials.yellow.emissive.set(substrateColors.primary);
+				microgridMaterials.yellow.emissiveIntensity = 0.06;
 				microgridMaterials.charge.emissive.set(substrateColors.cyanBright);
-				microgridMaterials.charge.emissiveIntensity = 0.58;
+				microgridMaterials.charge.emissiveIntensity = 0.52;
 
 				type MicrogridCableChannel = 'wind' | 'solar' | 'battery';
 				const microgridCableMaterials: InstanceType<typeof THREE.MeshBasicMaterial>[] = [];
@@ -1374,254 +1392,477 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 								x = 0,
 							) => {
 								const shadow = new THREE.Sprite(microgridShadowMaterial);
-								shadow.scale.set(width, 0.16, 1);
-								shadow.position.set(x, -0.005, -0.02);
+								shadow.scale.set(width, 0.18, 1);
+								shadow.position.set(x, -0.004, -0.025);
 								parent.add(shadow);
+							};
+							const addFastener = (
+								parent: InstanceType<typeof THREE.Object3D>,
+								x: number,
+								y: number,
+								z: number,
+								material = microgridMaterials.brass,
+							) => {
+								const fastener = new THREE.Mesh(miniGeometries.microFastener, material);
+								fastener.rotation.x = Math.PI / 2;
+								fastener.position.set(x, y, z);
+								parent.add(fastener);
 							};
 
 							const platform = new THREE.Group();
 							const platformSlab = new THREE.Mesh(
 								miniGeometries.microPlatform,
-								microgridMaterials.platform,
+								microgridMaterials.foundation,
 							);
-							platformSlab.position.y = -0.35;
+							platformSlab.position.y = -0.36;
 							platformSlab.receiveShadow = true;
 							platform.add(platformSlab);
 							const platformInset = new THREE.Mesh(
 								miniGeometries.microPlatformInset,
-								microgridMaterials.platformInset,
+								microgridMaterials.deck,
 							);
-							platformInset.position.set(0, -0.296, 0.03);
+							platformInset.position.set(0, -0.288, 0.018);
 							platform.add(platformInset);
-							[-0.88, -0.43, 0.02, 0.44, 0.96].forEach((x) => {
+							([-0.26, 0.26] as const).forEach((z) => {
+								const rail = new THREE.Mesh(
+									miniGeometries.microPlatformRail,
+									z > 0 ? microgridMaterials.copper : microgridMaterials.frame,
+								);
+								rail.position.set(0, -0.258, z);
+								platform.add(rail);
+							});
+							[-0.9, -0.48, 0.02, 0.47, 0.94].forEach((x) => {
 								const pad = new THREE.Mesh(
 									miniGeometries.microEquipmentPad,
-									microgridMaterials.graphite,
+									microgridMaterials.housing,
 								);
-								pad.position.set(x, -0.274, 0.035);
+								pad.position.set(x, -0.252, 0.02);
 								platform.add(pad);
+							});
+							[-0.98, -0.6, -0.2, 0.2, 0.6, 0.98].forEach((x) => {
+								addFastener(platform, x, -0.242, 0.32);
 							});
 							registerPart(platform, 0.02);
 
 							const wind = new THREE.Group();
-							wind.position.set(-0.88, -0.275, 0.06);
-							addShadow(wind, 0.34);
-							const windTower = new THREE.Mesh(miniGeometries.windTower, microgridMaterials.warm);
-							windTower.scale.set(0.3, 0.7, 0.3);
-							windTower.position.y = 0.28;
+							wind.position.set(-0.9, -0.255, 0.04);
+							addShadow(wind, 0.36);
+							const windFlange = new THREE.Mesh(
+								miniGeometries.microWindFlange,
+								microgridMaterials.frame,
+							);
+							windFlange.position.y = 0.025;
+							wind.add(windFlange);
+							const windFlangeRing = new THREE.Mesh(
+								miniGeometries.microWindFlange,
+								microgridMaterials.brass,
+							);
+							windFlangeRing.scale.set(0.72, 0.24, 0.72);
+							windFlangeRing.position.y = 0.065;
+							wind.add(windFlangeRing);
+							const windTower = new THREE.Mesh(
+								miniGeometries.microWindTower,
+								microgridMaterials.offWhite,
+							);
+							windTower.position.y = 0.35;
 							windTower.castShadow = true;
 							wind.add(windTower);
-							const towerFoot = new THREE.Mesh(miniGeometries.windBand, microgridMaterials.aluminium);
-							towerFoot.scale.setScalar(0.36);
-							towerFoot.position.y = 0.025;
-							wind.add(towerFoot);
-							const windAccent = new THREE.Mesh(miniGeometries.windBand, microgridMaterials.accent);
-							windAccent.scale.set(0.2, 0.12, 0.2);
-							windAccent.position.y = 0.08;
-							wind.add(windAccent);
-							const nacelle = new THREE.Mesh(miniGeometries.windNacelle, microgridMaterials.zinc);
-							nacelle.scale.set(0.34, 0.34, 0.38);
-							nacelle.position.set(0.018, 0.56, 0.015);
+							const nacelle = new THREE.Mesh(
+								miniGeometries.microWindNacelle,
+								microgridMaterials.housing,
+							);
+							nacelle.position.set(0.025, 0.67, 0.018);
+							nacelle.castShadow = true;
 							wind.add(nacelle);
+							const shaft = new THREE.Mesh(
+								miniGeometries.microWindShaft,
+								microgridMaterials.brass,
+							);
+							shaft.rotation.x = Math.PI / 2;
+							shaft.position.set(-0.01, 0.67, 0.105);
+							wind.add(shaft);
 							const windRotor = new THREE.Group();
-							windRotor.position.set(-0.012, 0.56, 0.105);
+							windRotor.position.set(-0.01, 0.67, 0.15);
 							for (let bladeIndex = 0; bladeIndex < 3; bladeIndex += 1) {
-								const blade = new THREE.Mesh(miniGeometries.windBlade, microgridMaterials.warm);
-								blade.scale.setScalar(0.34);
+								const blade = new THREE.Mesh(
+									miniGeometries.windBlade,
+									microgridMaterials.offWhite,
+								);
+								blade.scale.setScalar(0.36);
 								blade.rotation.z = (bladeIndex * Math.PI * 2) / 3;
+								blade.castShadow = true;
 								windRotor.add(blade);
 							}
-							const hub = new THREE.Mesh(miniGeometries.windHub, microgridMaterials.cyan);
-							hub.scale.setScalar(0.42);
+							const hub = new THREE.Mesh(
+								miniGeometries.microWindHub,
+								microgridMaterials.brass,
+							);
 							hub.rotation.x = Math.PI / 2;
 							windRotor.add(hub);
+							const hubIndicator = new THREE.Mesh(
+								miniGeometries.microIndicator,
+								microgridMaterials.cyan,
+							);
+							hubIndicator.scale.set(0.45, 0.45, 0.45);
+							hubIndicator.position.z = 0.042;
+							windRotor.add(hubIndicator);
 							wind.add(windRotor);
+							const windTerminal = new THREE.Mesh(
+								miniGeometries.microTerminalBlock,
+								microgridMaterials.copper,
+							);
+							windTerminal.scale.set(0.55, 0.7, 0.7);
+							windTerminal.position.set(0.08, 0.1, 0.215);
+							wind.add(windTerminal);
+							const windEntry = new THREE.Mesh(
+								miniGeometries.microCableEntry,
+								microgridMaterials.rubber,
+							);
+							windEntry.rotation.x = Math.PI / 2;
+							windEntry.position.set(0.08, 0.1, 0.245);
+							wind.add(windEntry);
 							registerPart(wind, 0.12);
 
 							const solar = new THREE.Group();
-							solar.position.set(-0.45, -0.265, 0.07);
-							addShadow(solar, 0.68);
-							[-0.13, 0.13].forEach((panelX) => {
+							solar.position.set(-0.47, -0.255, 0.06);
+							addShadow(solar, 0.72);
+							[-0.14, 0.14].forEach((panelX) => {
 								const panel = new THREE.Group();
-								panel.position.set(panelX, 0.18, 0.025);
+								panel.position.set(panelX, 0.21, 0.025);
 								panel.rotation.x = -Math.PI / 6;
 								const frame = new THREE.Mesh(
 									miniGeometries.microSolarFrame,
-									microgridMaterials.aluminium,
+									microgridMaterials.frame,
 								);
+								frame.castShadow = true;
 								panel.add(frame);
+								const backing = new THREE.Mesh(
+									miniGeometries.microSolarBack,
+									microgridMaterials.solarGlass,
+								);
+								backing.position.z = 0.022;
+								panel.add(backing);
 								for (let row = 0; row < 3; row += 1) {
 									for (let column = 0; column < 5; column += 1) {
 										const cell = new THREE.Mesh(
 											miniGeometries.microSolarCell,
-											microgridMaterials.panel,
+											microgridMaterials.solarCell,
 										);
-										cell.position.set((column - 2) * 0.073, (row - 1) * 0.062, 0.022);
+										cell.position.set((column - 2) * 0.077, (row - 1) * 0.062, 0.036);
 										panel.add(cell);
 									}
 								}
-								solar.add(panel);
-								[-0.1, 0.1].forEach((supportX) => {
-									const support = new THREE.Mesh(
-										miniGeometries.solarStand,
-										microgridMaterials.zinc,
+								[-0.092, 0.092].forEach((y) => {
+									const busRail = new THREE.Mesh(
+										miniGeometries.microSolarRail,
+										microgridMaterials.copper,
 									);
-									support.scale.set(0.28, 0.32, 0.28);
-									support.position.set(panelX + supportX, 0.025, -0.03);
-									support.rotation.z = supportX < 0 ? -0.22 : 0.22;
+									busRail.position.set(0, y, 0.042);
+									panel.add(busRail);
+								});
+								solar.add(panel);
+								[-0.125, 0.125].forEach((supportX) => {
+									const support = new THREE.Mesh(
+										miniGeometries.microSolarLeg,
+										microgridMaterials.frame,
+									);
+									support.scale.y = 0.68;
+									support.position.set(panelX + supportX, 0.08, -0.035);
+									support.rotation.z = supportX < 0 ? -0.26 : 0.26;
 									solar.add(support);
+									const foot = new THREE.Mesh(
+										miniGeometries.microMountFoot,
+										microgridMaterials.foundation,
+									);
+									foot.scale.set(0.48, 0.5, 0.58);
+									foot.position.set(panelX + supportX, 0.012, -0.035);
+									solar.add(foot);
 								});
 							});
+							const solarCombiner = new THREE.Mesh(
+								miniGeometries.microTerminalBlock,
+								microgridMaterials.housing,
+							);
+							solarCombiner.position.set(0.3, 0.1, 0.195);
+							solar.add(solarCombiner);
+							const solarTerminal = new THREE.Mesh(
+								miniGeometries.microCableEntry,
+								microgridMaterials.copper,
+							);
+							solarTerminal.rotation.x = Math.PI / 2;
+							solarTerminal.position.set(0.3, 0.1, 0.225);
+							solar.add(solarTerminal);
 							registerPart(solar, 0.2);
 
-							const battery = new THREE.Group();
-							battery.position.set(0.01, -0.265, 0.08);
-							addShadow(battery, 0.5);
-							const container = new THREE.Mesh(
-								miniGeometries.microBatteryCase,
-								microgridMaterials.graphite,
+							const inverter = new THREE.Group();
+							inverter.position.set(0.02, -0.255, 0.08);
+							addShadow(inverter, 0.5);
+							const inverterBody = new THREE.Mesh(
+								miniGeometries.microInverterCase,
+								microgridMaterials.housing,
 							);
-							container.position.y = 0.17;
-							container.castShadow = true;
-							battery.add(container);
-							[-0.1, 0.1].forEach((doorX) => {
-								const door = new THREE.Mesh(
-									miniGeometries.microBatteryDoor,
-									microgridMaterials.zinc,
-								);
-								door.position.set(doorX, 0.17, 0.108);
-								battery.add(door);
-								for (let ventIndex = 0; ventIndex < 4; ventIndex += 1) {
-									const vent = new THREE.Mesh(
-										miniGeometries.microVent,
-										microgridMaterials.aluminium,
-									);
-									vent.position.set(
-										doorX,
-										0.11 + ventIndex * 0.022,
-										0.119,
-									);
-									battery.add(vent);
-								}
+							inverterBody.position.y = 0.22;
+							inverterBody.castShadow = true;
+							inverter.add(inverterBody);
+							const inverterDoor = new THREE.Mesh(
+								miniGeometries.microInverterDoor,
+								microgridMaterials.panel,
+							);
+							inverterDoor.position.set(0, 0.22, 0.13);
+							inverter.add(inverterDoor);
+							([-0.17, 0.17] as const).forEach((x) => {
+								([-0.12, 0.12] as const).forEach((y) => {
+									addFastener(inverter, x, 0.22 + y, 0.145);
+								});
 							});
-							const batteryCells: InstanceType<typeof THREE.Mesh>[] = [];
-							for (let cellIndex = 0; cellIndex < 4; cellIndex += 1) {
-								const chargeCell = new THREE.Mesh(
-									miniGeometries.microBatteryCell,
-									microgridMaterials.charge,
+							[-0.11, -0.075, -0.04].forEach((y) => {
+								const vent = new THREE.Mesh(
+									miniGeometries.microVent,
+									microgridMaterials.rubber,
 								);
-								chargeCell.position.set(-0.056 + cellIndex * 0.037, 0.245, 0.122);
-								battery.add(chargeCell);
-								batteryCells.push(chargeCell);
-							}
-							const safetyAccent = new THREE.Mesh(
-								miniGeometries.microIndicator,
-								microgridMaterials.accent,
+								vent.position.set(-0.095, 0.22 + y, 0.149);
+								inverter.add(vent);
+							});
+							const inverterHandle = new THREE.Mesh(
+								miniGeometries.microHandle,
+								microgridMaterials.brass,
 							);
-							safetyAccent.position.set(0.15, 0.29, 0.122);
-							battery.add(safetyAccent);
-							registerPart(battery, 0.3);
+							inverterHandle.position.set(0.15, 0.22, 0.15);
+							inverter.add(inverterHandle);
+							[0, 0.045, 0.09].forEach((x, index) => {
+								const status = new THREE.Mesh(
+									miniGeometries.microIndicator,
+									index < 2 ? microgridMaterials.cyan : microgridMaterials.cyanOff,
+								);
+								status.scale.set(0.48, 0.7, 0.7);
+								status.position.set(-0.045 + x, 0.345, 0.149);
+								inverter.add(status);
+							});
+							const inverterWarning = new THREE.Mesh(
+								miniGeometries.batteryWarning,
+								microgridMaterials.yellow,
+							);
+							inverterWarning.scale.setScalar(0.42);
+							inverterWarning.position.set(0.12, 0.075, 0.148);
+							inverter.add(inverterWarning);
+							const inverterBolt = new THREE.Mesh(
+								miniGeometries.batteryBolt,
+								microgridMaterials.housing,
+							);
+							inverterBolt.scale.setScalar(0.42);
+							inverterBolt.position.set(0.12, 0.075, 0.152);
+							inverter.add(inverterBolt);
+							([-0.16, 0.16] as const).forEach((x) => {
+								const terminal = new THREE.Mesh(
+									miniGeometries.microTerminalBlock,
+									microgridMaterials.copper,
+								);
+								terminal.scale.set(0.55, 0.7, 0.7);
+								terminal.position.set(x, 0.09, 0.185);
+								inverter.add(terminal);
+								const entry = new THREE.Mesh(
+									miniGeometries.microCableEntry,
+									microgridMaterials.rubber,
+								);
+								entry.rotation.x = Math.PI / 2;
+								entry.position.set(x, 0.09, 0.216);
+								inverter.add(entry);
+							});
+							([-0.15, 0.15] as const).forEach((x) => {
+								const foot = new THREE.Mesh(
+									miniGeometries.microMountFoot,
+									microgridMaterials.foundation,
+								);
+								foot.scale.set(0.55, 0.55, 0.72);
+								foot.position.set(x, 0.012, 0);
+								inverter.add(foot);
+							});
+							registerPart(inverter, 0.3);
 
 							const substation = new THREE.Group();
-							substation.position.set(0.44, -0.265, 0.07);
-							addShadow(substation, 0.58);
+							substation.position.set(0.47, -0.255, 0.04);
+							addShadow(substation, 0.62);
 							const transformer = new THREE.Mesh(
 								miniGeometries.microTransformer,
-								microgridMaterials.graphite,
+								microgridMaterials.housing,
 							);
-							transformer.position.set(-0.12, 0.12, 0.015);
+							transformer.position.set(-0.13, 0.13, 0.015);
+							transformer.castShadow = true;
 							substation.add(transformer);
 							for (let finIndex = 0; finIndex < 6; finIndex += 1) {
 								const fin = new THREE.Mesh(
 									miniGeometries.microCoolingFin,
-									microgridMaterials.aluminium,
+									microgridMaterials.frame,
 								);
-								fin.position.set(-0.205 + finIndex * 0.034, 0.12, 0.116);
+								fin.position.set(-0.215 + finIndex * 0.034, 0.13, 0.116);
 								substation.add(fin);
 							}
 							const transformerIndicator = new THREE.Mesh(
 								miniGeometries.microIndicator,
 								microgridMaterials.cyan,
 							);
-							transformerIndicator.position.set(-0.12, 0.205, 0.118);
+							transformerIndicator.position.set(-0.13, 0.225, 0.119);
 							substation.add(transformerIndicator);
-							[-0.055, 0.055].forEach((postX, index) => {
+							[0.075, 0.185].forEach((postX, index) => {
 								const post = new THREE.Mesh(
-									miniGeometries.microPylonPost,
-									microgridMaterials.aluminium,
+									miniGeometries.microTowerLeg,
+									microgridMaterials.frame,
 								);
-								post.position.set(0.13 + postX, 0.28, 0);
-								post.rotation.z = index === 0 ? -0.13 : 0.13;
+								post.position.set(postX, 0.3, 0);
+								post.rotation.z = index === 0 ? -0.14 : 0.14;
 								substation.add(post);
+								const rearPost = post.clone();
+								rearPost.position.z = -0.09;
+								substation.add(rearPost);
 							});
-							[0.28, 0.43].forEach((crossarmY, rowIndex) => {
+							[0.32, 0.48].forEach((crossarmY, rowIndex) => {
 								const crossarm = new THREE.Mesh(
 									miniGeometries.microCrossarm,
-									microgridMaterials.aluminium,
+									microgridMaterials.frame,
 								);
-								crossarm.scale.x = rowIndex === 0 ? 0.72 : 0.92;
+								crossarm.scale.x = rowIndex === 0 ? 0.78 : 1;
 								crossarm.position.set(0.13, crossarmY, 0);
 								substation.add(crossarm);
 							});
 							[0.18, 0.29, 0.4].forEach((braceY, index) => {
 								const brace = new THREE.Mesh(
 									miniGeometries.microPylonBrace,
-									microgridMaterials.zinc,
+									microgridMaterials.copper,
 								);
-								brace.position.set(0.13, braceY, 0);
-								brace.rotation.z = index % 2 === 0 ? 0.55 : -0.55;
+								brace.position.set(0.13, braceY, 0.012);
+								brace.rotation.z = index % 2 === 0 ? 0.58 : -0.58;
 								substation.add(brace);
 							});
-							[0.02, 0.13, 0.24].forEach((insulatorX) => {
+							const insulatorPositions = [-0.04, 0.13, 0.3] as const;
+							insulatorPositions.forEach((insulatorX) => {
 								const insulator = new THREE.Mesh(
 									miniGeometries.microInsulator,
-									microgridMaterials.cyan,
+									microgridMaterials.insulator,
 								);
-								insulator.position.set(insulatorX, 0.402, 0);
+								insulator.position.set(insulatorX, 0.44, 0);
 								substation.add(insulator);
+								const cap = new THREE.Mesh(
+									miniGeometries.microInsulatorCap,
+									microgridMaterials.brass,
+								);
+								cap.position.set(insulatorX, 0.408, 0);
+								substation.add(cap);
 							});
-							const edgeLight = new THREE.PointLight(substrateColors.cyan, 0.16, 1.25, 2);
-							edgeLight.position.set(0.08, 0.28, 0.24);
-							substation.add(edgeLight);
+							const outputPost = new THREE.Mesh(
+								miniGeometries.microTowerLeg,
+								microgridMaterials.frame,
+							);
+							outputPost.scale.y = 0.62;
+							outputPost.position.set(0.7, 0.19, -0.1);
+							substation.add(outputPost);
+							const outputArm = new THREE.Mesh(
+								miniGeometries.microCrossarm,
+								microgridMaterials.frame,
+							);
+							outputArm.scale.x = 0.7;
+							outputArm.position.set(0.7, 0.37, -0.1);
+							substation.add(outputArm);
+							([-0.11, 0, 0.11] as const).forEach((z, index) => {
+								const start = new THREE.Vector3(insulatorPositions[index], 0.405, z);
+								const end = new THREE.Vector3(0.7, 0.34, -0.1 + z);
+								const powerCurve = new THREE.CubicBezierCurve3(
+									start,
+									new THREE.Vector3(start.x + 0.2, 0.33, z),
+									new THREE.Vector3(end.x - 0.2, 0.29, -0.1 + z),
+									end,
+								);
+								const powerGeometry = new THREE.TubeGeometry(powerCurve, 24, 0.004, 5, false);
+								microgridCableGeometries.push(powerGeometry);
+								substation.add(new THREE.Mesh(powerGeometry, microgridMaterials.copper));
+								addFastener(substation, end.x, end.y, end.z, microgridMaterials.brass);
+							});
 							registerPart(substation, 0.4);
 
-							const buildings = new THREE.Group();
-							buildings.position.set(0.94, -0.265, 0.07);
-							addShadow(buildings, 0.72, 0.12);
-							[0, 0.38].forEach((buildingX, index) => {
-								const building = new THREE.Group();
+							const storage = new THREE.Group();
+							storage.position.set(0.92, -0.255, 0.07);
+							addShadow(storage, 0.74);
+							const batteryCells: InstanceType<typeof THREE.Mesh>[] = [];
+							([-0.18, 0.18] as const).forEach((cabinetX, cabinetIndex) => {
+								const cabinet = new THREE.Group();
 								const body = new THREE.Mesh(
-									miniGeometries.microBuilding,
-									index === 0 ? microgridMaterials.graphite : microgridMaterials.zinc,
+									miniGeometries.microStorageCase,
+									microgridMaterials.housing,
 								);
-								body.scale.y = index === 0 ? 0.9 : 1.08;
-								body.position.y = 0.17 * body.scale.y;
-								building.add(body);
-								const wing = new THREE.Mesh(
-									miniGeometries.microBuildingWing,
-									microgridMaterials.platformInset,
+								body.position.y = 0.21;
+								body.castShadow = true;
+								cabinet.add(body);
+								const door = new THREE.Mesh(
+									miniGeometries.microStorageDoor,
+									microgridMaterials.panel,
 								);
-								wing.position.set(index === 0 ? 0.17 : -0.17, 0.1, 0);
-								building.add(wing);
-								[0.11, 0.21].forEach((windowY) => {
-									const windowBand = new THREE.Mesh(
-										miniGeometries.microWindowBand,
-										microgridMaterials.window,
+								door.position.set(0, 0.21, 0.124);
+								cabinet.add(door);
+								([-0.14, 0.14] as const).forEach((y) => {
+									const hinge = new THREE.Mesh(
+										miniGeometries.microHinge,
+										microgridMaterials.brass,
 									);
-									windowBand.position.set(0, windowY, 0.118);
-									building.add(windowBand);
+									hinge.position.set(-0.15, 0.21 + y, 0.142);
+									cabinet.add(hinge);
 								});
-								const roofLine = new THREE.Mesh(
-									miniGeometries.microWindowBand,
-									microgridMaterials.aluminium,
+								const handle = new THREE.Mesh(
+									miniGeometries.microHandle,
+									microgridMaterials.brass,
 								);
-								roofLine.scale.x = 1.25;
-								roofLine.position.set(0, 0.335 * body.scale.y, 0.03);
-								building.add(roofLine);
-								building.position.x = buildingX;
-								buildings.add(building);
+								handle.position.set(0.125, 0.21, 0.143);
+								cabinet.add(handle);
+								[-0.105, -0.07, -0.035].forEach((y) => {
+									const vent = new THREE.Mesh(
+										miniGeometries.microVent,
+										microgridMaterials.rubber,
+									);
+									vent.position.set(-0.045, 0.21 + y, 0.143);
+									cabinet.add(vent);
+								});
+								for (let segmentIndex = 0; segmentIndex < 3; segmentIndex += 1) {
+									const chargeCell = new THREE.Mesh(
+										miniGeometries.microBatteryCell,
+										segmentIndex < 2 ? microgridMaterials.charge : microgridMaterials.cyanOff,
+									);
+									chargeCell.position.set(-0.045 + segmentIndex * 0.04, 0.31, 0.143);
+									cabinet.add(chargeCell);
+									batteryCells.push(chargeCell);
+								}
+								if (cabinetIndex === 0) {
+									const warning = new THREE.Mesh(
+										miniGeometries.batteryWarning,
+										microgridMaterials.yellow,
+									);
+									warning.scale.setScalar(0.32);
+									warning.position.set(0.095, 0.09, 0.142);
+									cabinet.add(warning);
+								}
+								([-0.12, 0.12] as const).forEach((x) => {
+									const foot = new THREE.Mesh(
+										miniGeometries.microMountFoot,
+										microgridMaterials.foundation,
+									);
+									foot.scale.set(0.5, 0.52, 0.7);
+									foot.position.set(x, 0.012, 0);
+									cabinet.add(foot);
+								});
+								cabinet.position.x = cabinetX;
+								storage.add(cabinet);
 							});
-							registerPart(buildings, 0.5);
+							const storageTerminal = new THREE.Mesh(
+								miniGeometries.microTerminalBlock,
+								microgridMaterials.copper,
+							);
+							storageTerminal.position.set(-0.2, 0.09, 0.18);
+							storage.add(storageTerminal);
+							const storageEntry = new THREE.Mesh(
+								miniGeometries.microCableEntry,
+								microgridMaterials.rubber,
+							);
+							storageEntry.rotation.x = Math.PI / 2;
+							storageEntry.position.set(-0.2, 0.09, 0.211);
+							storage.add(storageEntry);
+							registerPart(storage, 0.5);
 
 							const cableNetwork = new THREE.Group();
 							const pulseRoutes: MicrogridPulseRoute[] = [];
@@ -1635,9 +1876,17 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 								offset: number,
 							) => {
 								const curve = new THREE.CubicBezierCurve3(start, controlA, controlB, end);
-								const glowGeometry = new THREE.TubeGeometry(curve, 40, 0.011, 6, false);
-								const coreGeometry = new THREE.TubeGeometry(curve, 40, 0.0035, 6, false);
-								microgridCableGeometries.push(glowGeometry, coreGeometry);
+								const physicalCurve = new THREE.CubicBezierCurve3(
+									start.clone().add(new THREE.Vector3(0, 0, -0.012)),
+									controlA.clone().add(new THREE.Vector3(0, 0, -0.012)),
+									controlB.clone().add(new THREE.Vector3(0, 0, -0.012)),
+									end.clone().add(new THREE.Vector3(0, 0, -0.012)),
+								);
+								const cableGeometry = new THREE.TubeGeometry(physicalCurve, 36, 0.009, 6, false);
+								const glowGeometry = new THREE.TubeGeometry(curve, 36, 0.008, 6, false);
+								const coreGeometry = new THREE.TubeGeometry(curve, 36, 0.0028, 6, false);
+								microgridCableGeometries.push(cableGeometry, glowGeometry, coreGeometry);
+								cableNetwork.add(new THREE.Mesh(cableGeometry, microgridMaterials.rubber));
 								const materials = microgridCableChannels[channel];
 								cableNetwork.add(new THREE.Mesh(glowGeometry, materials.glow));
 								cableNetwork.add(new THREE.Mesh(coreGeometry, materials.core));
@@ -1656,35 +1905,44 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 									});
 								});
 							};
-							const pathPoint = (x: number, y: number) => new THREE.Vector3(x, y, 0.34);
 							addEnergyPath(
 								'wind',
-								pathPoint(-0.9, -0.03),
-								pathPoint(-0.35, -0.03),
-								pathPoint(0.58, -0.03),
-								pathPoint(1.28, -0.03),
+								new THREE.Vector3(-0.82, -0.155, 0.285),
+								new THREE.Vector3(-0.68, -0.23, 0.315),
+								new THREE.Vector3(-0.3, -0.23, 0.315),
+								new THREE.Vector3(-0.14, -0.165, 0.295),
 								0.00012,
 								0.08,
 							);
 							addEnergyPath(
 								'solar',
-								pathPoint(-0.58, -0.095),
-								pathPoint(-0.16, -0.095),
-								pathPoint(0.7, -0.095),
-								pathPoint(1.28, -0.095),
+								new THREE.Vector3(-0.17, -0.165, 0.285),
+								new THREE.Vector3(-0.15, -0.22, 0.32),
+								new THREE.Vector3(-0.12, -0.2, 0.315),
+								new THREE.Vector3(-0.1, -0.165, 0.295),
 								0.00013,
 								0.4,
 							);
 							addEnergyPath(
 								'battery',
-								pathPoint(-0.12, -0.16),
-								pathPoint(0.2, -0.16),
-								pathPoint(0.84, -0.16),
-								pathPoint(1.28, -0.16),
+								new THREE.Vector3(0.72, -0.165, 0.28),
+								new THREE.Vector3(0.58, -0.23, 0.315),
+								new THREE.Vector3(0.3, -0.23, 0.315),
+								new THREE.Vector3(0.18, -0.165, 0.295),
 								0.00014,
 								0.7,
 							);
 							group.add(cableNetwork);
+
+							const gridKeyLight = new THREE.PointLight(0xe7ebe3, 0.16, 3.2, 2);
+							gridKeyLight.position.set(-0.55, 0.9, 1.1);
+							gridKeyLight.layers.set(1);
+							group.add(gridKeyLight);
+							const gridRimLight = new THREE.PointLight(substrateColors.cyanBright, 0.08, 2.2, 2);
+							gridRimLight.position.set(0.75, 0.45, -0.65);
+							gridRimLight.layers.set(1);
+							group.add(gridRimLight);
+
 							group.userData.microgridParts = assemblyParts;
 							group.userData.microgridWindRotor = windRotor;
 							group.userData.microgridBatteryCells = batteryCells;
@@ -2242,7 +2500,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 								material.opacity =
 									layerOpacity * ((material.userData.targetOpacity as number | undefined) ?? 1);
 							});
-							microgridShadowMaterial.opacity = layerOpacity * 0.34;
+							microgridShadowMaterial.opacity = layerOpacity * 0.44;
 						}
 						if (layerIndex === 3) {
 							productSurfaceMaterials.forEach((material) => {
@@ -2472,7 +2730,9 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 									Math.sin(time * 0.00048 + item.floatPhase) * 0.12 -
 									solarDip * 0.1;
 								batteryCells?.forEach((cell, index) => {
-									const cellFill = smootherstep(clamp01((storedEnergy - index * 0.16) / 0.28));
+									const cellFill = smootherstep(clamp01((storedEnergy - index * 0.1) / 0.22));
+									cell.material =
+										cellFill > 0.45 ? microgridMaterials.charge : microgridMaterials.cyanOff;
 									cell.scale.y = 0.14 + cellFill * 0.86;
 								});
 								microgridMaterials.charge.emissiveIntensity = 0.58 + solarDip * 0.42;
