@@ -286,6 +286,70 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					curveSegments: 3,
 				});
 				windBladeGeometry.translate(0, 0, -0.011);
+				const turbineBladeStations = [
+					{ y: 0.065, width: 0.082, thickness: 0.043, sweep: 0, twist: 0.38 },
+					{ y: 0.14, width: 0.088, thickness: 0.039, sweep: -0.004, twist: 0.3 },
+					{ y: 0.24, width: 0.071, thickness: 0.031, sweep: -0.014, twist: 0.2 },
+					{ y: 0.35, width: 0.052, thickness: 0.024, sweep: -0.028, twist: 0.1 },
+					{ y: 0.46, width: 0.036, thickness: 0.017, sweep: -0.044, twist: 0.02 },
+					{ y: 0.54, width: 0.019, thickness: 0.009, sweep: -0.056, twist: -0.04 },
+				];
+				const turbineBladeRadialSegments = 8;
+				const turbineBladePositions: number[] = [];
+				const turbineBladeIndices: number[] = [];
+				turbineBladeStations.forEach((station) => {
+					const twistCos = Math.cos(station.twist);
+					const twistSin = Math.sin(station.twist);
+					for (let radialIndex = 0; radialIndex < turbineBladeRadialSegments; radialIndex += 1) {
+						const angle = (radialIndex / turbineBladeRadialSegments) * Math.PI * 2;
+						const crossX = Math.cos(angle) * station.width;
+						const crossZ = Math.sin(angle) * station.thickness;
+						turbineBladePositions.push(
+							station.sweep + crossX * twistCos - crossZ * twistSin,
+							station.y,
+							crossX * twistSin + crossZ * twistCos,
+						);
+					}
+				});
+				for (let stationIndex = 0; stationIndex < turbineBladeStations.length - 1; stationIndex += 1) {
+					const ringStart = stationIndex * turbineBladeRadialSegments;
+					const nextRingStart = ringStart + turbineBladeRadialSegments;
+					for (let radialIndex = 0; radialIndex < turbineBladeRadialSegments; radialIndex += 1) {
+						const nextRadialIndex = (radialIndex + 1) % turbineBladeRadialSegments;
+						turbineBladeIndices.push(
+							ringStart + radialIndex,
+							nextRingStart + radialIndex,
+							nextRingStart + nextRadialIndex,
+							ringStart + radialIndex,
+							nextRingStart + nextRadialIndex,
+							ringStart + nextRadialIndex,
+						);
+					}
+				}
+				const turbineBladeRootCenter = turbineBladePositions.length / 3;
+				const turbineBladeTipCenter = turbineBladeRootCenter + 1;
+				const turbineBladeTipStart =
+					(turbineBladeStations.length - 1) * turbineBladeRadialSegments;
+				const turbineBladeRoot = turbineBladeStations[0];
+				const turbineBladeTip = turbineBladeStations[turbineBladeStations.length - 1];
+				turbineBladePositions.push(turbineBladeRoot.sweep, turbineBladeRoot.y, 0);
+				turbineBladePositions.push(turbineBladeTip.sweep, turbineBladeTip.y, 0);
+				for (let radialIndex = 0; radialIndex < turbineBladeRadialSegments; radialIndex += 1) {
+					const nextRadialIndex = (radialIndex + 1) % turbineBladeRadialSegments;
+					turbineBladeIndices.push(turbineBladeRootCenter, nextRadialIndex, radialIndex);
+					turbineBladeIndices.push(
+						turbineBladeTipCenter,
+						turbineBladeTipStart + radialIndex,
+						turbineBladeTipStart + nextRadialIndex,
+					);
+				}
+				const turbineBladeGeometry = new THREE.BufferGeometry();
+				turbineBladeGeometry.setAttribute(
+					'position',
+					new THREE.Float32BufferAttribute(turbineBladePositions, 3),
+				);
+				turbineBladeGeometry.setIndex(turbineBladeIndices);
+				turbineBladeGeometry.computeVertexNormals();
 				const batteryWarningShape = new THREE.Shape();
 				batteryWarningShape.moveTo(0, 0.07);
 				batteryWarningShape.lineTo(-0.072, -0.058);
@@ -318,12 +382,24 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					tokenSwatchPrint: new THREE.PlaneGeometry(0.78, 0.21),
 					tokenSheetEdge: new RoundedBoxGeometry(0.96, 0.64, 0.026, 2, 0.025),
 					tokenSheetPrint: bentSheetGeometry,
-					energyBase: new RoundedBoxGeometry(0.72, 0.09, 0.42, 2, 0.035),
-					windTower: new THREE.CylinderGeometry(0.052, 0.115, 0.78, 16),
-					windBand: new THREE.CylinderGeometry(0.072, 0.082, 0.05, 16),
-					windNacelle: new RoundedBoxGeometry(0.3, 0.14, 0.17, 3, 0.035),
-					windHub: new THREE.CylinderGeometry(0.074, 0.074, 0.1, 20),
 					windBlade: windBladeGeometry,
+					turbineFoundation: new RoundedBoxGeometry(0.82, 0.12, 0.48, 4, 0.045),
+					turbineFoot: new RoundedBoxGeometry(0.17, 0.045, 0.16, 2, 0.016),
+					turbineFoundationInset: new RoundedBoxGeometry(0.66, 0.028, 0.34, 2, 0.018),
+					turbineTower: new THREE.CylinderGeometry(0.046, 0.14, 0.72, 24),
+					turbineFlange: new THREE.CylinderGeometry(0.16, 0.18, 0.075, 24),
+					turbineYawRing: new THREE.CylinderGeometry(0.083, 0.094, 0.055, 24),
+					turbineNacelle: new RoundedBoxGeometry(0.38, 0.18, 0.22, 4, 0.045),
+					turbineGenerator: new THREE.CylinderGeometry(0.092, 0.092, 0.2, 24),
+					turbineShaft: new THREE.CylinderGeometry(0.035, 0.035, 0.22, 16),
+					turbineHub: new THREE.SphereGeometry(0.11, 20, 12),
+					turbineBladeRoot: new THREE.CylinderGeometry(0.043, 0.052, 0.1, 16),
+					turbineBlade: turbineBladeGeometry,
+					turbineAccessPanel: new RoundedBoxGeometry(0.105, 0.19, 0.018, 3, 0.016),
+					turbineNacellePanel: new RoundedBoxGeometry(0.17, 0.085, 0.014, 2, 0.014),
+					turbineVent: new RoundedBoxGeometry(0.075, 0.012, 0.014, 1, 0.004),
+					turbineBolt: new THREE.CylinderGeometry(0.012, 0.012, 0.018, 12),
+					turbineIndicator: new THREE.TorusGeometry(0.112, 0.01, 8, 28),
 					solarFoundation: new RoundedBoxGeometry(0.92, 0.1, 0.48, 4, 0.04),
 					solarFoot: new RoundedBoxGeometry(0.22, 0.045, 0.16, 2, 0.016),
 					solarOuterFrame: new RoundedBoxGeometry(1.28, 0.72, 0.09, 4, 0.028),
@@ -636,17 +712,23 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					energySurfaceMaterials.push(material);
 					return material;
 				};
-				const energyMaterials = {
-					dark: makeEnergySurface(substrateColors.secondary, 0.72, 0.12),
-					zinc: makeEnergySurface(substrateColors.border, 0.5, 0.28, 0.24),
-					warm: makeEnergySurface(substrateColors.text, 0.38, 0.26, 0.34),
-					cyan: makeEnergySurface(substrateColors.cyan, 0.24, 0.12, 0.48),
-					yellow: makeEnergySurface(substrateColors.primary, 0.3, 0.14, 0.52),
+				const windMaterials = {
+					foundation: makeEnergySurface('#031827', 0.8, 0.08, 0.12),
+					baseInset: makeEnergySurface('#073747', 0.58, 0.18, 0.2),
+					tower: makeEnergySurface('#d8d8cf', 0.48, 0.04, 0.34),
+					nacelle: makeEnergySurface('#c9d0c8', 0.36, 0.06, 0.44),
+					blade: makeEnergySurface('#e5e2d8', 0.3, 0.02, 0.42),
+					panel: makeEnergySurface('#07515a', 0.48, 0.22, 0.22),
+					joint: makeEnergySurface('#082f3c', 0.34, 0.42, 0.3),
+					brass: makeEnergySurface('#b77a2e', 0.26, 0.84, 0.52),
+					copper: makeEnergySurface('#b76532', 0.3, 0.72, 0.46),
+					cyan: makeEnergySurface('#34d8e3', 0.22, 0.12, 0.5),
+					yellow: makeEnergySurface('#f5c842', 0.34, 0.08, 0.34),
 				};
-				energyMaterials.cyan.emissive.set(substrateColors.cyan);
-				energyMaterials.cyan.emissiveIntensity = 0.34;
-				energyMaterials.yellow.emissive.set(substrateColors.primary);
-				energyMaterials.yellow.emissiveIntensity = 0.12;
+				windMaterials.cyan.emissive.set('#19b9c7');
+				windMaterials.cyan.emissiveIntensity = 0.26;
+				windMaterials.yellow.emissive.set('#8b6208');
+				windMaterials.yellow.emissiveIntensity = 0.06;
 
 				const solarMaterials = {
 					foundation: makeEnergySurface('#031827', 0.8, 0.08, 0.12),
@@ -1083,41 +1165,166 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							break;
 						}
 						case 'wind': {
-							const base = new THREE.Mesh(miniGeometries.energyBase, energyMaterials.dark);
-							base.position.y = -0.43;
-							group.add(base);
+							const foundation = new THREE.Mesh(
+								miniGeometries.turbineFoundation,
+								windMaterials.foundation,
+							);
+							foundation.position.y = -0.42;
+							foundation.castShadow = true;
+							foundation.receiveShadow = true;
+							group.add(foundation);
+							for (const x of [-0.27, 0.27]) {
+								for (const z of [-0.135, 0.135]) {
+									const foot = new THREE.Mesh(
+										miniGeometries.turbineFoot,
+										windMaterials.foundation,
+									);
+									foot.position.set(x, -0.497, z);
+									foot.castShadow = true;
+									group.add(foot);
+								}
+							}
 
-							const tower = new THREE.Mesh(miniGeometries.windTower, energyMaterials.warm);
-							tower.position.y = -0.015;
+
+							const foundationInset = new THREE.Mesh(
+								miniGeometries.turbineFoundationInset,
+								windMaterials.baseInset,
+							);
+							foundationInset.position.set(0, -0.351, 0.012);
+							foundationInset.receiveShadow = true;
+							group.add(foundationInset);
+
+							const flange = new THREE.Mesh(miniGeometries.turbineFlange, windMaterials.joint);
+							flange.position.y = -0.315;
+							flange.castShadow = true;
+							group.add(flange);
+							for (let boltIndex = 0; boltIndex < 8; boltIndex += 1) {
+								const boltAngle = (boltIndex / 8) * Math.PI * 2;
+								const bolt = new THREE.Mesh(
+									miniGeometries.turbineBolt,
+									boltIndex % 2 === 0 ? windMaterials.brass : windMaterials.copper,
+								);
+								bolt.position.set(
+									Math.cos(boltAngle) * 0.135,
+									-0.27,
+									Math.sin(boltAngle) * 0.135,
+								);
+								group.add(bolt);
+							}
+
+							const tower = new THREE.Mesh(miniGeometries.turbineTower, windMaterials.tower);
+							tower.position.y = 0.055;
 							tower.castShadow = true;
+							tower.receiveShadow = true;
 							group.add(tower);
-							const towerBand = new THREE.Mesh(miniGeometries.windBand, energyMaterials.yellow);
-							towerBand.position.y = -0.325;
-							group.add(towerBand);
 
-							const nacelle = new THREE.Mesh(miniGeometries.windNacelle, energyMaterials.zinc);
-							nacelle.position.set(0.055, 0.37, 0.035);
+							const accessPanel = new THREE.Mesh(
+								miniGeometries.turbineAccessPanel,
+								windMaterials.panel,
+							);
+							accessPanel.position.set(0, -0.145, 0.13);
+							group.add(accessPanel);
+							const doorHandle = new THREE.Mesh(
+								miniGeometries.turbineVent,
+								windMaterials.brass,
+							);
+							doorHandle.scale.set(0.22, 1, 0.7);
+							doorHandle.position.set(0.028, -0.13, 0.143);
+							group.add(doorHandle);
+							const warning = new THREE.Mesh(
+								miniGeometries.batteryWarning,
+								windMaterials.yellow,
+							);
+							warning.scale.setScalar(0.23);
+							warning.position.set(-0.025, -0.185, 0.144);
+							group.add(warning);
+
+							const yawRing = new THREE.Mesh(
+								miniGeometries.turbineYawRing,
+								windMaterials.joint,
+							);
+							yawRing.position.y = 0.407;
+							yawRing.castShadow = true;
+							group.add(yawRing);
+							const yawBand = new THREE.Mesh(
+								miniGeometries.turbineYawRing,
+								windMaterials.brass,
+							);
+							yawBand.scale.set(1.02, 0.2, 1.02);
+							yawBand.position.y = 0.43;
+							group.add(yawBand);
+
+							const nacelle = new THREE.Mesh(
+								miniGeometries.turbineNacelle,
+								windMaterials.nacelle,
+							);
+							nacelle.position.set(0.055, 0.46, 0.02);
 							nacelle.castShadow = true;
 							group.add(nacelle);
+							const nacellePanel = new THREE.Mesh(
+								miniGeometries.turbineNacellePanel,
+								windMaterials.panel,
+							);
+							nacellePanel.position.set(0.095, 0.46, 0.137);
+							group.add(nacellePanel);
+							for (let ventIndex = 0; ventIndex < 3; ventIndex += 1) {
+								const vent = new THREE.Mesh(
+									miniGeometries.turbineVent,
+									windMaterials.joint,
+								);
+								vent.position.set(0.11, 0.438 + ventIndex * 0.022, 0.148);
+								group.add(vent);
+							}
+
+							const generator = new THREE.Mesh(
+								miniGeometries.turbineGenerator,
+								windMaterials.joint,
+							);
+							generator.rotation.x = Math.PI / 2;
+							generator.position.set(-0.095, 0.46, 0.125);
+							generator.castShadow = true;
+							group.add(generator);
+							const shaft = new THREE.Mesh(
+								miniGeometries.turbineShaft,
+								windMaterials.copper,
+							);
+							shaft.rotation.x = Math.PI / 2;
+							shaft.position.set(-0.095, 0.46, 0.205);
+							group.add(shaft);
 
 							const rotor = new THREE.Group();
-							rotor.position.set(-0.06, 0.37, 0.145);
+							rotor.position.set(-0.095, 0.46, 0.245);
 							for (let bladeIndex = 0; bladeIndex < 3; bladeIndex += 1) {
-								const blade = new THREE.Mesh(miniGeometries.windBlade, energyMaterials.warm);
-								blade.rotation.z = (bladeIndex * Math.PI * 2) / 3;
+								const bladeMount = new THREE.Group();
+								bladeMount.rotation.z = (bladeIndex * Math.PI * 2) / 3;
+								const bladeRoot = new THREE.Mesh(
+									miniGeometries.turbineBladeRoot,
+									windMaterials.joint,
+								);
+								bladeRoot.position.y = 0.045;
+								bladeRoot.castShadow = true;
+								bladeMount.add(bladeRoot);
+								const blade = new THREE.Mesh(
+									miniGeometries.turbineBlade,
+									windMaterials.blade,
+								);
 								blade.castShadow = true;
-								rotor.add(blade);
+								bladeMount.add(blade);
+								rotor.add(bladeMount);
 							}
-							const hub = new THREE.Mesh(miniGeometries.windHub, energyMaterials.yellow);
-							hub.rotation.x = Math.PI / 2;
-							hub.position.z = 0.025;
+							const hub = new THREE.Mesh(miniGeometries.turbineHub, windMaterials.nacelle);
+							hub.scale.set(1, 1, 0.82);
+							hub.castShadow = true;
 							rotor.add(hub);
-							const nose = new THREE.Mesh(miniGeometries.knob, energyMaterials.cyan);
-							nose.scale.setScalar(0.62);
-							nose.position.z = 0.095;
-							rotor.add(nose);
+							const indicator = new THREE.Mesh(
+								miniGeometries.turbineIndicator,
+								windMaterials.cyan,
+							);
+							indicator.position.z = 0.092;
+							rotor.add(indicator);
 							group.add(rotor);
 							group.userData.windRotor = rotor;
+							group.userData.windIndicator = indicator;
 							break;
 						}
 						case 'solar': {
@@ -2697,7 +2904,14 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							}
 							if (isPrimitivesModel && item.kind === 'wind') {
 								const rotor = item.group.userData.windRotor as InstanceType<typeof THREE.Group> | undefined;
+								const indicator = item.group.userData.windIndicator as
+									| InstanceType<typeof THREE.Mesh>
+									| undefined;
 								if (rotor) rotor.rotation.z = time * 0.00022 + item.floatPhase;
+								if (indicator) {
+									const output = 0.5 + Math.sin(time * 0.0012 + item.floatPhase) * 0.5;
+									windMaterials.cyan.emissiveIntensity = 0.18 + output * 0.12;
+								}
 							}
 							if (isPrimitivesModel && item.kind === 'solar') {
 								const reflection = item.group.userData.solarReflection as
