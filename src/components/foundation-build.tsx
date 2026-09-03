@@ -243,16 +243,24 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				scene.add(orbit);
 				orbit.rotation.y = THREE.MathUtils.degToRad(-25);
 
-				const [{ CSS2DObject, CSS2DRenderer }, { RoundedBoxGeometry }] = await Promise.all([
-					import('three/examples/jsm/renderers/CSS2DRenderer.js'),
-					import('three/examples/jsm/geometries/RoundedBoxGeometry.js'),
-				]);
+				const [{ CSS2DObject, CSS2DRenderer }, { RoundedBoxGeometry }, { RoomEnvironment }] =
+					await Promise.all([
+						import('three/examples/jsm/renderers/CSS2DRenderer.js'),
+						import('three/examples/jsm/geometries/RoundedBoxGeometry.js'),
+						import('three/examples/jsm/environments/RoomEnvironment.js'),
+					]);
 				if (cancelled) return;
 
 				const labelRenderer = new CSS2DRenderer();
 				labelRenderer.domElement.className = 'foundation-model-labels';
 				labelRenderer.domElement.setAttribute('aria-hidden', 'true');
 				model.append(labelRenderer.domElement);
+
+				const environmentGenerator = new THREE.PMREMGenerator(renderer);
+				const environmentScene = new RoomEnvironment();
+				const nonPyramidEnvironment = environmentGenerator.fromScene(environmentScene, 0.04).texture;
+				environmentScene.dispose();
+				environmentGenerator.dispose();
 
 				const bentSheetGeometry = new THREE.PlaneGeometry(0.92, 0.6, 5, 3);
 				const bentSheetPositions = bentSheetGeometry.attributes.position;
@@ -278,59 +286,88 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					curveSegments: 3,
 				});
 				windBladeGeometry.translate(0, 0, -0.011);
+				const batteryWarningShape = new THREE.Shape();
+				batteryWarningShape.moveTo(0, 0.07);
+				batteryWarningShape.lineTo(-0.072, -0.058);
+				batteryWarningShape.lineTo(0.072, -0.058);
+				batteryWarningShape.closePath();
+				const batteryBoltShape = new THREE.Shape();
+				batteryBoltShape.moveTo(0.014, 0.052);
+				batteryBoltShape.lineTo(-0.026, 0.004);
+				batteryBoltShape.lineTo(-0.004, 0.004);
+				batteryBoltShape.lineTo(-0.018, -0.052);
+				batteryBoltShape.lineTo(0.03, 0.014);
+				batteryBoltShape.lineTo(0.006, 0.014);
+				batteryBoltShape.closePath();
 				const miniGeometries = {
 					card: new RoundedBoxGeometry(1, 0.62, 0.08, 2, 0.045),
 					wide: new RoundedBoxGeometry(1.24, 0.36, 0.08, 2, 0.04),
 					button: new RoundedBoxGeometry(0.5, 0.16, 0.1, 2, 0.035),
 					square: new RoundedBoxGeometry(0.2, 0.2, 0.08, 2, 0.03),
-					line: new THREE.BoxGeometry(0.6, 0.035, 0.045),
-					tick: new THREE.BoxGeometry(0.018, 0.11, 0.04),
-					avatar: new THREE.CylinderGeometry(0.19, 0.19, 0.08, 16),
+					rulerBody: new RoundedBoxGeometry(1.72, 0.3, 0.09, 4, 0.035),
+					rulerFace: new RoundedBoxGeometry(1.54, 0.215, 0.018, 2, 0.018),
+					rulerRail: new RoundedBoxGeometry(1.56, 0.026, 0.026, 1, 0.007),
+					rulerTick: new RoundedBoxGeometry(0.012, 0.09, 0.018, 1, 0.004),
+					rulerEndCap: new RoundedBoxGeometry(0.075, 0.28, 0.096, 2, 0.018),
+					rulerHole: new THREE.CylinderGeometry(0.042, 0.042, 0.014, 20),
+					rulerHoleRing: new THREE.TorusGeometry(0.052, 0.009, 8, 20),
+					rulerPrint: new THREE.PlaneGeometry(1.4, 0.12),
+					avatar: new THREE.CylinderGeometry(0.19, 0.19, 0.08, 24),
 					knob: new THREE.SphereGeometry(0.1, 12, 8),
 					tokenSwatch: new RoundedBoxGeometry(1, 0.34, 0.035, 3, 0.045),
 					tokenSwatchPrint: new THREE.PlaneGeometry(0.78, 0.21),
-					tokenGauge: new RoundedBoxGeometry(0.28, 0.16, 0.07, 2, 0.025),
-					tokenGaugePrint: new THREE.PlaneGeometry(0.2, 0.1),
 					tokenSheetEdge: new RoundedBoxGeometry(0.96, 0.64, 0.026, 2, 0.025),
 					tokenSheetPrint: bentSheetGeometry,
 					energyBase: new RoundedBoxGeometry(0.72, 0.09, 0.42, 2, 0.035),
-					windTower: new THREE.CylinderGeometry(0.052, 0.115, 0.78, 10),
-					windBand: new THREE.CylinderGeometry(0.072, 0.082, 0.05, 10),
-					windNacelle: new RoundedBoxGeometry(0.3, 0.14, 0.17, 2, 0.045),
-					windHub: new THREE.CylinderGeometry(0.074, 0.074, 0.1, 14),
+					windTower: new THREE.CylinderGeometry(0.052, 0.115, 0.78, 16),
+					windBand: new THREE.CylinderGeometry(0.072, 0.082, 0.05, 16),
+					windNacelle: new RoundedBoxGeometry(0.3, 0.14, 0.17, 3, 0.035),
+					windHub: new THREE.CylinderGeometry(0.074, 0.074, 0.1, 20),
 					windBlade: windBladeGeometry,
 					solarFrame: new RoundedBoxGeometry(1.26, 0.72, 0.075, 2, 0.028),
 					solarBack: new RoundedBoxGeometry(1.18, 0.64, 0.065, 2, 0.02),
 					solarCell: new RoundedBoxGeometry(0.128, 0.095, 0.018, 1, 0.008),
-					solarRail: new THREE.BoxGeometry(1.2, 0.012, 0.012),
-					solarStand: new THREE.BoxGeometry(0.055, 0.52, 0.055),
-					solarReflection: new THREE.BoxGeometry(0.06, 0.61, 0.012),
-					sunRay: new THREE.BoxGeometry(0.018, 0.09, 0.018),
-					batteryCase: new RoundedBoxGeometry(0.82, 0.68, 0.25, 3, 0.055),
-					batteryCell: new THREE.CylinderGeometry(0.073, 0.073, 0.24, 12),
-					batteryCellCap: new THREE.CylinderGeometry(0.058, 0.058, 0.018, 12),
-					batteryRail: new THREE.BoxGeometry(0.72, 0.035, 0.04),
-					batteryTerminal: new THREE.CylinderGeometry(0.052, 0.062, 0.11, 12),
-					batteryIndicator: new RoundedBoxGeometry(0.48, 0.115, 0.035, 2, 0.018),
-					batteryCharge: new THREE.BoxGeometry(0.4, 0.058, 0.022),
+					solarRail: new RoundedBoxGeometry(1.2, 0.012, 0.012, 1, 0.004),
+					solarStand: new RoundedBoxGeometry(0.055, 0.52, 0.055, 1, 0.014),
+					solarReflection: new RoundedBoxGeometry(0.06, 0.61, 0.012, 1, 0.004),
+					sunRay: new RoundedBoxGeometry(0.018, 0.09, 0.018, 1, 0.006),
+					batteryCase: new RoundedBoxGeometry(0.86, 0.64, 0.3, 4, 0.055),
+					batteryLid: new RoundedBoxGeometry(0.82, 0.075, 0.28, 3, 0.025),
+					batteryPanel: new RoundedBoxGeometry(0.7, 0.43, 0.035, 3, 0.022),
+					batteryModule: new RoundedBoxGeometry(0.135, 0.235, 0.028, 2, 0.014),
+					batteryModuleRail: new RoundedBoxGeometry(0.105, 0.018, 0.01, 1, 0.004),
+					batteryTerminalMount: new THREE.CylinderGeometry(0.076, 0.076, 0.045, 20),
+					batteryTerminal: new THREE.CylinderGeometry(0.047, 0.058, 0.11, 20),
+					batteryMark: new RoundedBoxGeometry(0.058, 0.012, 0.008, 1, 0.004),
+					batteryHandlePost: new RoundedBoxGeometry(0.035, 0.14, 0.042, 2, 0.012),
+					batteryHandleGrip: new RoundedBoxGeometry(0.42, 0.042, 0.052, 2, 0.014),
+					batteryFoot: new RoundedBoxGeometry(0.18, 0.055, 0.16, 2, 0.018),
+					batteryVent: new RoundedBoxGeometry(0.078, 0.012, 0.012, 1, 0.004),
+					batteryFastener: new THREE.CylinderGeometry(0.016, 0.016, 0.014, 12),
+					batteryDisplay: new RoundedBoxGeometry(0.43, 0.12, 0.035, 3, 0.018),
+					batteryDisplaySegment: new RoundedBoxGeometry(0.055, 0.058, 0.012, 1, 0.006),
+					batteryLabelPlate: new RoundedBoxGeometry(0.19, 0.068, 0.012, 1, 0.006),
+					batteryLabelLine: new RoundedBoxGeometry(0.13, 0.008, 0.006, 1, 0.003),
+					batteryWarning: new THREE.ShapeGeometry(batteryWarningShape),
+					batteryBolt: new THREE.ShapeGeometry(batteryBoltShape),
 					microPlatform: new RoundedBoxGeometry(2.4, 0.08, 0.68, 3, 0.03),
 					microPlatformInset: new RoundedBoxGeometry(2.18, 0.018, 0.54, 2, 0.015),
 					microEquipmentPad: new RoundedBoxGeometry(0.34, 0.025, 0.28, 2, 0.012),
 					microBuilding: new RoundedBoxGeometry(0.32, 0.34, 0.22, 2, 0.022),
 					microBuildingWing: new RoundedBoxGeometry(0.16, 0.2, 0.2, 2, 0.018),
-					microWindowBand: new THREE.BoxGeometry(0.21, 0.032, 0.012),
-					microPylonPost: new THREE.CylinderGeometry(0.012, 0.022, 0.54, 6),
-					microPylonBrace: new THREE.BoxGeometry(0.18, 0.012, 0.012),
-					microCrossarm: new THREE.BoxGeometry(0.34, 0.022, 0.022),
-					microInsulator: new THREE.CylinderGeometry(0.009, 0.014, 0.045, 6),
-					microTransformer: new RoundedBoxGeometry(0.24, 0.2, 0.2, 2, 0.025),
-					microCoolingFin: new THREE.BoxGeometry(0.018, 0.14, 0.11),
-					microSolarFrame: new RoundedBoxGeometry(0.42, 0.24, 0.025, 1, 0.014),
-					microSolarCell: new RoundedBoxGeometry(0.064, 0.052, 0.007, 1, 0.004),
-					microBatteryCase: new RoundedBoxGeometry(0.42, 0.34, 0.2, 2, 0.025),
-					microBatteryDoor: new RoundedBoxGeometry(0.17, 0.25, 0.014, 1, 0.008),
-					microVent: new THREE.BoxGeometry(0.085, 0.01, 0.012),
-					microIndicator: new THREE.BoxGeometry(0.04, 0.018, 0.012),
+					microWindowBand: new RoundedBoxGeometry(0.21, 0.032, 0.012, 1, 0.004),
+					microPylonPost: new THREE.CylinderGeometry(0.012, 0.022, 0.54, 8),
+					microPylonBrace: new RoundedBoxGeometry(0.18, 0.012, 0.012, 1, 0.004),
+					microCrossarm: new RoundedBoxGeometry(0.34, 0.022, 0.022, 1, 0.006),
+					microInsulator: new THREE.CylinderGeometry(0.009, 0.014, 0.045, 8),
+					microTransformer: new RoundedBoxGeometry(0.24, 0.2, 0.2, 3, 0.022),
+					microCoolingFin: new RoundedBoxGeometry(0.018, 0.14, 0.11, 1, 0.005),
+					microSolarFrame: new RoundedBoxGeometry(0.42, 0.24, 0.025, 2, 0.012),
+					microSolarCell: new RoundedBoxGeometry(0.064, 0.052, 0.007, 1, 0.003),
+					microBatteryCase: new RoundedBoxGeometry(0.42, 0.34, 0.2, 3, 0.022),
+					microBatteryDoor: new RoundedBoxGeometry(0.17, 0.25, 0.014, 2, 0.007),
+					microVent: new RoundedBoxGeometry(0.085, 0.01, 0.012, 1, 0.003),
+					microIndicator: new RoundedBoxGeometry(0.04, 0.018, 0.012, 1, 0.004),
 					microBatteryCell: new RoundedBoxGeometry(0.032, 0.085, 0.011, 1, 0.004),
 					microCablePulse: new THREE.CapsuleGeometry(0.0035, 0.024, 2, 5),
 					productBadge: new THREE.CylinderGeometry(0.29, 0.29, 0.085, 32),
@@ -346,8 +383,10 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				const makeMiniMaterial = (color: string) =>
 					new THREE.MeshStandardMaterial({
 						color,
-						roughness: 0.78,
-						metalness: 0.04,
+						roughness: 0.68,
+						metalness: 0.06,
+						envMap: nonPyramidEnvironment,
+						envMapIntensity: 0.52,
 						transparent: true,
 						opacity: 0,
 						depthWrite: false,
@@ -374,8 +413,10 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						color,
 						roughness,
 						metalness: 0.02,
-						clearcoat: 0.34,
-						clearcoatRoughness: 0.38,
+						clearcoat: 0.4,
+						clearcoatRoughness: 0.32,
+						envMap: nonPyramidEnvironment,
+						envMapIntensity: 0.72,
 						transparent: true,
 						opacity: 0,
 						depthWrite: false,
@@ -560,7 +601,9 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						roughness,
 						metalness,
 						clearcoat,
-						clearcoatRoughness: 0.42,
+						clearcoatRoughness: 0.34,
+						envMap: nonPyramidEnvironment,
+						envMapIntensity: 0.78,
 						transparent: true,
 						opacity: 0,
 						depthWrite: false,
@@ -600,6 +643,25 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				energyMaterials.charge.emissive.set(substrateColors.cyan);
 				energyMaterials.charge.emissiveIntensity = 0.58;
 
+				const batteryMaterials = {
+					casing: makeEnergySurface('#031d31', 0.46, 0.06, 0.34),
+					lid: makeEnergySurface('#06394c', 0.4, 0.08, 0.38),
+					panel: makeEnergySurface('#075158', 0.58, 0.04, 0.24),
+					module: makeEnergySurface('#073846', 0.52, 0.06, 0.28),
+					rubber: makeEnergySurface('#102329', 0.9, 0.01, 0.04),
+					copper: makeEnergySurface('#b86c3f', 0.3, 0.76, 0.24),
+					brass: makeEnergySurface('#d09a48', 0.28, 0.7, 0.28),
+					cyan: makeEnergySurface(substrateColors.cyanBright, 0.2, 0.08, 0.44),
+					cyanOff: makeEnergySurface('#0b4550', 0.5, 0.02, 0.16),
+					yellow: makeEnergySurface(substrateColors.primary, 0.34, 0.04, 0.26),
+				};
+				batteryMaterials.cyan.emissive.set(substrateColors.cyanBright);
+				batteryMaterials.cyan.emissiveIntensity = 0.42;
+				batteryMaterials.cyanOff.emissive.set(substrateColors.cyanDim);
+				batteryMaterials.cyanOff.emissiveIntensity = 0.08;
+				batteryMaterials.yellow.emissive.set(substrateColors.primary);
+				batteryMaterials.yellow.emissiveIntensity = 0.08;
+
 				const sunHaloCanvas = document.createElement('canvas');
 				sunHaloCanvas.width = 96;
 				sunHaloCanvas.height = 96;
@@ -638,7 +700,9 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						roughness,
 						metalness,
 						clearcoat,
-						clearcoatRoughness: 0.38,
+						clearcoatRoughness: 0.32,
+						envMap: nonPyramidEnvironment,
+						envMapIntensity: 0.74,
 						transparent: true,
 						opacity: 0,
 						depthWrite: false,
@@ -725,6 +789,28 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					depthWrite: false,
 				});
 
+				const contactShadowCanvas = document.createElement('canvas');
+				contactShadowCanvas.width = 128;
+				contactShadowCanvas.height = 64;
+				const contactShadowContext = contactShadowCanvas.getContext('2d')!;
+				const contactShadowGradient = contactShadowContext.createRadialGradient(64, 32, 2, 64, 32, 58);
+				contactShadowGradient.addColorStop(0, 'rgba(0, 0, 0, 0.72)');
+				contactShadowGradient.addColorStop(0.5, 'rgba(0, 0, 0, 0.3)');
+				contactShadowGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+				contactShadowContext.fillStyle = contactShadowGradient;
+				contactShadowContext.fillRect(0, 0, 128, 64);
+				const contactShadowTexture = new THREE.CanvasTexture(contactShadowCanvas);
+				const contactShadowMaterials = LAYER_SPECS.map(
+					() =>
+						new THREE.SpriteMaterial({
+							map: contactShadowTexture,
+							color: 0x000000,
+							transparent: true,
+							opacity: 0,
+							depthWrite: false,
+						}),
+				);
+
 				type MicrogridAssemblyPart = {
 					object: InstanceType<typeof THREE.Object3D>;
 					restPosition: InstanceType<typeof THREE.Vector3>;
@@ -780,8 +866,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					['microgrid'],
 					['Chronos', 'Amun', 'Origin', 'Solaris', 'Lumus'],
 				];
-				const layerRadii = [1.82, 1.82, 1.38, 1.18] as const;
-				const layerMinDistances = [0.94, 0.94, 1.35, 0.76] as const;
+				const layerRadii = [1.62, 1.66, 1.32, 1.28] as const;
+				const layerMinDistances = [0.9, 0.9, 1.35, 0.88] as const;
 
 				const makeMesh = (
 					geometry: (typeof miniGeometries)[keyof typeof miniGeometries],
@@ -871,54 +957,71 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							break;
 						}
 						case 'ruler': {
-							const stepWidths = [0.72, 0.94, 1.22, 1.58] as const;
-							const measurements = ['4', '8', '16', '24'] as const;
-							const surfaces = ['#3f3f46', '#52525b', '#71717a', '#a1a1aa'] as const;
-							const glowMaterial = makeTokenSurface('#ffcc00', 0.28);
-							glowMaterial.emissive.set('#ffcc00');
-							glowMaterial.emissiveIntensity = 0;
-							let cursor = -0.72;
-							stepWidths.forEach((widthScale, index) => {
-								const segmentWidth = 0.28 * widthScale;
-								const segment = new THREE.Mesh(
-									miniGeometries.tokenGauge,
-									makeTokenSurface(surfaces[index], 0.58),
+							const bodyMaterial = makeTokenSurface('#ffcc00', 0.32);
+							bodyMaterial.emissive.set('#ffcc00');
+							bodyMaterial.emissiveIntensity = 0;
+							const faceMaterial = makeTokenSurface('#eebc00', 0.46);
+							const inkMaterial = makeTokenSurface('#111113', 0.6);
+							const metalMaterial = makeTokenSurface('#8a6b00', 0.3);
+							metalMaterial.metalness = 0.52;
+
+							const body = new THREE.Mesh(miniGeometries.rulerBody, bodyMaterial);
+							body.castShadow = true;
+							group.add(body);
+
+							const face = new THREE.Mesh(miniGeometries.rulerFace, faceMaterial);
+							face.position.set(0.035, 0, 0.052);
+							group.add(face);
+
+							const lowerRail = new THREE.Mesh(miniGeometries.rulerRail, inkMaterial);
+							lowerRail.position.set(0.035, -0.124, 0.057);
+							group.add(lowerRail);
+
+							for (let measurement = 0; measurement <= 24; measurement += 1) {
+								const isMajor = measurement % 4 === 0;
+								const isMedium = measurement % 2 === 0;
+								const tickScale = isMajor ? 1 : isMedium ? 0.72 : 0.45;
+								const tick = new THREE.Mesh(miniGeometries.rulerTick, inkMaterial);
+								tick.scale.y = tickScale;
+								tick.position.set(
+									-0.665 + (measurement / 24) * 1.42,
+									0.101 - 0.045 * tickScale,
+									0.074,
 								);
-								segment.scale.set(widthScale, 0.92 + index * 0.36, 1);
-								segment.position.set(cursor + segmentWidth / 2, -0.13 + index * 0.066, index * 0.012);
-								segment.castShadow = true;
-								group.add(segment);
+								group.add(tick);
+							}
 
-								for (let tickIndex = 1; tickIndex <= index + 2; tickIndex += 1) {
-									const tick = new THREE.Mesh(miniGeometries.tick, glowMaterial);
-									tick.scale.set(0.46, 0.34 + (tickIndex % 2) * 0.18, 0.36);
-									tick.position.set(
-										cursor + (segmentWidth * tickIndex) / (index + 3),
-										segment.position.y + 0.075 * segment.scale.y,
-										0.055 + index * 0.012,
-									);
-									group.add(tick);
+							const printMaterial = makeTokenPrint(960, 110, (context, width, height) => {
+								context.fillStyle = '#111113';
+								context.textAlign = 'center';
+								context.textBaseline = 'middle';
+								context.font = '700 34px ui-monospace, monospace';
+								for (let measurement = 0; measurement <= 24; measurement += 4) {
+									const x = 34 + (measurement / 24) * (width - 68);
+									context.fillText(String(measurement), x, height * 0.56);
 								}
-
-								const printMaterial = makeTokenPrint(180, 100, (context, width, height) => {
-									context.fillStyle = index >= 2 ? '#111113' : '#f4f4f5';
-									context.font = '700 54px ui-monospace, monospace';
-									context.textAlign = 'center';
-									context.textBaseline = 'middle';
-									context.fillText(measurements[index], width / 2, height / 2);
-								});
-								const print = new THREE.Mesh(miniGeometries.tokenGaugePrint, printMaterial);
-								print.scale.x = Math.max(0.62, widthScale * 0.64);
-								print.scale.y = 1.18;
-								print.position.set(segment.position.x, segment.position.y, 0.057 + index * 0.012);
-								group.add(print);
-								cursor += segmentWidth + 0.025;
+								context.textAlign = 'right';
+								context.font = '700 19px ui-monospace, monospace';
+								context.fillText('SPACING · PX', width - 12, height * 0.88);
 							});
-							const rulerSpine = new THREE.Mesh(miniGeometries.line, glowMaterial);
-							rulerSpine.scale.set(2.34, 0.62, 0.6);
-							rulerSpine.position.set(-0.035, -0.24, 0.018);
-							group.add(rulerSpine);
-							group.userData.rulerGlow = [glowMaterial];
+							const print = new THREE.Mesh(miniGeometries.rulerPrint, printMaterial);
+							print.position.set(0.035, -0.034, 0.075);
+							group.add(print);
+
+							const endCap = new THREE.Mesh(miniGeometries.rulerEndCap, metalMaterial);
+							endCap.position.x = 0.822;
+							endCap.castShadow = true;
+							group.add(endCap);
+
+							const hole = new THREE.Mesh(miniGeometries.rulerHole, inkMaterial);
+							hole.rotation.x = Math.PI / 2;
+							hole.position.set(-0.774, -0.018, 0.058);
+							group.add(hole);
+							const holeRing = new THREE.Mesh(miniGeometries.rulerHoleRing, metalMaterial);
+							holeRing.position.set(-0.774, -0.018, 0.069);
+							group.add(holeRing);
+
+							group.userData.rulerGlow = [bodyMaterial];
 							break;
 						}
 						case 'typography': {
@@ -1093,54 +1196,165 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							break;
 						}
 						case 'battery': {
-							const cabinet = new THREE.Mesh(miniGeometries.batteryCase, energyMaterials.zinc);
+							const cabinet = new THREE.Mesh(miniGeometries.batteryCase, batteryMaterials.casing);
 							cabinet.castShadow = true;
 							group.add(cabinet);
-							const inset = new THREE.Mesh(miniGeometries.batteryCase, energyMaterials.dark);
-							inset.scale.set(0.88, 0.84, 0.78);
-							inset.position.z = 0.08;
-							group.add(inset);
 
-							const cellXs = [-0.235, 0, 0.235] as const;
-							const cellYs = [-0.1, 0.14] as const;
-							cellYs.forEach((y) => {
-								cellXs.forEach((x) => {
-									const cell = new THREE.Mesh(miniGeometries.batteryCell, energyMaterials.cyan);
-									cell.rotation.x = Math.PI / 2;
-									cell.position.set(x, y, 0.18);
-									group.add(cell);
-									const cellCap = new THREE.Mesh(miniGeometries.batteryCellCap, energyMaterials.cell);
-									cellCap.rotation.x = Math.PI / 2;
-									cellCap.position.set(x, y, 0.315);
-									group.add(cellCap);
+							const lid = new THREE.Mesh(miniGeometries.batteryLid, batteryMaterials.lid);
+							lid.position.y = 0.338;
+							lid.castShadow = true;
+							group.add(lid);
+
+							const frontPanel = new THREE.Mesh(miniGeometries.batteryPanel, batteryMaterials.panel);
+							frontPanel.position.set(0, -0.005, 0.168);
+							group.add(frontPanel);
+
+							const moduleXs = [-0.246, -0.082, 0.082, 0.246] as const;
+							moduleXs.forEach((x, index) => {
+								const module = new THREE.Mesh(miniGeometries.batteryModule, batteryMaterials.module);
+								module.position.set(x, 0.065, 0.202);
+								group.add(module);
+
+								[-0.064, 0, 0.064].forEach((moduleY) => {
+									const rail = new THREE.Mesh(miniGeometries.batteryModuleRail, batteryMaterials.rubber);
+									rail.position.set(x, 0.065 + moduleY, 0.22);
+									group.add(rail);
+								});
+
+								const moduleStatus = new THREE.Mesh(
+									miniGeometries.batteryModuleRail,
+									index < 3 ? batteryMaterials.cyan : batteryMaterials.cyanOff,
+								);
+								moduleStatus.scale.x = 0.54;
+								moduleStatus.position.set(x, 0.158, 0.222);
+								group.add(moduleStatus);
+							});
+
+							([-0.245, 0.245] as const).forEach((x, index) => {
+								const mount = new THREE.Mesh(
+									miniGeometries.batteryTerminalMount,
+									batteryMaterials.rubber,
+								);
+								mount.position.set(x, 0.385, -0.015);
+								group.add(mount);
+
+								const terminal = new THREE.Mesh(
+									miniGeometries.batteryTerminal,
+									index === 0 ? batteryMaterials.copper : batteryMaterials.brass,
+								);
+								terminal.position.set(x, 0.455, -0.015);
+								terminal.castShadow = true;
+								group.add(terminal);
+
+								const markMaterial = index === 0 ? batteryMaterials.casing : batteryMaterials.panel;
+								const minus = new THREE.Mesh(miniGeometries.batteryMark, markMaterial);
+								minus.rotation.x = -Math.PI / 2;
+								minus.position.set(x, 0.515, -0.015);
+								group.add(minus);
+								if (index === 1) {
+									const plus = new THREE.Mesh(miniGeometries.batteryMark, markMaterial);
+									plus.rotation.set(-Math.PI / 2, 0, Math.PI / 2);
+									plus.position.copy(minus.position);
+									group.add(plus);
+								}
+
+								const frontMarkMaterial =
+									index === 0 ? batteryMaterials.copper : batteryMaterials.brass;
+								const frontMinus = new THREE.Mesh(
+									miniGeometries.batteryMark,
+									frontMarkMaterial,
+								);
+								frontMinus.position.set(x, 0.267, 0.192);
+								group.add(frontMinus);
+								if (index === 1) {
+									const frontPlus = new THREE.Mesh(
+										miniGeometries.batteryMark,
+										frontMarkMaterial,
+									);
+									frontPlus.rotation.z = Math.PI / 2;
+									frontPlus.position.copy(frontMinus.position);
+									group.add(frontPlus);
+								}
+							});
+
+							const handle = new THREE.Group();
+							([-0.2, 0.2] as const).forEach((x) => {
+								const mount = new THREE.Mesh(miniGeometries.batteryFastener, batteryMaterials.copper);
+								mount.position.set(x, 0.378, -0.105);
+								handle.add(mount);
+								const post = new THREE.Mesh(miniGeometries.batteryHandlePost, batteryMaterials.rubber);
+								post.position.set(x, 0.416, -0.105);
+								post.rotation.z = x < 0 ? -0.18 : 0.18;
+								handle.add(post);
+							});
+							const grip = new THREE.Mesh(miniGeometries.batteryHandleGrip, batteryMaterials.rubber);
+							grip.position.set(0, 0.475, -0.105);
+							handle.add(grip);
+							group.add(handle);
+
+							([-0.29, 0.29] as const).forEach((x) => {
+								const foot = new THREE.Mesh(miniGeometries.batteryFoot, batteryMaterials.rubber);
+								foot.position.set(x, -0.342, 0.015);
+								group.add(foot);
+							});
+
+							for (let ventIndex = 0; ventIndex < 4; ventIndex += 1) {
+								const vent = new THREE.Mesh(miniGeometries.batteryVent, batteryMaterials.rubber);
+								vent.position.set(0.21 + ventIndex * 0.042, 0.267, 0.18);
+								vent.rotation.z = Math.PI / 2;
+								group.add(vent);
+							}
+
+							([-0.322, 0.322] as const).forEach((x) => {
+								([-0.174, 0.174] as const).forEach((y) => {
+									const fastener = new THREE.Mesh(
+										miniGeometries.batteryFastener,
+										batteryMaterials.copper,
+									);
+									fastener.rotation.x = Math.PI / 2;
+									fastener.position.set(x, y, 0.199);
+									group.add(fastener);
 								});
 							});
 
-							[-0.26, 0.26].forEach((x) => {
-								const terminal = new THREE.Mesh(
-									miniGeometries.batteryTerminal,
-									energyMaterials.yellow,
+							const display = new THREE.Mesh(miniGeometries.batteryDisplay, batteryMaterials.rubber);
+							display.position.set(-0.075, -0.235, 0.202);
+							group.add(display);
+							const chargeSegments: InstanceType<typeof THREE.Mesh>[] = [];
+							for (let segmentIndex = 0; segmentIndex < 5; segmentIndex += 1) {
+								const segment = new THREE.Mesh(
+									miniGeometries.batteryDisplaySegment,
+									segmentIndex < 3 ? batteryMaterials.cyan : batteryMaterials.cyanOff,
 								);
-								terminal.position.set(x, 0.39, 0);
-								group.add(terminal);
-							});
+								segment.position.set(-0.22 + segmentIndex * 0.073, -0.235, 0.225);
+								group.add(segment);
+								chargeSegments.push(segment);
+							}
 
-							[-0.305, 0.305].forEach((y) => {
-								const rail = new THREE.Mesh(miniGeometries.batteryRail, energyMaterials.metal);
-								rail.position.set(0, y, 0.31);
-								group.add(rail);
-							});
-
-							const indicator = new THREE.Mesh(
-								miniGeometries.batteryIndicator,
-								energyMaterials.dark,
+							const labelPlate = new THREE.Mesh(
+								miniGeometries.batteryLabelPlate,
+								batteryMaterials.lid,
 							);
-							indicator.position.set(0, -0.245, 0.345);
-							group.add(indicator);
-							const charge = new THREE.Mesh(miniGeometries.batteryCharge, energyMaterials.charge);
-							charge.position.set(-0.12, -0.245, 0.375);
-							group.add(charge);
-							group.userData.batteryCharge = charge;
+							labelPlate.position.set(0.254, -0.238, 0.204);
+							group.add(labelPlate);
+							[-0.012, 0.012].forEach((lineY) => {
+								const labelLine = new THREE.Mesh(
+									miniGeometries.batteryLabelLine,
+									batteryMaterials.copper,
+								);
+								labelLine.position.set(0.254, -0.238 + lineY, 0.215);
+								labelLine.scale.x = lineY < 0 ? 0.68 : 1;
+								group.add(labelLine);
+							});
+
+							const warning = new THREE.Mesh(miniGeometries.batteryWarning, batteryMaterials.yellow);
+							warning.position.set(0.255, -0.09, 0.202);
+							group.add(warning);
+							const warningBolt = new THREE.Mesh(miniGeometries.batteryBolt, batteryMaterials.casing);
+							warningBolt.position.set(0.255, -0.09, 0.214);
+							group.add(warningBolt);
+
+							group.userData.batteryChargeSegments = chargeSegments;
 							break;
 						}
 						case 'microgrid': {
@@ -1489,6 +1703,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 									metalness: 0.04,
 									clearcoat: 0.82,
 									clearcoatRoughness: 0.2,
+									envMap: nonPyramidEnvironment,
+									envMapIntensity: 0.56,
 									emissive: definition.badge,
 									emissiveIntensity: 0.08,
 									transparent: true,
@@ -1506,6 +1722,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 									color: substrateColors.text,
 									roughness: 0.26,
 									metalness: 0.32,
+									envMap: nonPyramidEnvironment,
+									envMapIntensity: 0.52,
 									transparent: true,
 									opacity: 0,
 									depthWrite: false,
@@ -1586,6 +1804,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						}
 					}
 
+
 					if (layerIndex === 1 || layerIndex === 3 || kind === 'microgrid') {
 						group.updateMatrixWorld(true);
 						const bounds = new THREE.Box3().setFromObject(group);
@@ -1602,6 +1821,13 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							-center.z * normalization,
 						);
 						group.add(normalizedModel);
+					}
+					if (kind !== 'microgrid') {
+						const shadow = new THREE.Sprite(contactShadowMaterials[layerIndex]);
+						const shadowWidth = layerIndex === 3 ? 1.18 : layerIndex === 0 ? 1.34 : 1.5;
+						shadow.scale.set(shadowWidth, shadowWidth * 0.27, 1);
+						shadow.position.set(0, layerIndex === 0 ? -0.36 : -0.47, -0.08);
+						group.add(shadow);
 					}
 
 					return { kind, group, labels };
@@ -1632,13 +1858,23 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					return positions;
 				};
 
+				const productPositions = [
+					{ x: -2, z: 0.34, y: LAYER_SPECS[3].y + 0.92, rotation: 0 },
+					{ x: -1, z: -0.02, y: LAYER_SPECS[3].y + 1.1, rotation: 0 },
+					{ x: 0, z: -0.2, y: LAYER_SPECS[3].y + 1.2, rotation: 0 },
+					{ x: 1, z: -0.02, y: LAYER_SPECS[3].y + 1.1, rotation: 0 },
+					{ x: 2, z: 0.34, y: LAYER_SPECS[3].y + 0.92, rotation: 0 },
+				] as const;
+
 				const riseLayers: RiseLayer[] = layerKinds.map((kinds, layerIndex) => {
-					const positions = createSeededPositions(layerIndex, kinds.length);
+					const positions = layerIndex === 3 ? productPositions : createSeededPositions(layerIndex, kinds.length);
 					const items = kinds.map((kind, itemIndex) => {
 						const built = makeRiseItem(kind, layerIndex, itemIndex);
 						const position = positions[itemIndex];
 						const clearance = layerIndex <= 1 ? TOKEN_MODEL_CLEARANCE : 1;
 						const isMicrogrid = kind === 'microgrid';
+						const presentationLift = layerIndex <= 1 ? 0.34 : layerIndex === 2 ? 0.24 : 0.28;
+						built.group.traverse((object) => object.layers.enable(1));
 						pyramid.add(built.group);
 						return {
 							...built,
@@ -1646,9 +1882,10 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							z: isMicrogrid ? -0.18 : position.z * clearance,
 							hiddenY: LAYER_SPECS[layerIndex].y - 0.52 - itemIndex * 0.035,
 							targetY: isMicrogrid
-								? LAYER_SPECS[layerIndex].y + 1.12
+								? LAYER_SPECS[layerIndex].y + 1.12 + presentationLift
 								: LAYER_SPECS[layerIndex].y +
-									(position.y - LAYER_SPECS[layerIndex].y) * clearance,
+									(position.y - LAYER_SPECS[layerIndex].y) * clearance +
+									presentationLift,
 							baseRotation: isMicrogrid ? 0 : position.rotation,
 							floatPhase: seededUnit(700 + layerIndex * 41 + itemIndex * 7) * Math.PI * 2,
 							faceTiltX: isMicrogrid
@@ -1932,6 +2169,17 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				rimLight.position.set(-5, 2, -4);
 				scene.add(rimLight);
 
+				camera.layers.enable(1);
+				const modelKeyLight = new THREE.RectAreaLight(0xffffff, 0.82, 4.5, 3.2);
+				modelKeyLight.position.set(-1.5, 6, 5.5);
+				modelKeyLight.lookAt(0, 1.8, 0);
+				modelKeyLight.layers.set(1);
+				scene.add(modelKeyLight);
+				const modelRimLight = new THREE.DirectionalLight(substrateColors.cyanBright, 0.16);
+				modelRimLight.position.set(5, 4, -3);
+				modelRimLight.layers.set(1);
+				scene.add(modelRimLight);
+
 				let pointerX = 0;
 				let pointerY = 0;
 				let hoveredLayer = -1;
@@ -1972,6 +2220,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				const facingGuide = new THREE.Object3D();
 
 				const updateAccessoryTransforms = (time: number) => {
+					const compactPresentation = model.clientWidth <= 520;
 					riseLayers.forEach((layer, layerIndex) => {
 						const layerOpacity = smootherstep(clamp01(layer.progress * 1.14));
 						risePalettes[layerIndex].all.forEach((material) => {
@@ -2001,6 +2250,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 									layerOpacity * ((material.userData.targetOpacity as number | undefined) ?? 1);
 							});
 						}
+						contactShadowMaterials[layerIndex].opacity = layerOpacity * 0.34;
 						layer.items.forEach((item, itemIndex) => {
 							const stagger = itemIndex * 0.105;
 							const localProgress = smootherstep(clamp01((layer.progress - stagger) / (1 - stagger)));
@@ -2022,7 +2272,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 								const elevatedY =
 									item.hiddenY + (item.targetY + 0.16 - item.hiddenY) * riseProgress;
 								item.group.position.set(
-									item.x * 0.52 + item.x * 0.48 * forwardProgress,
+									(item.x * 0.52 + item.x * 0.48 * forwardProgress) *
+										(compactPresentation ? 0.68 : 1),
 									elevatedY - 0.16 * settleProgress + float,
 									-0.86 - itemIndex * 0.07 + (item.z + 0.86 + itemIndex * 0.07) * forwardProgress,
 								);
@@ -2044,9 +2295,14 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 									(1 + Math.sin(popPhase * Math.PI * 3) * (1 - popPhase) * 0.17);
 								item.group.scale.setScalar(
 									isProductModel
-										? 0.615 * productPop
-										: (isMicrogridModel ? 0.567 : 0.36) *
-												smootherstep(clamp01(localProgress / 0.58)),
+										? (compactPresentation ? 0.68 : 0.74) * productPop
+										: (isMicrogridModel
+													? compactPresentation
+														? 0.64
+														: 0.68
+													: compactPresentation
+														? 0.46
+														: 0.5) * smootherstep(clamp01(localProgress / 0.58)),
 								);
 							} else {
 								item.group.position.set(
@@ -2122,15 +2378,18 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 								if (sunlight) sunlight.intensity = layerOpacity * (0.34 + sunPulse * 0.14);
 							}
 							if (isPrimitivesModel && item.kind === 'battery') {
-								const charge = item.group.userData.batteryCharge as
-									| InstanceType<typeof THREE.Mesh>
+								const chargeSegments = item.group.userData.batteryChargeSegments as
+									| InstanceType<typeof THREE.Mesh>[]
 									| undefined;
-								if (charge) {
+								if (chargeSegments) {
 									const pulse = 0.5 + Math.sin(time * 0.00065 + item.floatPhase) * 0.5;
-									const chargeLevel = 0.28 + pulse * 0.68;
-									charge.scale.x = chargeLevel;
-									charge.position.x = -0.2 + chargeLevel * 0.2;
-									energyMaterials.charge.emissiveIntensity = 0.38 + pulse * 0.2;
+									const activeSegments = 2 + Math.round(pulse * 3);
+									chargeSegments.forEach((segment, index) => {
+										segment.material =
+											index < activeSegments ? batteryMaterials.cyan : batteryMaterials.cyanOff;
+										segment.scale.y = index === activeSegments - 1 ? 0.72 + pulse * 0.28 : 1;
+									});
+									batteryMaterials.cyan.emissiveIntensity = 0.34 + pulse * 0.18;
 								}
 							}
 							if (isMicrogridModel) {
@@ -2736,6 +2995,9 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					microgridShadowMaterial.dispose();
 					sunHaloTexture.dispose();
 					sunHaloMaterial.dispose();
+					contactShadowTexture.dispose();
+					contactShadowMaterials.forEach((material) => material.dispose());
+					nonPyramidEnvironment.dispose();
 					sparkGeometry.dispose();
 					sparkMaterial.dispose();
 					confettiMaterial.dispose();
