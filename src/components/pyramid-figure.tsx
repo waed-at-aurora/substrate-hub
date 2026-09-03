@@ -22,7 +22,7 @@ export function PyramidFigure({ composites, primitives }: { composites: number; 
 			<svg
 				viewBox="0 0 560 330"
 				role="img"
-				aria-label="System pyramid: each layer is a button that opens its note."
+				aria-label="System pyramid: Substrate spans UI primitives, tokens, composite components, and interaction patterns; each layer opens its note."
 				style={{ width: '100%', height: 'auto', display: 'block' }}
 			>
 				<g fontFamily="var(--font-mono), monospace" fontSize="11" letterSpacing="0.08em">
@@ -40,7 +40,7 @@ export function PyramidFigure({ composites, primitives }: { composites: number; 
 						<text x="280" y="68" textAnchor="middle" fill="var(--ink)" fontWeight="600" letterSpacing="0.12em">EOS PRODUCTS</text>
 						<text x="280" y="88" textAnchor="middle" fill="var(--muted)" fontSize="9.5">product variants remain possible</text>
 					</a>
-					{/* middle: Substrate — the layer this system owns, washed in the brand yellow */}
+					{/* middle: the highest-leverage layer — reusable UX, washed in the brand yellow */}
 					<a
 						className="pyr-btn pyr-a-substrate"
 						href="#pyr-substrate"
@@ -51,11 +51,11 @@ export function PyramidFigure({ composites, primitives }: { composites: number; 
 						onClick={pick('substrate')}
 					>
 						<path d="M160 120 L400 120 L448 200 L112 200 Z" fill="color-mix(in srgb, var(--yellow) 22%, var(--paper))" stroke="var(--yellow)" strokeWidth="1.2" />
-						<text x="280" y="150" textAnchor="middle" fill="var(--yellow)" fontWeight="700" fontSize="13" letterSpacing="0.18em">SUBSTRATE</text>
-						<text x="280" y="170" textAnchor="middle" fill="var(--ink-2)" fontSize="9.5">composite components · interaction patterns</text>
-						<text x="280" y="186" textAnchor="middle" fill="var(--ink-2)" fontSize="9.5">shared across every EOS product</text>
+						<text x="280" y="150" textAnchor="middle" fill="var(--yellow)" fontWeight="700" fontSize="12" letterSpacing="0.14em">COMPOSITES &amp; PATTERNS</text>
+						<text x="280" y="170" textAnchor="middle" fill="var(--ink-2)" fontSize="9.5">Substrate&apos;s highest-leverage UX layer</text>
+						<text x="280" y="186" textAnchor="middle" fill="var(--ink-2)" fontSize="9.5">reusable across every EOS product</text>
 					</a>
-					{/* base: primitives and tokens */}
+					{/* base: the shared foundation Substrate also owns */}
 					<a
 						className="pyr-btn pyr-a-foundation"
 						href="#pyr-foundation"
@@ -65,17 +65,17 @@ export function PyramidFigure({ composites, primitives }: { composites: number; 
 						aria-pressed={open === 'foundation'}
 						onClick={pick('foundation')}
 					>
-						<path d="M112 214 L448 214 L486 292 L74 292 Z" fill="var(--surface)" stroke="var(--ink)" strokeWidth="1.2" />
+						<path d="M112 214 L448 214 L486 292 L74 292 Z" fill="color-mix(in srgb, var(--yellow) 7%, var(--surface))" stroke="color-mix(in srgb, var(--yellow) 46%, var(--rule))" strokeWidth="1.2" />
 						<text x="280" y="246" textAnchor="middle" fill="var(--ink)" fontWeight="600" letterSpacing="0.12em">UI PRIMITIVES &amp; TOKENS</text>
-						<text x="280" y="266" textAnchor="middle" fill="var(--muted)" fontSize="9.5">base-ui primitives · EOS color, type, spacing tokens</text>
+						<text x="280" y="266" textAnchor="middle" fill="var(--muted)" fontSize="9.5">shared foundation · type · spacing · base behaviors</text>
 					</a>
-					{/* dimension callout for the layer this system owns */}
+					{/* Substrate spans the middle UX layer and its shared foundation */}
 					<g stroke="color-mix(in srgb, var(--yellow) 55%, var(--rule))" strokeWidth="1">
 						<line x1="412" y1="120" x2="505" y2="120" />
-						<line x1="456" y1="200" x2="505" y2="200" />
-						<line x1="505" y1="120" x2="505" y2="200" />
+						<line x1="486" y1="292" x2="505" y2="292" />
+						<line x1="505" y1="120" x2="505" y2="292" />
 					</g>
-					<text x="513" y="164" fill="color-mix(in srgb, var(--yellow) 70%, var(--muted))" fontSize="9" writingMode="tb" letterSpacing="0.1em">THIS SYSTEM</text>
+					<text x="513" y="161" fill="color-mix(in srgb, var(--yellow) 70%, var(--muted))" fontSize="9" writingMode="tb" letterSpacing="0.1em">SUBSTRATE</text>
 				</g>
 			</svg>
 			{/* notes mirror the pyramid top-to-bottom: products, substrate, foundation */}
@@ -89,18 +89,19 @@ export function PyramidFigure({ composites, primitives }: { composites: number; 
 					</p>
 				</div>
 				<div className="pyramid-note acc" id="pyr-substrate" data-open={open === 'substrate'}>
-					<span className="mono">The shared layer</span>
+					<span className="mono">The UX core</span>
 					<p>
-						Substrate&rsquo;s responsibility is the middle: composite components and interaction
-						patterns every EOS product shares — {composites} composites and {primitives} primitives
-						today.
+						Substrate doubles down on the layer typical design systems leave to product flows:
+						reusable composite components and interaction patterns. It is the highest-leverage UX
+						work for building with AI — {composites} composites and {primitives} primitives today.
 					</p>
 				</div>
 				<div className="pyramid-note acc" id="pyr-foundation" data-open={open === 'foundation'}>
-					<span className="mono">Foundation</span>
+					<span className="mono">The shared foundation</span>
 					<p>
-						Primitives and tokens are the base: base-ui behaviors and the EOS color, type, and
-						spacing ramps. Substrate consumes them; products rarely touch them directly.
+						Substrate also includes UI primitives and EOS tokens. Most design systems cover this
+						foundation well; here it makes the composite UX layer dependable rather than defining the
+						highest-value work.
 					</p>
 				</div>
 			</div>

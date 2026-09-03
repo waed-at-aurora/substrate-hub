@@ -43,14 +43,6 @@ export function StatusMark({ status }: { status: CatalogStatus }) {
 	}
 }
 
-export function Status({ status }: { status: CatalogStatus }) {
-	return (
-		<span className="status status-cell">
-			<StatusMark status={status} />
-			{status}
-		</span>
-	);
-}
 
 /** Drawn external-link arrow — one stroke weight across the icon set. */
 export function ExtArrow() {

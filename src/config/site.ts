@@ -13,7 +13,7 @@ export const site = {
 	repoUrl: 'https://github.com/AuroraEnergyResearch/aurora-ui',
 	cliUrl: 'https://github.com/AuroraEnergyResearch/substrate-cli-v2',
 	atlasUrl: 'https://github.com/AuroraEnergyResearch/atlas',
-	contributionDocPath: 'docs/DesignSystemConsumerWorkflows.md',
+
 	/** Local canonical Storybook (`storybook-substrate`, port 6007). */
 	storybookLocalUrl: 'http://localhost:6007',
 	/** Production Storybook for Substrate. */

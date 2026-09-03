@@ -24,7 +24,7 @@ const LAYERS = [
 		key: 'tokens',
 		number: '01',
 		name: 'Tokens',
-		statement: 'The decisions underneath everything.',
+		statement: 'Decisions beneath every product, made once.',
 		detail: 'Color · type · space · motion',
 		cameraY: 0.25,
 		targetY: -0.35,
@@ -34,7 +34,7 @@ const LAYERS = [
 		key: 'primitives',
 		number: '02',
 		name: 'Primitives',
-		statement: 'Shared components. Build once, reuse everywhere.',
+		statement: 'Shared building blocks mean no team starts from scratch.',
 		detail: '',
 		cameraY: 0.85,
 		targetY: 0.08,
@@ -44,7 +44,7 @@ const LAYERS = [
 		key: 'composites',
 		number: '03',
 		name: 'Composites',
-		statement: 'Complete components, ready to use.',
+		statement: 'Ready-made components save development time.',
 		detail: '',
 		cameraY: 1.45,
 		targetY: 0.52,
@@ -54,7 +54,7 @@ const LAYERS = [
 		key: 'products',
 		number: '04',
 		name: 'Products',
-		statement: 'One unified EOS experience across every product.',
+		statement: 'Every product feels unmistakably EOS.',
 		detail: 'Chronos · Amun · Origin · Solaris · Lumus',
 		cameraY: 2.05,
 		targetY: 1.02,
@@ -349,11 +349,55 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					}
 				};
 
-				const grid = new THREE.GridHelper(15, 30, 0x34343c, 0x1b1b20);
+				const gridSize = 15;
+				const gridDivisions = 30;
+				const gridHalf = gridSize / 2;
+				const gridStep = gridSize / gridDivisions;
+				const gridPositions: number[] = [];
+				const gridColors: number[] = [];
+				const floorColor = new THREE.Color(0x09090b);
+				const secondaryGridColor = new THREE.Color(0x24242a);
+				const axisColor = new THREE.Color(0x3e3e48);
+
+				const appendGridVertex = (x: number, z: number, isAxis: boolean) => {
+					gridPositions.push(x, 0, z);
+					if (isAxis) {
+						gridColors.push(axisColor.r, axisColor.g, axisColor.b);
+						return;
+					}
+
+					const distance = Math.hypot(x, z);
+					const fade = 1 - smootherstep(clamp01((distance - 3.6) / (gridHalf - 3.6)));
+					gridColors.push(
+						floorColor.r + (secondaryGridColor.r - floorColor.r) * fade,
+						floorColor.g + (secondaryGridColor.g - floorColor.g) * fade,
+						floorColor.b + (secondaryGridColor.b - floorColor.b) * fade,
+					);
+				};
+
+				for (let lineIndex = 0; lineIndex <= gridDivisions; lineIndex += 1) {
+					const coordinate = -gridHalf + lineIndex * gridStep;
+					const isAxis = Math.abs(coordinate) < gridStep / 2;
+					for (let segmentIndex = 0; segmentIndex < gridDivisions; segmentIndex += 1) {
+						const start = -gridHalf + segmentIndex * gridStep;
+						const end = start + gridStep;
+						appendGridVertex(coordinate, start, isAxis);
+						appendGridVertex(coordinate, end, isAxis);
+						appendGridVertex(start, coordinate, isAxis);
+						appendGridVertex(end, coordinate, isAxis);
+					}
+				}
+
+				const gridGeometry = new THREE.BufferGeometry();
+				gridGeometry.setAttribute('position', new THREE.Float32BufferAttribute(gridPositions, 3));
+				gridGeometry.setAttribute('color', new THREE.Float32BufferAttribute(gridColors, 3));
+				const gridMaterial = new THREE.LineBasicMaterial({
+					vertexColors: true,
+					transparent: true,
+					opacity: 0.56,
+				});
+				const grid = new THREE.LineSegments(gridGeometry, gridMaterial);
 				grid.position.y = -0.64;
-				const gridMaterial = grid.material as InstanceType<typeof THREE.LineBasicMaterial>;
-				gridMaterial.transparent = true;
-				gridMaterial.opacity = 0.56;
 				scene.add(grid);
 
 				scene.add(new THREE.HemisphereLight(0xf4f4f5, 0x09090b, 0.9));
@@ -757,8 +801,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 			<div className="foundation-sticky">
 				<header className="foundation-copy">
 					<p className="foundation-caption">Fig. 02 · system architecture</p>
-					<h2 id="foundation-title">See how Substrate stacks up.</h2>
-					<p>Scroll to inspect each layer of the system, from shared decisions to distinct products.</p>
+					<h2 id="foundation-title">See what one shared system unlocks.</h2>
+					<p>Fewer repeated decisions, faster delivery, and one consistent EOS experience.</p>
 				</header>
 
 				<div className="foundation-model" ref={modelRef}>
@@ -786,9 +830,9 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							<h3>{layer.statement}</h3>
 							<p>
 								{index === 1
-									? `${primitives} shareable primitives · reuse instead of rebuild`
+									? `${primitives} shared building blocks`
 									: index === 2
-										? `${composites} production-ready composites`
+										? `${composites} ready-made components`
 										: layer.detail}
 							</p>
 						</article>

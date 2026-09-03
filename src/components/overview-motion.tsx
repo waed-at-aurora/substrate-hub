@@ -75,11 +75,11 @@ export function OverviewMotion() {
 			});
 
 			const listGroups = [
-				'#quick-start .codeblock',
+				'#what .overview-boundary > div',
+				'#why [data-persona-trigger]',
 				'#fits .pyramid-note',
+				'#quick-start .codeblock',
 				'#coverage tbody tr',
-				'#happening .feed li',
-				'#resources .resources li',
 			];
 
 			for (const selector of listGroups) {

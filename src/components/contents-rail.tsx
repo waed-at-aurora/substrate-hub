@@ -12,14 +12,13 @@ export const sections = [
 	{ num: '05', title: 'Releases', href: '/releases' },
 	{ num: '06', title: 'Roadmap', href: '/roadmap' },
 	{ num: '07', title: 'Tools & resources', href: '/tools' },
-	{ num: '08', title: 'Updates', href: '/updates' },
 ] as const;
 
 export function ContentsRail() {
 	const pathname = usePathname();
 	const router = useRouter();
 
-	// Direct address: keys 1–8 jump to the numbered section.
+	// Direct address: keys 1–7 jump to the numbered section.
 	useEffect(() => {
 		const onKey = (e: KeyboardEvent) => {
 			if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -48,7 +47,7 @@ export function ContentsRail() {
 				))}
 			</ol>
 			<p className="rail-hint">
-				Direct address: press <kbd>1</kbd>–<kbd>8</kbd> to jump to a section.
+				Direct address: press <kbd>1</kbd>–<kbd>7</kbd> to jump to a section.
 			</p>
 		</nav>
 	);

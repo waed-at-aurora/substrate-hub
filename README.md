@@ -15,7 +15,7 @@ npm run dev    # http://localhost:4400
 The catalog, coverage numbers, forms-pattern map, and updates feed are generated
 from the real `aurora-ui` checkout by `scripts/sync-substrate.mjs` (override the
 location with `AURORA_UI_WORKTREE`). Versioned notes come from the matching
-`packages/substrate` GitHub releases through `scripts/sync-releases.mjs`.
+`packages/substrate/*` GitHub releases through `scripts/sync-releases.mjs`.
 The hub consumes the design system directly — the buttons, inputs, selects,
 checkboxes, and accordions on these pages are the real components, and Fig. 2
 on the overview renders them live.
@@ -28,12 +28,12 @@ Marked visibly in the UI with a `provisional` tag; all live in
 - **Support channel** — currently `#design-system`.
 - **Authoritative planning source** — roadmap Next/Later items await confirmation.
 - ~~Design library (Figma) link — tools page.~~ Row removed at the user's request (2026-08-26).
-- **Events feed** — home + tools pages state none exist yet.
+- **Events feed** — the home page states none exist yet.
 
 ## Design-system updates and deployment
 
 Run **Sync published Substrate release** manually with a published tag such as
-`packages/substrate/0.0.1`. The workflow checks out that exact tag,
+`packages/substrate/1.0.0`. The workflow checks out that exact tag,
 regenerates both data feeds, builds the static site, and opens an auto-merge PR.
 It also accepts a `substrate-released` repository dispatch if a source-side
 notifier is configured later; this repository does not modify `aurora-ui`.
