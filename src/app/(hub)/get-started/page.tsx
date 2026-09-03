@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Troubleshooting } from '@/components/islands';
 import { CopyBlock } from '@/components/copy-block';
 import { Exhibit } from '@/components/exhibit';
+import { SETUP_SUBSTRATE_PROMPT } from '@/lib/prompts';
 import { site } from '@/config/site';
 import { data, latestReleaseVersion } from '@/lib/data';
 
@@ -37,7 +38,7 @@ export default function GetStarted() {
 								label="Prompt for your coding agent"
 								copyLabel="copy prompt"
 								prompt
-								code={`Set up Substrate in this project. Inspect the stack and existing theme first. Run \`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 doctor\`, then preview the install with \`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 install --dry-run\`. If the checks pass, run \`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 install --yes\`, import \`@aurora-ui/substrate/style.css\` at the app root, preserve the existing light or dark theme, render a basic \`Button\`, and verify it visually. Do not hand-edit registry credentials; report any failed check with its recovery command.`}
+								code={SETUP_SUBSTRATE_PROMPT}
 							/>
 							<p className="note agent-skill-note">
 								For repeat use, install the CLI&rsquo;s agent skill once. Claude-compatible agents

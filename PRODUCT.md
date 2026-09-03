@@ -36,7 +36,7 @@ Substrate bridges UI primitives and complete product experiences. Its primary re
 
 ## Capabilities and Constraints
 
-- Confirmed IA (user-specified): Home, Get started, Components, Patterns, Releases, Roadmap, Tools & resources. The standalone Updates page is temporarily omitted; the homepage keeps the lightweight “what’s happening” source-history feed. Homepage sequence: positioning → primary actions → system pyramid → quick start → coverage → what's happening → resources.
+- Confirmed IA (user-specified): Home, Get started, Components, Patterns, Releases, Roadmap, Tools & resources. The standalone Updates page is temporarily omitted; the homepage keeps the lightweight “what’s happening” source-history feed. Homepage sequence: positioning → compact agent-ready setup prompt and continuation cue → system pyramid → quick start → coverage → what's happening → resources.
 - Substrate = the design system implemented at `~/repo/aurora-ui/packages/substrate` (`@aurora-ui/substrate`). The hub renders its components live; the interactive playground renders the `InvestmentCaseSelectionCard` composite (selection states default/selected/active; consumer-composed header, badges, and content).
 - Forms is the one established pattern (`storybook-substrate/src/patterns/forms/FormPatterns.stories.tsx`); the Patterns surface leads with it.
 - Component detail stays shallow: link into the exact Storybook docs, never duplicate API documentation maintained there.

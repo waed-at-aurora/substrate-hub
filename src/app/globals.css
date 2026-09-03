@@ -649,80 +649,6 @@ button {
 	mask-image: linear-gradient(to bottom, transparent 0%, #000 16%, #000 100%);
 }
 
-/* The clicked CTA sends one feathered drafting-grid wave across the stage. */
-.landing-enter-wave {
-	position: absolute;
-	inset: 0;
-	z-index: 0;
-	overflow: hidden;
-	pointer-events: none;
-}
-.landing-enter-wave::before {
-	content: '';
-	position: absolute;
-	inset: 0;
-	background:
-		radial-gradient(
-			ellipse 58% 62% at 50% var(--enter-y),
-			color-mix(in srgb, var(--ink) 14%, transparent) 0%,
-			color-mix(in srgb, var(--ink) 6%, transparent) 46%,
-			transparent 76%
-		),
-		linear-gradient(color-mix(in srgb, var(--ink) 28%, transparent) 1px, transparent 1px) 0 0 /
-			100% var(--portal-grid-unit),
-		linear-gradient(90deg, color-mix(in srgb, var(--ink) 28%, transparent) 1px, transparent 1px) 0 0 /
-			var(--portal-grid-unit) 100%;
-	-webkit-mask-image: linear-gradient(
-		90deg,
-		transparent 0%,
-		rgba(0, 0, 0, 0.16) 20%,
-		#000 46%,
-		#000 54%,
-		rgba(0, 0, 0, 0.16) 80%,
-		transparent 100%
-	);
-	mask-image: linear-gradient(
-		90deg,
-		transparent 0%,
-		rgba(0, 0, 0, 0.16) 20%,
-		#000 46%,
-		#000 54%,
-		rgba(0, 0, 0, 0.16) 80%,
-		transparent 100%
-	);
-	opacity: 0;
-	transform: translate3d(-100%, 0, 0);
-}
-.landing[data-entering='true'] .landing-enter-wave::before {
-	will-change: transform, opacity;
-	animation:
-		landing-enter-wave-travel 640ms linear both,
-		landing-enter-wave-opacity 640ms var(--ease-out) both;
-}
-
-@keyframes landing-enter-wave-travel {
-	from {
-		transform: translate3d(-100%, 0, 0);
-	}
-	to {
-		transform: translate3d(100%, 0, 0);
-	}
-}
-
-@keyframes landing-enter-wave-opacity {
-	0% {
-		opacity: 0;
-	}
-	12% {
-		opacity: 0.58;
-	}
-	72% {
-		opacity: 0.5;
-	}
-	100% {
-		opacity: 0;
-	}
-}
 
 .landing-dateline {
 	max-width: none;
@@ -820,11 +746,67 @@ button {
 	max-width: 52ch;
 }
 
-.landing-actions {
+.landing-scroll-cue {
+	position: absolute;
+	z-index: 3;
+	left: 50%;
+	bottom: 1.8rem;
 	display: flex;
-	gap: 0.75rem;
-	flex-wrap: wrap;
-	margin-top: 1.5rem;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.55rem;
+	transform: translateX(-50%);
+	color: var(--ink);
+	text-align: center;
+}
+
+.landing-scroll-cue p {
+	margin: 0;
+	font-family: var(--font-mono), monospace;
+	font-size: 0.68rem;
+	font-weight: 500;
+	line-height: 1.2;
+	letter-spacing: 0.13em;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.landing-scroll-cue svg {
+	width: 1rem;
+	height: 2.5rem;
+	overflow: visible;
+	fill: none;
+	stroke: var(--ink-2);
+	stroke-width: 1;
+	stroke-linecap: square;
+	stroke-linejoin: miter;
+}
+
+.landing-scroll-cue path {
+	stroke-dasharray: 1;
+	stroke-dashoffset: 1;
+	animation: landing-scroll-trace 1800ms var(--ease-out) infinite;
+}
+
+.landing[data-cue-active='false'] .landing-scroll-cue path {
+	animation-play-state: paused;
+}
+
+@keyframes landing-scroll-trace {
+	0%,
+	12% {
+		opacity: 0.18;
+		stroke-dashoffset: 1;
+	}
+	52%,
+	72% {
+		opacity: 1;
+		stroke-dashoffset: 0;
+	}
+	100% {
+		opacity: 0.18;
+		stroke-dashoffset: 0;
+	}
 }
 
 .landing-readout {
@@ -870,6 +852,8 @@ button {
 		display: none;
 	}
 	.landing-body {
+		flex-direction: column;
+		align-items: stretch;
 		padding-block: 1.25rem 1.4rem;
 		gap: 1rem;
 	}
@@ -881,37 +865,13 @@ button {
 		font-size: 0.93rem;
 		line-height: 1.55;
 	}
-	.landing-actions {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-		gap: 0.65rem;
-		width: 100%;
-	}
-	.landing-actions .action {
-		min-width: 0;
-		min-block-size: 2.9rem;
-		justify-content: center;
-		padding-inline: 0.8rem;
-		font-size: 0.84rem;
-		line-height: 1.2;
-		text-align: center;
-		white-space: normal;
-	}
-	.landing-actions .action-primary {
-		grid-column: 1 / -1;
-	}
-	.landing .install-line {
-		display: flex;
-		width: 100%;
-	}
-	.landing .install-line code {
-		min-width: 0;
-		overflow-x: auto;
-		scrollbar-width: thin;
-	}
-	.landing .install-line .copy-btn {
-		flex: none;
-		min-block-size: 2.75rem;
+	.landing-scroll-cue {
+		position: relative;
+		left: auto;
+		bottom: auto;
+		align-self: center;
+		margin-top: 0.35rem;
+		transform: none;
 	}
 	.landing-starburst {
 		opacity: 0.72;
@@ -1879,6 +1839,32 @@ th.num {
 .codeblock--prompt code {
 	font-family: inherit;
 	font-size: inherit;
+}
+.codeblock--compact {
+	width: min(34rem, 100%);
+	margin-top: 1.1rem;
+}
+
+.codeblock--compact .codeblock-label {
+	padding-right: 8rem;
+}
+
+.codeblock--compact pre {
+	min-width: 0;
+	overflow: hidden;
+	padding: 0.52rem 8rem 0.72rem 1rem;
+	white-space: nowrap;
+}
+
+.codeblock--compact code {
+	display: block;
+	overflow: hidden;
+	color: var(--ink-2);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.landing .codeblock--compact .copy-btn {
+	min-block-size: 2.75rem;
 }
 
 .codeblock-label {
@@ -3191,6 +3177,10 @@ input[data-slot='input'],
 	}
 	.landing-l {
 		animation: none;
+	}
+	.landing-scroll-cue path {
+		animation: none;
+		stroke-dashoffset: 0;
 	}
 	.landing-ghost {
 		transform: none;
