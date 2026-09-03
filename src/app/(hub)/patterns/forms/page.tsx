@@ -66,7 +66,6 @@ export default function FormsPattern() {
 					</a>
 				</div>
 
-
 			</Exhibit>
 		</>
 	);

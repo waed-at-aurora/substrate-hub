@@ -25,7 +25,6 @@ export default function HubLayout({ children }: { children: React.ReactNode }) {
 				<ContentsRail />
 				<main className="page">{children}</main>
 			</div>
-
 		</>
 	);
 }
