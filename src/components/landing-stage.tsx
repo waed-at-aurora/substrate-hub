@@ -100,6 +100,9 @@ export function LandingStage({
 		let lastReadout = '';
 		let lastLightX = '';
 		let lastLightY = '';
+		let lastParallaxX = '';
+		let lastParallaxY = '';
+		let isVisible = true;
 		let letterMetrics: Array<{ element: HTMLSpanElement; x: number; y: number; weight: number }> = [];
 
 		const measure = () => {
@@ -132,6 +135,8 @@ export function LandingStage({
 		root.addEventListener('pointermove', onMove, { passive: true });
 
 		const frame = (time: number) => {
+			raf = 0;
+			if (!isVisible || document.hidden) return;
 			if (width < 1 || height < 1) {
 				raf = requestAnimationFrame(frame);
 				return;
@@ -156,8 +161,14 @@ export function LandingStage({
 				lastLightX = lightX;
 				lastLightY = lightY;
 			}
-			root.style.setProperty('--pnx', (normalizedX - 0.5).toFixed(3));
-			root.style.setProperty('--pny', (normalizedY - 0.5).toFixed(3));
+			const parallaxX = (normalizedX - 0.5).toFixed(3);
+			const parallaxY = (normalizedY - 0.5).toFixed(3);
+			if (parallaxX !== lastParallaxX || parallaxY !== lastParallaxY) {
+				root.style.setProperty('--pnx', parallaxX);
+				root.style.setProperty('--pny', parallaxY);
+				lastParallaxX = parallaxX;
+				lastParallaxY = parallaxY;
+			}
 
 			for (const metric of letterMetrics) {
 				const distance = Math.hypot(metric.x - lx, metric.y - ly);
@@ -179,11 +190,31 @@ export function LandingStage({
 
 			raf = requestAnimationFrame(frame);
 		};
-		raf = requestAnimationFrame(frame);
+		const start = () => {
+			if (!raf && isVisible && !document.hidden) raf = requestAnimationFrame(frame);
+		};
+		const stop = () => {
+			if (raf) cancelAnimationFrame(raf);
+			raf = 0;
+		};
+		const intersectionObserver = new IntersectionObserver(([entry]) => {
+			isVisible = entry?.isIntersecting ?? false;
+			if (isVisible) start();
+			else stop();
+		});
+		intersectionObserver.observe(root);
+		const onVisibilityChange = () => {
+			if (document.hidden) stop();
+			else start();
+		};
+		document.addEventListener('visibilitychange', onVisibilityChange);
+		start();
 
 		return () => {
-			cancelAnimationFrame(raf);
+			stop();
 			resizeObserver.disconnect();
+			intersectionObserver.disconnect();
+			document.removeEventListener('visibilitychange', onVisibilityChange);
 			root.removeEventListener('pointermove', onMove);
 		};
 	}, []);

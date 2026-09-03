@@ -263,25 +263,43 @@ export default function StarBurst({
 			return () => resizeObserver.disconnect();
 		}
 		let isVisible = true;
-		const intersectionObserver = new IntersectionObserver((entries) => {
-			isVisible = entries[0]?.isIntersecting ?? false;
-		});
-		intersectionObserver.observe(container);
-
 		let animationFrame = 0;
 		let previousTime = performance.now();
 		const loop = (time: number) => {
+			animationFrame = 0;
+			if (!isVisible || document.hidden) return;
 			const delta = (time - previousTime) / 1000;
 			previousTime = time;
-			if (!document.hidden && isVisible) drawFrame(delta);
+			drawFrame(delta);
 			animationFrame = requestAnimationFrame(loop);
 		};
-		animationFrame = requestAnimationFrame(loop);
+		const start = () => {
+			if (animationFrame || !isVisible || document.hidden) return;
+			previousTime = performance.now();
+			animationFrame = requestAnimationFrame(loop);
+		};
+		const stop = () => {
+			if (animationFrame) cancelAnimationFrame(animationFrame);
+			animationFrame = 0;
+		};
+		const intersectionObserver = new IntersectionObserver(([entry]) => {
+			isVisible = entry?.isIntersecting ?? false;
+			if (isVisible) start();
+			else stop();
+		});
+		intersectionObserver.observe(container);
+		const onVisibilityChange = () => {
+			if (document.hidden) stop();
+			else start();
+		};
+		document.addEventListener('visibilitychange', onVisibilityChange);
+		start();
 
 		return () => {
-			cancelAnimationFrame(animationFrame);
+			stop();
 			resizeObserver.disconnect();
 			intersectionObserver.disconnect();
+			document.removeEventListener('visibilitychange', onVisibilityChange);
 		};
 	}, [speed, starCount, color, centerX, centerY, starSize, opacity, flowerIntensity, twinkleSpeed]);
 

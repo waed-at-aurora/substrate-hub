@@ -223,7 +223,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					antialias: true,
 					powerPreference: 'high-performance',
 				});
-				renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+				let rendererPixelRatio = Math.min(window.devicePixelRatio, window.innerWidth <= 832 ? 1.5 : 1.75);
+				renderer.setPixelRatio(rendererPixelRatio);
 				renderer.outputColorSpace = THREE.SRGBColorSpace;
 				renderer.setClearColor(0x09090b, 0);
 
@@ -946,6 +947,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					items: RiseItem[];
 					progress: number;
 					target: number;
+					visible: boolean;
+					lastOpacity: number;
 					sparks: InstanceType<typeof THREE.Points> | null;
 					sparkBase: Float32Array | null;
 					sparkDirections: Float32Array | null;
@@ -971,6 +974,30 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					mesh.position.set(x, y, z);
 					return mesh;
 				};
+				const instanceScratch = new THREE.Object3D();
+				const makeStaticInstances = (
+					geometry: (typeof miniGeometries)[keyof typeof miniGeometries],
+					material: InstanceType<typeof THREE.Material>,
+					count: number,
+					configure: (instance: InstanceType<typeof THREE.Object3D>, index: number) => void,
+					castShadow = false,
+				) => {
+					const instances = new THREE.InstancedMesh(geometry, material, count);
+					for (let index = 0; index < count; index += 1) {
+						instanceScratch.position.set(0, 0, 0);
+						instanceScratch.rotation.set(0, 0, 0);
+						instanceScratch.scale.set(1, 1, 1);
+						configure(instanceScratch, index);
+						instanceScratch.updateMatrix();
+						instances.setMatrixAt(index, instanceScratch.matrix);
+					}
+					instances.instanceMatrix.setUsage(THREE.StaticDrawUsage);
+					instances.instanceMatrix.needsUpdate = true;
+					instances.computeBoundingSphere();
+					instances.castShadow = castShadow;
+					return instances;
+				};
+
 
 				const addMiniLabel = (
 					group: InstanceType<typeof THREE.Group>,
@@ -1068,19 +1095,23 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							lowerRail.position.set(0.035, -0.124, 0.057);
 							group.add(lowerRail);
 
-							for (let measurement = 0; measurement <= 24; measurement += 1) {
-								const isMajor = measurement % 4 === 0;
-								const isMedium = measurement % 2 === 0;
-								const tickScale = isMajor ? 1 : isMedium ? 0.72 : 0.45;
-								const tick = new THREE.Mesh(miniGeometries.rulerTick, inkMaterial);
-								tick.scale.y = tickScale;
-								tick.position.set(
-									-0.665 + (measurement / 24) * 1.42,
-									0.101 - 0.045 * tickScale,
-									0.074,
-								);
-								group.add(tick);
-							}
+							const ticks = makeStaticInstances(
+								miniGeometries.rulerTick,
+								inkMaterial,
+								25,
+								(tick, measurement) => {
+									const isMajor = measurement % 4 === 0;
+									const isMedium = measurement % 2 === 0;
+									const tickScale = isMajor ? 1 : isMedium ? 0.72 : 0.45;
+									tick.scale.y = tickScale;
+									tick.position.set(
+										-0.665 + (measurement / 24) * 1.42,
+										0.101 - 0.045 * tickScale,
+										0.074,
+									);
+								},
+							);
+							group.add(ticks);
 
 							const printMaterial = makeTokenPrint(960, 110, (context, width, height) => {
 								context.fillStyle = '#111113';
@@ -1175,17 +1206,16 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							foundation.castShadow = true;
 							foundation.receiveShadow = true;
 							group.add(foundation);
-							for (const x of [-0.27, 0.27]) {
-								for (const z of [-0.135, 0.135]) {
-									const foot = new THREE.Mesh(
-										miniGeometries.turbineFoot,
-										windMaterials.foundation,
-									);
-									foot.position.set(x, -0.497, z);
-									foot.castShadow = true;
-									group.add(foot);
-								}
-							}
+							const feet = makeStaticInstances(
+								miniGeometries.turbineFoot,
+								windMaterials.foundation,
+								4,
+								(foot, index) => {
+									foot.position.set(index < 2 ? -0.27 : 0.27, -0.497, index % 2 === 0 ? -0.135 : 0.135);
+								},
+								true,
+							);
+							group.add(feet);
 
 
 							const foundationInset = new THREE.Mesh(
@@ -1200,19 +1230,22 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							flange.position.y = -0.315;
 							flange.castShadow = true;
 							group.add(flange);
-							for (let boltIndex = 0; boltIndex < 8; boltIndex += 1) {
-								const boltAngle = (boltIndex / 8) * Math.PI * 2;
-								const bolt = new THREE.Mesh(
+							[windMaterials.brass, windMaterials.copper].forEach((material, materialIndex) => {
+								const bolts = makeStaticInstances(
 									miniGeometries.turbineBolt,
-									boltIndex % 2 === 0 ? windMaterials.brass : windMaterials.copper,
+									material,
+									4,
+									(bolt, index) => {
+										const boltAngle = ((index * 2 + materialIndex) / 8) * Math.PI * 2;
+										bolt.position.set(
+											Math.cos(boltAngle) * 0.135,
+											-0.27,
+											Math.sin(boltAngle) * 0.135,
+										);
+									},
 								);
-								bolt.position.set(
-									Math.cos(boltAngle) * 0.135,
-									-0.27,
-									Math.sin(boltAngle) * 0.135,
-								);
-								group.add(bolt);
-							}
+								group.add(bolts);
+							});
 
 							const tower = new THREE.Mesh(miniGeometries.turbineTower, windMaterials.tower);
 							tower.position.y = 0.055;
@@ -1269,14 +1302,15 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							);
 							nacellePanel.position.set(0.095, 0.46, 0.137);
 							group.add(nacellePanel);
-							for (let ventIndex = 0; ventIndex < 3; ventIndex += 1) {
-								const vent = new THREE.Mesh(
-									miniGeometries.turbineVent,
-									windMaterials.joint,
-								);
-								vent.position.set(0.11, 0.438 + ventIndex * 0.022, 0.148);
-								group.add(vent);
-							}
+							const vents = makeStaticInstances(
+								miniGeometries.turbineVent,
+								windMaterials.joint,
+								3,
+								(vent, index) => {
+									vent.position.set(0.11, 0.438 + index * 0.022, 0.148);
+								},
+							);
+							group.add(vents);
 
 							const generator = new THREE.Mesh(
 								miniGeometries.turbineGenerator,
@@ -1296,24 +1330,28 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 
 							const rotor = new THREE.Group();
 							rotor.position.set(-0.095, 0.46, 0.245);
-							for (let bladeIndex = 0; bladeIndex < 3; bladeIndex += 1) {
-								const bladeMount = new THREE.Group();
-								bladeMount.rotation.z = (bladeIndex * Math.PI * 2) / 3;
-								const bladeRoot = new THREE.Mesh(
-									miniGeometries.turbineBladeRoot,
-									windMaterials.joint,
-								);
-								bladeRoot.position.y = 0.045;
-								bladeRoot.castShadow = true;
-								bladeMount.add(bladeRoot);
-								const blade = new THREE.Mesh(
-									miniGeometries.turbineBlade,
-									windMaterials.blade,
-								);
-								blade.castShadow = true;
-								bladeMount.add(blade);
-								rotor.add(bladeMount);
-							}
+							const bladeRoots = makeStaticInstances(
+								miniGeometries.turbineBladeRoot,
+								windMaterials.joint,
+								3,
+								(bladeRoot, index) => {
+									const angle = (index * Math.PI * 2) / 3;
+									bladeRoot.position.set(-Math.sin(angle) * 0.045, Math.cos(angle) * 0.045, 0);
+									bladeRoot.rotation.z = angle;
+								},
+								true,
+							);
+							rotor.add(bladeRoots);
+							const blades = makeStaticInstances(
+								miniGeometries.turbineBlade,
+								windMaterials.blade,
+								3,
+								(blade, index) => {
+									blade.rotation.z = (index * Math.PI * 2) / 3;
+								},
+								true,
+							);
+							rotor.add(blades);
 							const hub = new THREE.Mesh(miniGeometries.turbineHub, windMaterials.nacelle);
 							hub.scale.set(1, 1, 0.82);
 							hub.castShadow = true;
@@ -1346,49 +1384,56 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							foundation.receiveShadow = true;
 							group.add(foundation);
 
-							([-0.32, 0.32] as const).forEach((x, index) => {
-								const foot = new THREE.Mesh(
-									miniGeometries.solarFoot,
-									solarMaterials.foundation,
-								);
-								foot.position.set(x, -0.37, -0.075);
-								group.add(foot);
-
-								const upright = new THREE.Mesh(
-									miniGeometries.solarSupportBeam,
-									solarMaterials.support,
-								);
-								upright.scale.y = 0.74;
-								upright.position.set(x, -0.19, -0.09);
-								upright.rotation.z = index === 0 ? -0.16 : 0.16;
-								upright.rotation.x = -0.12;
-								group.add(upright);
-
-								const rearBrace = new THREE.Mesh(
-									miniGeometries.solarSupportBeam,
-									solarMaterials.support,
-								);
-								rearBrace.scale.y = 0.62;
-								rearBrace.position.set(x, -0.21, 0.04);
-								rearBrace.rotation.x = 0.58;
-								group.add(rearBrace);
-
-								const pivot = new THREE.Mesh(
-									miniGeometries.solarPivot,
-									solarMaterials.brass,
-								);
-								pivot.rotation.x = Math.PI / 2;
-								pivot.position.set(x, -0.055, -0.02);
-								group.add(pivot);
-
-								const fastener = new THREE.Mesh(
-									miniGeometries.solarFastener,
-									solarMaterials.copper,
-								);
-								fastener.rotation.x = Math.PI / 2;
-								fastener.position.set(x, -0.055, 0.022);
-								group.add(fastener);
-							});
+							const solarMountXs = [-0.32, 0.32] as const;
+							const solarFeet = makeStaticInstances(
+								miniGeometries.solarFoot,
+								solarMaterials.foundation,
+								2,
+								(foot, index) => foot.position.set(solarMountXs[index], -0.37, -0.075),
+							);
+							group.add(solarFeet);
+							const uprights = makeStaticInstances(
+								miniGeometries.solarSupportBeam,
+								solarMaterials.support,
+								2,
+								(upright, index) => {
+									upright.scale.y = 0.74;
+									upright.position.set(solarMountXs[index], -0.19, -0.09);
+									upright.rotation.set(-0.12, 0, index === 0 ? -0.16 : 0.16);
+								},
+							);
+							group.add(uprights);
+							const rearBraces = makeStaticInstances(
+								miniGeometries.solarSupportBeam,
+								solarMaterials.support,
+								2,
+								(rearBrace, index) => {
+									rearBrace.scale.y = 0.62;
+									rearBrace.position.set(solarMountXs[index], -0.21, 0.04);
+									rearBrace.rotation.x = 0.58;
+								},
+							);
+							group.add(rearBraces);
+							const pivots = makeStaticInstances(
+								miniGeometries.solarPivot,
+								solarMaterials.brass,
+								2,
+								(pivot, index) => {
+									pivot.rotation.x = Math.PI / 2;
+									pivot.position.set(solarMountXs[index], -0.055, -0.02);
+								},
+							);
+							group.add(pivots);
+							const fasteners = makeStaticInstances(
+								miniGeometries.solarFastener,
+								solarMaterials.copper,
+								2,
+								(fastener, index) => {
+									fastener.rotation.x = Math.PI / 2;
+									fastener.position.set(solarMountXs[index], -0.055, 0.022);
+								},
+							);
+							group.add(fasteners);
 							const crossBrace = new THREE.Mesh(
 								miniGeometries.solarCrossBrace,
 								solarMaterials.support,
@@ -1417,20 +1462,26 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 								solarMaterials.cellB,
 								solarMaterials.cellC,
 							] as const;
+							const solarCellPositions: Array<Array<readonly [number, number]>> = [[], [], []];
 							for (let row = 0; row < 4; row += 1) {
 								for (let column = 0; column < 8; column += 1) {
-									const cell = new THREE.Mesh(
-										miniGeometries.solarCell,
-										cellMaterials[(row * 5 + column * 3) % cellMaterials.length],
-									);
-									cell.position.set(
+									const materialIndex = (row * 5 + column * 3) % cellMaterials.length;
+									solarCellPositions[materialIndex].push([
 										(column - 3.5) * 0.146,
 										(row - 1.5) * 0.15,
-										0.078,
-									);
-									panel.add(cell);
+									]);
 								}
 							}
+							cellMaterials.forEach((material, materialIndex) => {
+								const positions = solarCellPositions[materialIndex];
+								const cells = makeStaticInstances(
+									miniGeometries.solarCell,
+									material,
+									positions.length,
+									(cell, index) => cell.position.set(positions[index][0], positions[index][1], 0.078),
+								);
+								panel.add(cells);
+							});
 
 							const glass = new THREE.Mesh(
 								miniGeometries.solarGlass,
@@ -1438,16 +1489,15 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							);
 							glass.position.z = 0.094;
 							panel.add(glass);
-							([-0.58, 0.58] as const).forEach((x) => {
-								([-0.3, 0.3] as const).forEach((y) => {
-									const clip = new THREE.Mesh(
-										miniGeometries.solarMountClip,
-										solarMaterials.brass,
-									);
-									clip.position.set(x, y, 0.094);
-									panel.add(clip);
-								});
-							});
+							const clips = makeStaticInstances(
+								miniGeometries.solarMountClip,
+								solarMaterials.brass,
+								4,
+								(clip, index) => {
+									clip.position.set(index < 2 ? -0.58 : 0.58, index % 2 === 0 ? -0.3 : 0.3, 0.094);
+								},
+							);
+							panel.add(clips);
 
 							const junctionBox = new THREE.Mesh(
 								miniGeometries.solarJunctionBox,
@@ -1455,14 +1505,15 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							);
 							junctionBox.position.set(0.34, -0.255, -0.075);
 							panel.add(junctionBox);
-							([-0.045, 0.045] as const).forEach((x) => {
-								const connector = new THREE.Mesh(
-									miniGeometries.solarConnector,
-									solarMaterials.copper,
-								);
-								connector.position.set(0.34 + x, -0.35, -0.075);
-								panel.add(connector);
-							});
+							const connectors = makeStaticInstances(
+								miniGeometries.solarConnector,
+								solarMaterials.copper,
+								2,
+								(connector, index) => {
+									connector.position.set(0.34 + (index === 0 ? -0.045 : 0.045), -0.35, -0.075);
+								},
+							);
+							panel.add(connectors);
 
 							const reflection = new THREE.Mesh(
 								miniGeometries.solarReflection,
@@ -1530,33 +1581,49 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							group.add(frontPanel);
 
 							const moduleXs = [-0.246, -0.082, 0.082, 0.246] as const;
-							moduleXs.forEach((x, index) => {
-								const module = new THREE.Mesh(miniGeometries.batteryModule, batteryMaterials.module);
-								module.position.set(x, 0.065, 0.202);
-								group.add(module);
+							const modules = makeStaticInstances(
+								miniGeometries.batteryModule,
+								batteryMaterials.module,
+								moduleXs.length,
+								(module, index) => module.position.set(moduleXs[index], 0.065, 0.202),
+							);
+							group.add(modules);
+							const moduleRails = makeStaticInstances(
+								miniGeometries.batteryModuleRail,
+								batteryMaterials.rubber,
+								moduleXs.length * 3,
+								(rail, index) => {
+									rail.position.set(moduleXs[Math.floor(index / 3)], 0.001 + (index % 3) * 0.064, 0.22);
+								},
+							);
+							group.add(moduleRails);
+							const activeModuleStatuses = makeStaticInstances(
+								miniGeometries.batteryModuleRail,
+								batteryMaterials.cyan,
+								3,
+								(status, index) => {
+									status.scale.x = 0.54;
+									status.position.set(moduleXs[index], 0.158, 0.222);
+								},
+							);
+							group.add(activeModuleStatuses);
+							const inactiveModuleStatus = new THREE.Mesh(
+								miniGeometries.batteryModuleRail,
+								batteryMaterials.cyanOff,
+							);
+							inactiveModuleStatus.scale.x = 0.54;
+							inactiveModuleStatus.position.set(moduleXs[3], 0.158, 0.222);
+							group.add(inactiveModuleStatus);
 
-								[-0.064, 0, 0.064].forEach((moduleY) => {
-									const rail = new THREE.Mesh(miniGeometries.batteryModuleRail, batteryMaterials.rubber);
-									rail.position.set(x, 0.065 + moduleY, 0.22);
-									group.add(rail);
-								});
-
-								const moduleStatus = new THREE.Mesh(
-									miniGeometries.batteryModuleRail,
-									index < 3 ? batteryMaterials.cyan : batteryMaterials.cyanOff,
-								);
-								moduleStatus.scale.x = 0.54;
-								moduleStatus.position.set(x, 0.158, 0.222);
-								group.add(moduleStatus);
-							});
-
-							([-0.245, 0.245] as const).forEach((x, index) => {
-								const mount = new THREE.Mesh(
-									miniGeometries.batteryTerminalMount,
-									batteryMaterials.rubber,
-								);
-								mount.position.set(x, 0.385, -0.015);
-								group.add(mount);
+							const terminalXs = [-0.245, 0.245] as const;
+							const terminalMounts = makeStaticInstances(
+								miniGeometries.batteryTerminalMount,
+								batteryMaterials.rubber,
+								2,
+								(mount, index) => mount.position.set(terminalXs[index], 0.385, -0.015),
+							);
+							group.add(terminalMounts);
+							terminalXs.forEach((x, index) => {
 
 								const terminal = new THREE.Mesh(
 									miniGeometries.batteryTerminal,
@@ -1598,44 +1665,57 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							});
 
 							const handle = new THREE.Group();
-							([-0.2, 0.2] as const).forEach((x) => {
-								const mount = new THREE.Mesh(miniGeometries.batteryFastener, batteryMaterials.copper);
-								mount.position.set(x, 0.378, -0.105);
-								handle.add(mount);
-								const post = new THREE.Mesh(miniGeometries.batteryHandlePost, batteryMaterials.rubber);
-								post.position.set(x, 0.416, -0.105);
-								post.rotation.z = x < 0 ? -0.18 : 0.18;
-								handle.add(post);
-							});
+							const handleMounts = makeStaticInstances(
+								miniGeometries.batteryFastener,
+								batteryMaterials.copper,
+								2,
+								(mount, index) => mount.position.set(index === 0 ? -0.2 : 0.2, 0.378, -0.105),
+							);
+							handle.add(handleMounts);
+							const handlePosts = makeStaticInstances(
+								miniGeometries.batteryHandlePost,
+								batteryMaterials.rubber,
+								2,
+								(post, index) => {
+									post.position.set(index === 0 ? -0.2 : 0.2, 0.416, -0.105);
+									post.rotation.z = index === 0 ? -0.18 : 0.18;
+								},
+							);
+							handle.add(handlePosts);
 							const grip = new THREE.Mesh(miniGeometries.batteryHandleGrip, batteryMaterials.rubber);
 							grip.position.set(0, 0.475, -0.105);
 							handle.add(grip);
 							group.add(handle);
 
-							([-0.29, 0.29] as const).forEach((x) => {
-								const foot = new THREE.Mesh(miniGeometries.batteryFoot, batteryMaterials.rubber);
-								foot.position.set(x, -0.342, 0.015);
-								group.add(foot);
-							});
+							const batteryFeet = makeStaticInstances(
+								miniGeometries.batteryFoot,
+								batteryMaterials.rubber,
+								2,
+								(foot, index) => foot.position.set(index === 0 ? -0.29 : 0.29, -0.342, 0.015),
+							);
+							group.add(batteryFeet);
 
-							for (let ventIndex = 0; ventIndex < 4; ventIndex += 1) {
-								const vent = new THREE.Mesh(miniGeometries.batteryVent, batteryMaterials.rubber);
-								vent.position.set(0.21 + ventIndex * 0.042, 0.267, 0.18);
-								vent.rotation.z = Math.PI / 2;
-								group.add(vent);
-							}
+							const batteryVents = makeStaticInstances(
+								miniGeometries.batteryVent,
+								batteryMaterials.rubber,
+								4,
+								(vent, index) => {
+									vent.position.set(0.21 + index * 0.042, 0.267, 0.18);
+									vent.rotation.z = Math.PI / 2;
+								},
+							);
+							group.add(batteryVents);
 
-							([-0.322, 0.322] as const).forEach((x) => {
-								([-0.174, 0.174] as const).forEach((y) => {
-									const fastener = new THREE.Mesh(
-										miniGeometries.batteryFastener,
-										batteryMaterials.copper,
-									);
+							const batteryFasteners = makeStaticInstances(
+								miniGeometries.batteryFastener,
+								batteryMaterials.copper,
+								4,
+								(fastener, index) => {
 									fastener.rotation.x = Math.PI / 2;
-									fastener.position.set(x, y, 0.199);
-									group.add(fastener);
-								});
-							});
+									fastener.position.set(index < 2 ? -0.322 : 0.322, index % 2 === 0 ? -0.174 : 0.174, 0.199);
+								},
+							);
+							group.add(batteryFasteners);
 
 							const display = new THREE.Mesh(miniGeometries.batteryDisplay, batteryMaterials.rubber);
 							display.position.set(-0.075, -0.235, 0.202);
@@ -1657,15 +1737,17 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							);
 							labelPlate.position.set(0.254, -0.238, 0.204);
 							group.add(labelPlate);
-							[-0.012, 0.012].forEach((lineY) => {
-								const labelLine = new THREE.Mesh(
-									miniGeometries.batteryLabelLine,
-									batteryMaterials.copper,
-								);
-								labelLine.position.set(0.254, -0.238 + lineY, 0.215);
-								labelLine.scale.x = lineY < 0 ? 0.68 : 1;
-								group.add(labelLine);
-							});
+							const labelLines = makeStaticInstances(
+								miniGeometries.batteryLabelLine,
+								batteryMaterials.copper,
+								2,
+								(labelLine, index) => {
+									const lineY = index === 0 ? -0.012 : 0.012;
+									labelLine.position.set(0.254, -0.238 + lineY, 0.215);
+									labelLine.scale.x = lineY < 0 ? 0.68 : 1;
+								},
+							);
+							group.add(labelLines);
 
 							const warning = new THREE.Mesh(miniGeometries.batteryWarning, batteryMaterials.yellow);
 							warning.position.set(0.255, -0.09, 0.202);
@@ -1733,17 +1815,25 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 								rail.position.set(0, -0.258, z);
 								platform.add(rail);
 							});
-							[-0.9, -0.48, 0.02, 0.47, 0.94].forEach((x) => {
-								const pad = new THREE.Mesh(
-									miniGeometries.microEquipmentPad,
-									microgridMaterials.housing,
-								);
-								pad.position.set(x, -0.252, 0.02);
-								platform.add(pad);
-							});
-							[-0.98, -0.6, -0.2, 0.2, 0.6, 0.98].forEach((x) => {
-								addFastener(platform, x, -0.242, 0.32);
-							});
+							const equipmentPadXs = [-0.9, -0.48, 0.02, 0.47, 0.94] as const;
+							const equipmentPads = makeStaticInstances(
+								miniGeometries.microEquipmentPad,
+								microgridMaterials.housing,
+								equipmentPadXs.length,
+								(pad, index) => pad.position.set(equipmentPadXs[index], -0.252, 0.02),
+							);
+							platform.add(equipmentPads);
+							const platformFastenerXs = [-0.98, -0.6, -0.2, 0.2, 0.6, 0.98] as const;
+							const platformFasteners = makeStaticInstances(
+								miniGeometries.microFastener,
+								microgridMaterials.brass,
+								platformFastenerXs.length,
+								(fastener, index) => {
+									fastener.rotation.x = Math.PI / 2;
+									fastener.position.set(platformFastenerXs[index], -0.242, 0.32);
+								},
+							);
+							platform.add(platformFasteners);
 							registerPart(platform, 0.02);
 
 							const wind = new THREE.Group();
@@ -1785,16 +1875,17 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							wind.add(shaft);
 							const windRotor = new THREE.Group();
 							windRotor.position.set(-0.01, 0.67, 0.15);
-							for (let bladeIndex = 0; bladeIndex < 3; bladeIndex += 1) {
-								const blade = new THREE.Mesh(
-									miniGeometries.windBlade,
-									microgridMaterials.offWhite,
-								);
-								blade.scale.setScalar(0.36);
-								blade.rotation.z = (bladeIndex * Math.PI * 2) / 3;
-								blade.castShadow = true;
-								windRotor.add(blade);
-							}
+							const windBlades = makeStaticInstances(
+								miniGeometries.windBlade,
+								microgridMaterials.offWhite,
+								3,
+								(blade, index) => {
+									blade.scale.setScalar(0.36);
+									blade.rotation.z = (index * Math.PI * 2) / 3;
+								},
+								true,
+							);
+							windRotor.add(windBlades);
 							const hub = new THREE.Mesh(
 								miniGeometries.microWindHub,
 								microgridMaterials.brass,
@@ -1844,42 +1935,48 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 								);
 								backing.position.z = 0.022;
 								panel.add(backing);
-								for (let row = 0; row < 3; row += 1) {
-									for (let column = 0; column < 5; column += 1) {
-										const cell = new THREE.Mesh(
-											miniGeometries.microSolarCell,
-											microgridMaterials.solarCell,
-										);
+								const cells = makeStaticInstances(
+									miniGeometries.microSolarCell,
+									microgridMaterials.solarCell,
+									15,
+									(cell, index) => {
+										const row = Math.floor(index / 5);
+										const column = index % 5;
 										cell.position.set((column - 2) * 0.077, (row - 1) * 0.062, 0.036);
-										panel.add(cell);
-									}
-								}
-								[-0.092, 0.092].forEach((y) => {
-									const busRail = new THREE.Mesh(
-										miniGeometries.microSolarRail,
-										microgridMaterials.copper,
-									);
-									busRail.position.set(0, y, 0.042);
-									panel.add(busRail);
-								});
+									},
+								);
+								panel.add(cells);
+								const busRails = makeStaticInstances(
+									miniGeometries.microSolarRail,
+									microgridMaterials.copper,
+									2,
+									(busRail, index) => busRail.position.set(0, index === 0 ? -0.092 : 0.092, 0.042),
+								);
+								panel.add(busRails);
 								solar.add(panel);
-								[-0.125, 0.125].forEach((supportX) => {
-									const support = new THREE.Mesh(
-										miniGeometries.microSolarLeg,
-										microgridMaterials.frame,
-									);
-									support.scale.y = 0.68;
-									support.position.set(panelX + supportX, 0.08, -0.035);
-									support.rotation.z = supportX < 0 ? -0.26 : 0.26;
-									solar.add(support);
-									const foot = new THREE.Mesh(
-										miniGeometries.microMountFoot,
-										microgridMaterials.foundation,
-									);
-									foot.scale.set(0.48, 0.5, 0.58);
-									foot.position.set(panelX + supportX, 0.012, -0.035);
-									solar.add(foot);
-								});
+								const supports = makeStaticInstances(
+									miniGeometries.microSolarLeg,
+									microgridMaterials.frame,
+									2,
+									(support, index) => {
+										const supportX = index === 0 ? -0.125 : 0.125;
+										support.scale.y = 0.68;
+										support.position.set(panelX + supportX, 0.08, -0.035);
+										support.rotation.z = supportX < 0 ? -0.26 : 0.26;
+									},
+								);
+								solar.add(supports);
+								const feet = makeStaticInstances(
+									miniGeometries.microMountFoot,
+									microgridMaterials.foundation,
+									2,
+									(foot, index) => {
+										const supportX = index === 0 ? -0.125 : 0.125;
+										foot.scale.set(0.48, 0.5, 0.58);
+										foot.position.set(panelX + supportX, 0.012, -0.035);
+									},
+								);
+								solar.add(feet);
 							});
 							const solarCombiner = new THREE.Mesh(
 								miniGeometries.microTerminalBlock,
@@ -1912,34 +2009,46 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							);
 							inverterDoor.position.set(0, 0.22, 0.13);
 							inverter.add(inverterDoor);
-							([-0.17, 0.17] as const).forEach((x) => {
-								([-0.12, 0.12] as const).forEach((y) => {
-									addFastener(inverter, x, 0.22 + y, 0.145);
-								});
-							});
-							[-0.11, -0.075, -0.04].forEach((y) => {
-								const vent = new THREE.Mesh(
-									miniGeometries.microVent,
-									microgridMaterials.rubber,
-								);
-								vent.position.set(-0.095, 0.22 + y, 0.149);
-								inverter.add(vent);
-							});
+							const inverterFasteners = makeStaticInstances(
+								miniGeometries.microFastener,
+								microgridMaterials.brass,
+								4,
+								(fastener, index) => {
+									fastener.rotation.x = Math.PI / 2;
+									fastener.position.set(index < 2 ? -0.17 : 0.17, 0.22 + (index % 2 === 0 ? -0.12 : 0.12), 0.145);
+								},
+							);
+							inverter.add(inverterFasteners);
+							const inverterVents = makeStaticInstances(
+								miniGeometries.microVent,
+								microgridMaterials.rubber,
+								3,
+								(vent, index) => vent.position.set(-0.095, 0.11 + index * 0.035, 0.149),
+							);
+							inverter.add(inverterVents);
 							const inverterHandle = new THREE.Mesh(
 								miniGeometries.microHandle,
 								microgridMaterials.brass,
 							);
 							inverterHandle.position.set(0.15, 0.22, 0.15);
 							inverter.add(inverterHandle);
-							[0, 0.045, 0.09].forEach((x, index) => {
-								const status = new THREE.Mesh(
-									miniGeometries.microIndicator,
-									index < 2 ? microgridMaterials.cyan : microgridMaterials.cyanOff,
-								);
-								status.scale.set(0.48, 0.7, 0.7);
-								status.position.set(-0.045 + x, 0.345, 0.149);
-								inverter.add(status);
-							});
+							const activeStatuses = makeStaticInstances(
+								miniGeometries.microIndicator,
+								microgridMaterials.cyan,
+								2,
+								(status, index) => {
+									status.scale.set(0.48, 0.7, 0.7);
+									status.position.set(-0.045 + index * 0.045, 0.345, 0.149);
+								},
+							);
+							inverter.add(activeStatuses);
+							const inactiveStatus = new THREE.Mesh(
+								miniGeometries.microIndicator,
+								microgridMaterials.cyanOff,
+							);
+							inactiveStatus.scale.set(0.48, 0.7, 0.7);
+							inactiveStatus.position.set(0.045, 0.345, 0.149);
+							inverter.add(inactiveStatus);
 							const inverterWarning = new THREE.Mesh(
 								miniGeometries.batteryWarning,
 								microgridMaterials.yellow,
@@ -1954,31 +2063,37 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							inverterBolt.scale.setScalar(0.42);
 							inverterBolt.position.set(0.12, 0.075, 0.152);
 							inverter.add(inverterBolt);
-							([-0.16, 0.16] as const).forEach((x) => {
-								const terminal = new THREE.Mesh(
-									miniGeometries.microTerminalBlock,
-									microgridMaterials.copper,
-								);
-								terminal.scale.set(0.55, 0.7, 0.7);
-								terminal.position.set(x, 0.09, 0.185);
-								inverter.add(terminal);
-								const entry = new THREE.Mesh(
-									miniGeometries.microCableEntry,
-									microgridMaterials.rubber,
-								);
-								entry.rotation.x = Math.PI / 2;
-								entry.position.set(x, 0.09, 0.216);
-								inverter.add(entry);
-							});
-							([-0.15, 0.15] as const).forEach((x) => {
-								const foot = new THREE.Mesh(
-									miniGeometries.microMountFoot,
-									microgridMaterials.foundation,
-								);
-								foot.scale.set(0.55, 0.55, 0.72);
-								foot.position.set(x, 0.012, 0);
-								inverter.add(foot);
-							});
+							const inverterTerminalXs = [-0.16, 0.16] as const;
+							const inverterTerminals = makeStaticInstances(
+								miniGeometries.microTerminalBlock,
+								microgridMaterials.copper,
+								2,
+								(terminal, index) => {
+									terminal.scale.set(0.55, 0.7, 0.7);
+									terminal.position.set(inverterTerminalXs[index], 0.09, 0.185);
+								},
+							);
+							inverter.add(inverterTerminals);
+							const inverterEntries = makeStaticInstances(
+								miniGeometries.microCableEntry,
+								microgridMaterials.rubber,
+								2,
+								(entry, index) => {
+									entry.rotation.x = Math.PI / 2;
+									entry.position.set(inverterTerminalXs[index], 0.09, 0.216);
+								},
+							);
+							inverter.add(inverterEntries);
+							const inverterFeet = makeStaticInstances(
+								miniGeometries.microMountFoot,
+								microgridMaterials.foundation,
+								2,
+								(foot, index) => {
+									foot.scale.set(0.55, 0.55, 0.72);
+									foot.position.set(index === 0 ? -0.15 : 0.15, 0.012, 0);
+								},
+							);
+							inverter.add(inverterFeet);
 							registerPart(inverter, 0.3);
 
 							const substation = new THREE.Group();
@@ -1991,65 +2106,65 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							transformer.position.set(-0.13, 0.13, 0.015);
 							transformer.castShadow = true;
 							substation.add(transformer);
-							for (let finIndex = 0; finIndex < 6; finIndex += 1) {
-								const fin = new THREE.Mesh(
-									miniGeometries.microCoolingFin,
-									microgridMaterials.frame,
-								);
-								fin.position.set(-0.215 + finIndex * 0.034, 0.13, 0.116);
-								substation.add(fin);
-							}
+							const coolingFins = makeStaticInstances(
+								miniGeometries.microCoolingFin,
+								microgridMaterials.frame,
+								6,
+								(fin, index) => fin.position.set(-0.215 + index * 0.034, 0.13, 0.116),
+							);
+							substation.add(coolingFins);
 							const transformerIndicator = new THREE.Mesh(
 								miniGeometries.microIndicator,
 								microgridMaterials.cyan,
 							);
 							transformerIndicator.position.set(-0.13, 0.225, 0.119);
 							substation.add(transformerIndicator);
-							[0.075, 0.185].forEach((postX, index) => {
-								const post = new THREE.Mesh(
-									miniGeometries.microTowerLeg,
-									microgridMaterials.frame,
-								);
-								post.position.set(postX, 0.3, 0);
-								post.rotation.z = index === 0 ? -0.14 : 0.14;
-								substation.add(post);
-								const rearPost = post.clone();
-								rearPost.position.z = -0.09;
-								substation.add(rearPost);
-							});
-							[0.32, 0.48].forEach((crossarmY, rowIndex) => {
-								const crossarm = new THREE.Mesh(
-									miniGeometries.microCrossarm,
-									microgridMaterials.frame,
-								);
-								crossarm.scale.x = rowIndex === 0 ? 0.78 : 1;
-								crossarm.position.set(0.13, crossarmY, 0);
-								substation.add(crossarm);
-							});
-							[0.18, 0.29, 0.4].forEach((braceY, index) => {
-								const brace = new THREE.Mesh(
-									miniGeometries.microPylonBrace,
-									microgridMaterials.copper,
-								);
-								brace.position.set(0.13, braceY, 0.012);
-								brace.rotation.z = index % 2 === 0 ? 0.58 : -0.58;
-								substation.add(brace);
-							});
+							const towerPosts = makeStaticInstances(
+								miniGeometries.microTowerLeg,
+								microgridMaterials.frame,
+								4,
+								(post, index) => {
+									const column = Math.floor(index / 2);
+									post.position.set(column === 0 ? 0.075 : 0.185, 0.3, index % 2 === 0 ? 0 : -0.09);
+									post.rotation.z = column === 0 ? -0.14 : 0.14;
+								},
+							);
+							substation.add(towerPosts);
+							const crossarms = makeStaticInstances(
+								miniGeometries.microCrossarm,
+								microgridMaterials.frame,
+								2,
+								(crossarm, index) => {
+									crossarm.scale.x = index === 0 ? 0.78 : 1;
+									crossarm.position.set(0.13, index === 0 ? 0.32 : 0.48, 0);
+								},
+							);
+							substation.add(crossarms);
+							const braces = makeStaticInstances(
+								miniGeometries.microPylonBrace,
+								microgridMaterials.copper,
+								3,
+								(brace, index) => {
+									brace.position.set(0.13, 0.18 + index * 0.11, 0.012);
+									brace.rotation.z = index % 2 === 0 ? 0.58 : -0.58;
+								},
+							);
+							substation.add(braces);
 							const insulatorPositions = [-0.04, 0.13, 0.3] as const;
-							insulatorPositions.forEach((insulatorX) => {
-								const insulator = new THREE.Mesh(
-									miniGeometries.microInsulator,
-									microgridMaterials.insulator,
-								);
-								insulator.position.set(insulatorX, 0.44, 0);
-								substation.add(insulator);
-								const cap = new THREE.Mesh(
-									miniGeometries.microInsulatorCap,
-									microgridMaterials.brass,
-								);
-								cap.position.set(insulatorX, 0.408, 0);
-								substation.add(cap);
-							});
+							const insulators = makeStaticInstances(
+								miniGeometries.microInsulator,
+								microgridMaterials.insulator,
+								insulatorPositions.length,
+								(insulator, index) => insulator.position.set(insulatorPositions[index], 0.44, 0),
+							);
+							substation.add(insulators);
+							const insulatorCaps = makeStaticInstances(
+								miniGeometries.microInsulatorCap,
+								microgridMaterials.brass,
+								insulatorPositions.length,
+								(cap, index) => cap.position.set(insulatorPositions[index], 0.408, 0),
+							);
+							substation.add(insulatorCaps);
 							const outputPost = new THREE.Mesh(
 								miniGeometries.microTowerLeg,
 								microgridMaterials.frame,
@@ -2099,28 +2214,26 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 								);
 								door.position.set(0, 0.21, 0.124);
 								cabinet.add(door);
-								([-0.14, 0.14] as const).forEach((y) => {
-									const hinge = new THREE.Mesh(
-										miniGeometries.microHinge,
-										microgridMaterials.brass,
-									);
-									hinge.position.set(-0.15, 0.21 + y, 0.142);
-									cabinet.add(hinge);
-								});
+								const hinges = makeStaticInstances(
+									miniGeometries.microHinge,
+									microgridMaterials.brass,
+									2,
+									(hinge, index) => hinge.position.set(-0.15, 0.07 + index * 0.28, 0.142),
+								);
+								cabinet.add(hinges);
 								const handle = new THREE.Mesh(
 									miniGeometries.microHandle,
 									microgridMaterials.brass,
 								);
 								handle.position.set(0.125, 0.21, 0.143);
 								cabinet.add(handle);
-								[-0.105, -0.07, -0.035].forEach((y) => {
-									const vent = new THREE.Mesh(
-										miniGeometries.microVent,
-										microgridMaterials.rubber,
-									);
-									vent.position.set(-0.045, 0.21 + y, 0.143);
-									cabinet.add(vent);
-								});
+								const cabinetVents = makeStaticInstances(
+									miniGeometries.microVent,
+									microgridMaterials.rubber,
+									3,
+									(vent, index) => vent.position.set(-0.045, 0.105 + index * 0.035, 0.143),
+								);
+								cabinet.add(cabinetVents);
 								for (let segmentIndex = 0; segmentIndex < 3; segmentIndex += 1) {
 									const chargeCell = new THREE.Mesh(
 										miniGeometries.microBatteryCell,
@@ -2139,15 +2252,16 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 									warning.position.set(0.095, 0.09, 0.142);
 									cabinet.add(warning);
 								}
-								([-0.12, 0.12] as const).forEach((x) => {
-									const foot = new THREE.Mesh(
-										miniGeometries.microMountFoot,
-										microgridMaterials.foundation,
-									);
-									foot.scale.set(0.5, 0.52, 0.7);
-									foot.position.set(x, 0.012, 0);
-									cabinet.add(foot);
-								});
+								const cabinetFeet = makeStaticInstances(
+									miniGeometries.microMountFoot,
+									microgridMaterials.foundation,
+									2,
+									(foot, index) => {
+										foot.scale.set(0.5, 0.52, 0.7);
+										foot.position.set(index === 0 ? -0.12 : 0.12, 0.012, 0);
+									},
+								);
+								cabinet.add(cabinetFeet);
 								cabinet.position.x = cabinetX;
 								storage.add(cabinet);
 							});
@@ -2326,15 +2440,19 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 								}),
 								0.52,
 							);
-							for (let rayIndex = 0; rayIndex < 12; rayIndex += 1) {
-								const ray = new THREE.Mesh(miniGeometries.productRay, burstMaterial);
-								const angle = (rayIndex / 12) * Math.PI * 2;
-								const distance = 0.39 + (rayIndex % 2) * 0.035;
-								ray.position.set(Math.cos(angle) * distance, Math.sin(angle) * distance, -0.02);
-								ray.rotation.z = angle - Math.PI / 2;
-								ray.scale.y = rayIndex % 2 === 0 ? 1 : 0.62;
-								burst.add(ray);
-							}
+							const rays = makeStaticInstances(
+								miniGeometries.productRay,
+								burstMaterial,
+								12,
+								(ray, index) => {
+									const angle = (index / 12) * Math.PI * 2;
+									const distance = 0.39 + (index % 2) * 0.035;
+									ray.position.set(Math.cos(angle) * distance, Math.sin(angle) * distance, -0.02);
+									ray.rotation.z = angle - Math.PI / 2;
+									ray.scale.y = index % 2 === 0 ? 1 : 0.62;
+								},
+							);
+							burst.add(rays);
 							burst.renderOrder = -1;
 							group.add(burst);
 
@@ -2434,6 +2552,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						const clearance = layerIndex <= 1 ? TOKEN_MODEL_CLEARANCE : 1;
 						const isMicrogrid = kind === 'microgrid';
 						const presentationLift = layerIndex <= 1 ? 0.34 : layerIndex === 2 ? 0.24 : 0.28;
+						built.group.visible = false;
 						built.group.traverse((object) => object.layers.enable(1));
 						pyramid.add(built.group);
 						return {
@@ -2457,7 +2576,16 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						};
 					});
 
-					return { items, progress: 0, target: 0, sparks: null, sparkBase: null, sparkDirections: null };
+					return {
+						items,
+						progress: 0,
+						target: 0,
+						visible: false,
+						lastOpacity: -1,
+						sparks: null,
+						sparkBase: null,
+						sparkDirections: null,
+					};
 				});
 
 				const celebrationColors = [
@@ -2779,38 +2907,59 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				const cameraLocalPosition = new THREE.Vector3();
 				const facingGuide = new THREE.Object3D();
 
+				let compactPresentation = model.clientWidth <= 520;
 				const updateAccessoryTransforms = (time: number) => {
-					const compactPresentation = model.clientWidth <= 520;
 					riseLayers.forEach((layer, layerIndex) => {
+						const isLayerActive = layer.target > 0 || layer.progress > 0.001;
+						if (!isLayerActive) {
+							if (layer.visible) {
+								layer.items.forEach((item) => {
+									item.group.visible = false;
+									item.labels.forEach((label) => {
+										label.style.opacity = '0';
+										label.style.visibility = 'hidden';
+									});
+								});
+								if (layer.sparks) layer.sparks.visible = false;
+								layer.visible = false;
+								layer.lastOpacity = -1;
+							}
+							return;
+						}
+						layer.visible = true;
 						const layerOpacity = smootherstep(clamp01(layer.progress * 1.14));
-						risePalettes[layerIndex].all.forEach((material) => {
-							material.opacity = layerOpacity;
-						});
-						if (layerIndex === 0) {
-							tokenSurfaceMaterials.forEach((material) => {
-								material.opacity = layerOpacity * ((material.userData.targetOpacity as number | undefined) ?? 1);
+						if (Math.abs(layerOpacity - layer.lastOpacity) > 0.0005) {
+							risePalettes[layerIndex].all.forEach((material) => {
+								material.opacity = layerOpacity;
 							});
+							if (layerIndex === 0) {
+								tokenSurfaceMaterials.forEach((material) => {
+									material.opacity =
+										layerOpacity * ((material.userData.targetOpacity as number | undefined) ?? 1);
+								});
+							}
+							if (layerIndex === 1) {
+								energySurfaceMaterials.forEach((material) => {
+									material.opacity =
+										layerOpacity * ((material.userData.targetOpacity as number | undefined) ?? 1);
+								});
+							}
+							if (layerIndex === 2) {
+								microgridSurfaceMaterials.forEach((material) => {
+									material.opacity =
+										layerOpacity * ((material.userData.targetOpacity as number | undefined) ?? 1);
+								});
+								microgridShadowMaterial.opacity = layerOpacity * 0.44;
+							}
+							if (layerIndex === 3) {
+								productSurfaceMaterials.forEach((material) => {
+									material.opacity =
+										layerOpacity * ((material.userData.targetOpacity as number | undefined) ?? 1);
+								});
+							}
+							contactShadowMaterials[layerIndex].opacity = layerOpacity * 0.34;
+							layer.lastOpacity = layerOpacity;
 						}
-						if (layerIndex === 1) {
-							energySurfaceMaterials.forEach((material) => {
-								material.opacity =
-									layerOpacity * ((material.userData.targetOpacity as number | undefined) ?? 1);
-							});
-						}
-						if (layerIndex === 2) {
-							microgridSurfaceMaterials.forEach((material) => {
-								material.opacity =
-									layerOpacity * ((material.userData.targetOpacity as number | undefined) ?? 1);
-							});
-							microgridShadowMaterial.opacity = layerOpacity * 0.44;
-						}
-						if (layerIndex === 3) {
-							productSurfaceMaterials.forEach((material) => {
-								material.opacity =
-									layerOpacity * ((material.userData.targetOpacity as number | undefined) ?? 1);
-							});
-						}
-						contactShadowMaterials[layerIndex].opacity = layerOpacity * 0.34;
 						layer.items.forEach((item, itemIndex) => {
 							const stagger = itemIndex * 0.105;
 							const localProgress = smootherstep(clamp01((layer.progress - stagger) / (1 - stagger)));
@@ -3165,7 +3314,6 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					pyramid.rotation.x = pointerY * 0.055;
 					pyramid.rotation.y = pointerX * 0.1;
 					camera.lookAt(lookTarget.position);
-					scene.updateMatrixWorld(true);
 					cameraLocalPosition.copy(camera.position);
 					pyramid.worldToLocal(cameraLocalPosition);
 					updateAccessoryTransforms(time);
@@ -3215,6 +3363,12 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				const resize = () => {
 					const width = Math.max(1, model.clientWidth);
 					const height = Math.max(1, model.clientHeight);
+					compactPresentation = width <= 520;
+					const nextPixelRatio = Math.min(window.devicePixelRatio, width <= 832 ? 1.5 : 1.75);
+					if (nextPixelRatio !== rendererPixelRatio) {
+						rendererPixelRatio = nextPixelRatio;
+						renderer.setPixelRatio(rendererPixelRatio);
+					}
 					renderer.setSize(width, height, false);
 					labelRenderer.setSize(width, height);
 					const exitProjection = preservedExitProjection;
