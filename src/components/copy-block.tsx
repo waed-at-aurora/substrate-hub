@@ -6,11 +6,13 @@ export function CopyBlock({
 	label,
 	code,
 	prompt = false,
+	preview,
 	copyLabel = 'copy',
 }: {
 	label?: string;
 	code: string;
 	prompt?: boolean;
+	preview?: string;
 	copyLabel?: string;
 }) {
 	const [copied, setCopied] = useState(false);
@@ -28,10 +30,10 @@ export function CopyBlock({
 	};
 
 	return (
-		<div className={prompt ? 'codeblock codeblock--prompt' : 'codeblock'}>
+		<div className={`codeblock${prompt ? ' codeblock--prompt' : ''}${preview ? ' codeblock--compact' : ''}`}>
 			{label ? <span className="codeblock-label">{label}</span> : null}
 			<pre>
-				<code>{code}</code>
+				<code>{preview ?? code}</code>
 			</pre>
 			<button
 				type="button"

@@ -1,16 +1,24 @@
 'use client';
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { type MouseEvent, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import { CopyBlock } from '@/components/copy-block';
 import StarBurst from '@/components/star-burst';
-import { InstallLine } from '@/components/install-line';
+import { SETUP_SUBSTRATE_PROMPT, SETUP_SUBSTRATE_PROMPT_PREVIEW } from '@/lib/prompts';
 
 const WORD = 'Substrate'.split('');
 const BASE_WGHT = 760;
 const SWELL_WGHT = 900;
 const SWELL_RADIUS = 220; // px — how far the light "presses" the letterforms
-const ENTER_DURATION_MS = 640;
+function LandingScrollCue() {
+	return (
+		<div className="landing-scroll-cue">
+			<p>See why substrate matters</p>
+			<svg viewBox="0 0 16 40" aria-hidden="true">
+				<path pathLength="1" d="M8 1v36M3 32l5 5 5-5" />
+			</svg>
+		</div>
+	);
+}
 
 /**
  * The landing is the illuminated face of the same drafting plate used by the
@@ -31,51 +39,10 @@ export function LandingStage({
 	composites: number;
 	primitives: number;
 }) {
-	const router = useRouter();
-	const [isEntering, setIsEntering] = useState(false);
-	const enteringRef = useRef(false);
-	const enterTimerRef = useRef<number | null>(null);
 	const rootRef = useRef<HTMLElement | null>(null);
 	const wordRef = useRef<HTMLHeadingElement | null>(null);
 	const readoutRef = useRef<HTMLSpanElement | null>(null);
 
-	useEffect(
-		() => () => {
-			if (enterTimerRef.current !== null) window.clearTimeout(enterTimerRef.current);
-		},
-		[],
-	);
-
-	const openOverview = (event: MouseEvent<HTMLAnchorElement>) => {
-		if (
-			event.defaultPrevented ||
-			event.button !== 0 ||
-			event.metaKey ||
-			event.ctrlKey ||
-			event.shiftKey ||
-			event.altKey
-		) {
-			return;
-		}
-
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-		event.preventDefault();
-		if (enteringRef.current) return;
-		const root = rootRef.current;
-		if (root) {
-			const rootRect = root.getBoundingClientRect();
-			const buttonRect = event.currentTarget.getBoundingClientRect();
-			root.style.setProperty('--enter-y', `${buttonRect.top - rootRect.top + buttonRect.height / 2}px`);
-		}
-
-		enteringRef.current = true;
-		setIsEntering(true);
-		enterTimerRef.current = window.setTimeout(() => {
-			enterTimerRef.current = null;
-			router.push('/overview');
-		}, ENTER_DURATION_MS);
-	};
 
 	useEffect(() => {
 		const root = rootRef.current;
@@ -197,13 +164,18 @@ export function LandingStage({
 			if (raf) cancelAnimationFrame(raf);
 			raf = 0;
 		};
+		const setAnimationActivity = () => {
+			root.dataset.cueActive = String(isVisible && !document.hidden);
+		};
 		const intersectionObserver = new IntersectionObserver(([entry]) => {
 			isVisible = entry?.isIntersecting ?? false;
+			setAnimationActivity();
 			if (isVisible) start();
 			else stop();
 		});
 		intersectionObserver.observe(root);
 		const onVisibilityChange = () => {
+			setAnimationActivity();
 			if (document.hidden) stop();
 			else start();
 		};
@@ -224,13 +196,12 @@ export function LandingStage({
 			className="landing"
 			ref={rootRef}
 			aria-label="Substrate"
-			data-entering={isEntering}
+			data-cue-active="true"
 		>
 			{/* Main-branch StarBurst settings (component DEFAULTS); only centerY is
 			    overridden to hold the origin at the first component's corner. */}
 			<StarBurst className="landing-starburst" centerY={85} />
 			<div className="landing-grid" aria-hidden="true" />
-			<div className="landing-enter-wave" aria-hidden="true" />
 
 			<p className="landing-dateline">
 				<span>Substrate Hub · internal edition</span>
@@ -257,22 +228,15 @@ export function LandingStage({
 				<div className="landing-pitch">
 					<p className="landing-position">The foundational medium from which experiences emerge.</p>
 					<p className="landing-copy">An agent-first, modern design system.</p>
-					<div className="landing-actions">
-						<Link className="action action-primary" href="/overview" onClick={openOverview}>
-							Open overview
-						</Link>
-						<Link className="action" href="/components">
-							Browse components
-						</Link>
-						<Link className="action" href="/get-started">
-							Install Substrate
-						</Link>
-						<Link className="action" href="/patterns">
-							Explore patterns
-						</Link>
-					</div>
-					<InstallLine command="npx --yes github:AuroraEnergyResearch/substrate-cli-v2 install" />
+					<CopyBlock
+						label="Agent-ready setup"
+						copyLabel="copy prompt"
+						prompt
+						preview={SETUP_SUBSTRATE_PROMPT_PREVIEW}
+						code={SETUP_SUBSTRATE_PROMPT}
+					/>
 				</div>
+				<LandingScrollCue />
 				<p className="landing-readout mono" aria-hidden="true">
 					light <span className="landing-readout-live" ref={readoutRef}>—</span>
 				</p>
