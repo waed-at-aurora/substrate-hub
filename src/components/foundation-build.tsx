@@ -393,6 +393,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					turbineGenerator: new THREE.CylinderGeometry(0.092, 0.092, 0.2, 24),
 					turbineShaft: new THREE.CylinderGeometry(0.035, 0.035, 0.22, 16),
 					turbineHub: new THREE.SphereGeometry(0.11, 20, 12),
+					turbineHubCap: new THREE.CylinderGeometry(0.08, 0.082, 0.024, 32),
 					turbineBladeRoot: new THREE.CylinderGeometry(0.043, 0.052, 0.1, 16),
 					turbineBlade: turbineBladeGeometry,
 					turbineAccessPanel: new RoundedBoxGeometry(0.105, 0.19, 0.018, 3, 0.016),
@@ -718,6 +719,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					tower: makeEnergySurface('#d8d8cf', 0.48, 0.04, 0.34),
 					nacelle: makeEnergySurface('#c9d0c8', 0.36, 0.06, 0.44),
 					blade: makeEnergySurface('#e5e2d8', 0.3, 0.02, 0.42),
+					hubCap: makeEnergySurface('#d8d8cf', 0.68, 0.02, 0.12),
 					panel: makeEnergySurface('#07515a', 0.48, 0.22, 0.22),
 					joint: makeEnergySurface('#082f3c', 0.34, 0.42, 0.3),
 					brass: makeEnergySurface('#b77a2e', 0.26, 0.84, 0.52),
@@ -1316,6 +1318,14 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							hub.scale.set(1, 1, 0.82);
 							hub.castShadow = true;
 							rotor.add(hub);
+							const hubCap = new THREE.Mesh(
+								miniGeometries.turbineHubCap,
+								windMaterials.hubCap,
+							);
+							hubCap.rotation.x = Math.PI / 2;
+							hubCap.position.z = 0.1;
+							hubCap.castShadow = true;
+							rotor.add(hubCap);
 							const indicator = new THREE.Mesh(
 								miniGeometries.turbineIndicator,
 								windMaterials.cyan,
