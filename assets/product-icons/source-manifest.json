@@ -1,0 +1,26 @@
+{
+  "repository": "/home/waedmohamed/repo/aurora-ui",
+  "icons": {
+    "Chronos": {
+      "local": "/assets/product-icons/chronos.svg",
+      "source": "content/productIcons/chronos.svg"
+    },
+    "Amun": {
+      "local": "/assets/product-icons/amun.svg",
+      "source": "content/productIcons/amun.svg"
+    },
+    "Origin": {
+      "local": "/assets/product-icons/origin.svg",
+      "source": "content/productIcons/origin.svg"
+    },
+    "Solaris": {
+      "local": "/assets/product-icons/solaris.svg",
+      "source": "content/productIcons/solaris.svg"
+    },
+    "Lumus": {
+      "local": "/assets/product-icons/lumus.svg",
+      "source": "content/productIcons/ppa.svg",
+      "canonicalMapping": "RegionalProduct.lumus uses PPAIcon"
+    }
+  }
+}
