@@ -55,6 +55,11 @@ export function RoadmapDuck() {
 				antialias: false,
 				powerPreference: 'high-performance',
 			});
+			renderer.outputColorSpace = THREE.SRGBColorSpace;
+			renderer.toneMapping = THREE.ACESFilmicToneMapping;
+			renderer.toneMappingExposure = 1.08;
+			renderer.shadowMap.enabled = true;
+			renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 		} catch {
 			host.dataset.duckFailed = 'true';
 			return;
@@ -68,11 +73,21 @@ export function RoadmapDuck() {
 		const pivot = new THREE.Group();
 		pivot.position.set(1.05, -0.08, 0);
 		scene.add(pivot);
-		scene.add(new THREE.HemisphereLight(0xffffff, 0x15151a, 2.8));
-		const key = new THREE.DirectionalLight(0xffffff, 4.6);
+		scene.add(new THREE.HemisphereLight(0xffffff, 0x15151a, 2.2));
+		const key = new THREE.DirectionalLight(0xffffff, 4.2);
 		key.position.set(-3, 5, 4);
+		key.castShadow = true;
+		key.shadow.mapSize.set(1024, 1024);
+		key.shadow.camera.near = 1;
+		key.shadow.camera.far = 12;
+		key.shadow.bias = -0.0004;
+		key.shadow.normalBias = 0.025;
+		key.shadow.radius = 4;
 		scene.add(key);
-		const rim = new THREE.DirectionalLight(0x53eafd, 3.2);
+		const fill = new THREE.DirectionalLight(0xb8c0cc, 1.35);
+		fill.position.set(4, 2.5, 5);
+		scene.add(fill);
+		const rim = new THREE.DirectionalLight(0x53eafd, 2.7);
 		rim.position.set(4, 1, -2);
 		scene.add(rim);
 
@@ -118,6 +133,17 @@ export function RoadmapDuck() {
 		let yaw = 0;
 		let pitch = 0;
 		let startTime = performance.now();
+		const plinthGeometry = new THREE.CylinderGeometry(0.78, 0.86, 0.09, 48);
+		const plinthMaterial = new THREE.MeshStandardMaterial({
+			color: 0x4a4a52,
+			roughness: 0.82,
+			metalness: 0.04,
+		});
+		const plinth = new THREE.Mesh(plinthGeometry, plinthMaterial);
+		plinth.position.y = -0.96;
+		plinth.receiveShadow = true;
+		plinth.visible = false;
+		pivot.add(plinth);
 
 		const render = () => {
 			renderer.setRenderTarget(renderTarget);
@@ -197,6 +223,18 @@ export function RoadmapDuck() {
 			(gltf) => {
 				if (disposed) return;
 				duck = gltf.scene;
+				duck.traverse((node) => {
+					if (!(node instanceof THREE.Mesh)) return;
+					node.castShadow = true;
+					node.receiveShadow = true;
+					const materials = Array.isArray(node.material) ? node.material : [node.material];
+					for (const material of materials) {
+						if (!(material instanceof THREE.MeshStandardMaterial)) continue;
+						material.roughness = Math.max(0.34, Math.min(material.roughness, 0.58));
+						material.metalness = Math.min(material.metalness, 0.08);
+						material.envMapIntensity = 0.72;
+					}
+				});
 				const bounds = new THREE.Box3().setFromObject(duck);
 				const size = bounds.getSize(new THREE.Vector3());
 				const center = bounds.getCenter(new THREE.Vector3());
@@ -205,6 +243,7 @@ export function RoadmapDuck() {
 				duck.scale.setScalar(duckUnitScale * (host.clientWidth <= 520 ? 1.45 : 1.85));
 				duck.rotation.y = Math.PI;
 				pivot.add(duck);
+				plinth.visible = true;
 				host.dataset.duckReady = 'true';
 				render();
 			},
@@ -237,6 +276,8 @@ export function RoadmapDuck() {
 					material.dispose();
 				}
 			});
+			plinthGeometry.dispose();
+			plinthMaterial.dispose();
 			renderTarget.dispose();
 			postGeometry.dispose();
 			postMaterial.dispose();
