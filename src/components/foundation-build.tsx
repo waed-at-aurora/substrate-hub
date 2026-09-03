@@ -585,32 +585,33 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				colorProbe.remove();
 
 				type ProductName = 'Chronos' | 'Amun' | 'Origin' | 'Solaris' | 'Lumus';
+				const assetBasePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 				const productDefinitions: Record<
 					ProductName,
 					{ path: string; badge: string; ink: string }
 				> = {
 					Chronos: {
-						path: '/assets/product-icons/chronos.svg',
+						path: `${assetBasePath}/assets/product-icons/chronos.svg`,
 						badge: substrateColors.primary,
 						ink: substrateColors.primaryInk,
 					},
 					Amun: {
-						path: '/assets/product-icons/amun.svg',
+						path: `${assetBasePath}/assets/product-icons/amun.svg`,
 						badge: substrateColors.cyan,
 						ink: substrateColors.text,
 					},
 					Origin: {
-						path: '/assets/product-icons/origin.svg',
+						path: `${assetBasePath}/assets/product-icons/origin.svg`,
 						badge: substrateColors.coral,
 						ink: substrateColors.text,
 					},
 					Solaris: {
-						path: '/assets/product-icons/solaris.svg',
+						path: `${assetBasePath}/assets/product-icons/solaris.svg`,
 						badge: substrateColors.green,
 						ink: substrateColors.primaryInk,
 					},
 					Lumus: {
-						path: '/assets/product-icons/lumus.svg',
+						path: `${assetBasePath}/assets/product-icons/lumus.svg`,
 						badge: substrateColors.blue,
 						ink: substrateColors.text,
 					},
