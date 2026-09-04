@@ -208,6 +208,9 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 		if (!root || !model || !canvas) return;
 
 		let cancelled = false;
+		let setupStarted = false;
+		let idleSetupHandle: number | null = null;
+		let setupTimer: number | null = null;
 		let dispose = () => {};
 		let cancelExit = () => {};
 
@@ -227,7 +230,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					antialias: true,
 					powerPreference: 'high-performance',
 				});
-				let rendererPixelRatio = Math.min(window.devicePixelRatio, window.innerWidth <= 832 ? 1.5 : 1.75);
+				let rendererPixelRatio = Math.min(window.devicePixelRatio, window.innerWidth <= 832 ? 1.25 : 1.5);
 				renderer.setPixelRatio(rendererPixelRatio);
 				renderer.outputColorSpace = THREE.SRGBColorSpace;
 				renderer.setClearColor(0x09090b, 0);
@@ -254,7 +257,14 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						import('three/examples/jsm/geometries/RoundedBoxGeometry.js'),
 						import('three/examples/jsm/environments/RoomEnvironment.js'),
 					]);
-				if (cancelled) return;
+				if (cancelled) {
+					renderer.dispose();
+					return;
+				}
+				const yieldToMain = () =>
+					new Promise<void>((resolve) => {
+						requestAnimationFrame(() => resolve());
+					});
 
 				const labelRenderer = new CSS2DRenderer();
 				labelRenderer.domElement.className = 'foundation-model-labels';
@@ -266,6 +276,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				const nonPyramidEnvironment = environmentGenerator.fromScene(environmentScene, 0.04).texture;
 				environmentScene.dispose();
 				environmentGenerator.dispose();
+				await yieldToMain();
 
 				const bentSheetGeometry = new THREE.PlaneGeometry(0.92, 0.6, 5, 3);
 				const bentSheetPositions = bentSheetGeometry.attributes.position;
@@ -939,6 +950,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					kind: MiniKind;
 					group: InstanceType<typeof THREE.Group>;
 					labels: HTMLElement[];
+					lastLabelOpacity: number;
+					labelsVisible: boolean;
 					x: number;
 					z: number;
 					hiddenY: number;
@@ -2549,9 +2562,12 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					{ x: 2, z: 0.34, y: LAYER_SPECS[3].y + 0.92, rotation: 0 },
 				] as const;
 
-				const riseLayers: RiseLayer[] = layerKinds.map((kinds, layerIndex) => {
-					const positions = layerIndex === 3 ? productPositions : createSeededPositions(layerIndex, kinds.length);
-					const items = kinds.map((kind, itemIndex) => {
+				const riseLayers: RiseLayer[] = [];
+				for (const [layerIndex, kinds] of layerKinds.entries()) {
+					const positions =
+						layerIndex === 3 ? productPositions : createSeededPositions(layerIndex, kinds.length);
+					const items: RiseItem[] = [];
+					for (const [itemIndex, kind] of kinds.entries()) {
 						const built = makeRiseItem(kind, layerIndex, itemIndex);
 						const position = positions[itemIndex];
 						const clearance = layerIndex <= 1 ? TOKEN_MODEL_CLEARANCE : 1;
@@ -2560,8 +2576,10 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						built.group.visible = false;
 						built.group.traverse((object) => object.layers.enable(1));
 						pyramid.add(built.group);
-						return {
+						items.push({
 							...built,
+							lastLabelOpacity: 0,
+							labelsVisible: false,
 							x: isMicrogrid ? -0.16 : position.x * clearance,
 							z: isMicrogrid ? -0.18 : position.z * clearance,
 							hiddenY: LAYER_SPECS[layerIndex].y - 0.52 - itemIndex * 0.035,
@@ -2578,10 +2596,10 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							faceTiltZ: isMicrogrid
 								? 0
 								: (seededUnit(1800 + itemIndex * 19) - 0.5) * 0.18,
-						};
-					});
-
-					return {
+						});
+						await yieldToMain();
+					}
+					riseLayers.push({
 						items,
 						progress: 0,
 						target: 0,
@@ -2590,8 +2608,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						sparks: null,
 						sparkBase: null,
 						sparkDirections: null,
-					};
-				});
+					});
+				}
 
 				const celebrationColors = [
 					substrateColors.primary,
@@ -2692,6 +2710,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				productRibbons.frustumCulled = false;
 				pyramid.add(productConfetti, productRibbons);
 				let productCelebrationStartedAt = Number.NEGATIVE_INFINITY;
+				await yieldToMain();
 
 				const blockGeometry = new THREE.BoxGeometry(0.74, 0.34, 0.74);
 				const studGeometry = new THREE.CylinderGeometry(0.085, 0.085, 0.085, 20);
@@ -2771,6 +2790,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					group.add(blocks, studs);
 					instancedLayers.push({ blocks, studs, bricks });
 				});
+				await yieldToMain();
 
 				const updateBrickExit = (progress: number) => {
 					for (let layerIndex = 0; layerIndex < instancedLayers.length; layerIndex += 1) {
@@ -2872,6 +2892,9 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				modelRimLight.position.set(5, 4, -3);
 				modelRimLight.layers.set(1);
 				scene.add(modelRimLight);
+				await yieldToMain();
+				await renderer.compileAsync(scene, camera);
+				await yieldToMain();
 
 				let pointerX = 0;
 				let pointerY = 0;
@@ -2907,7 +2930,9 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				};
 
 				let accessoryFrame = 0;
+				let queuedRenderFrame = 0;
 				let accessoryLastTime = performance.now();
+				let slowFrameCount = 0;
 				let modelInView = true;
 				const cameraLocalPosition = new THREE.Vector3();
 				const facingGuide = new THREE.Object3D();
@@ -2924,6 +2949,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 										label.style.opacity = '0';
 										label.style.visibility = 'hidden';
 									});
+									item.lastLabelOpacity = 0;
+									item.labelsVisible = false;
 								});
 								if (layer.sparks) layer.sparks.visible = false;
 								layer.visible = false;
@@ -3245,10 +3272,20 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							}
 
 							const labelOpacity = clamp01((localProgress - 0.32) / 0.68);
-							item.labels.forEach((label) => {
-								label.style.opacity = labelOpacity.toFixed(3);
-								label.style.visibility = labelOpacity > 0.02 ? 'visible' : 'hidden';
-							});
+							if (Math.abs(labelOpacity - item.lastLabelOpacity) > 0.002) {
+								const opacity = labelOpacity.toFixed(3);
+								item.labels.forEach((label) => {
+									label.style.opacity = opacity;
+								});
+								item.lastLabelOpacity = labelOpacity;
+							}
+							const labelsVisible = labelOpacity > 0.02;
+							if (labelsVisible !== item.labelsVisible) {
+								item.labels.forEach((label) => {
+									label.style.visibility = labelsVisible ? 'visible' : 'hidden';
+								});
+								item.labelsVisible = labelsVisible;
+							}
 						});
 
 						if (layer.sparks && layer.sparkBase && layer.sparkDirections) {
@@ -3326,12 +3363,26 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					renderer.render(scene, camera);
 					labelRenderer.render(scene, camera);
 				};
+				const requestRender = () => {
+					if (accessoryFrame || queuedRenderFrame || !modelInView || document.hidden) return;
+					queuedRenderFrame = requestAnimationFrame((time) => {
+						queuedRenderFrame = 0;
+						if (modelInView && !document.hidden) render(time);
+					});
+				};
 
 				const runAccessoryFrame = (time: number) => {
 					accessoryFrame = 0;
 					if (!modelInView || document.hidden) return;
 					const delta = Math.min(40, Math.max(0, time - accessoryLastTime));
 					accessoryLastTime = time;
+					slowFrameCount = delta > 30 ? slowFrameCount + 1 : Math.max(0, slowFrameCount - 1);
+					if (slowFrameCount >= 8 && rendererPixelRatio > 1) {
+						rendererPixelRatio = Math.max(1, rendererPixelRatio - 0.25);
+						renderer.setPixelRatio(rendererPixelRatio);
+						renderer.setSize(Math.max(1, model.clientWidth), Math.max(1, model.clientHeight), false);
+						slowFrameCount = 0;
+					}
 					let shouldContinue = false;
 					riseLayers.forEach((layer) => {
 						const duration = layer.target > layer.progress ? 260 : 185;
@@ -3369,7 +3420,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					const width = Math.max(1, model.clientWidth);
 					const height = Math.max(1, model.clientHeight);
 					compactPresentation = width <= 520;
-					const nextPixelRatio = Math.min(window.devicePixelRatio, width <= 832 ? 1.5 : 1.75);
+					const nextPixelRatio = Math.min(window.devicePixelRatio, width <= 832 ? 1.25 : 1.5);
 					if (nextPixelRatio !== rendererPixelRatio) {
 						rendererPixelRatio = nextPixelRatio;
 						renderer.setPixelRatio(rendererPixelRatio);
@@ -3405,7 +3456,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						modelInView = entry.isIntersecting;
 						if (modelInView) {
 							ensureAccessoryAnimation();
-							render();
+							requestRender();
 						} else if (accessoryFrame) {
 							cancelAnimationFrame(accessoryFrame);
 							accessoryFrame = 0;
@@ -3441,9 +3492,9 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						rotateY: (index - (LAYERS.length - 1) / 2) * 3,
 						duration: 420,
 						ease: 'out(3)',
-						onUpdate: () => render(),
+						onUpdate: requestRender,
 					});
-					render();
+					requestRender();
 				};
 
 				const focusState = { value: 0 };
@@ -3479,7 +3530,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						root.style.setProperty('--focus-opacity', String(Math.max(0.14, focusMix)));
 						root.style.setProperty('--ending-progress', String(ending));
 						if (readoutRef.current) readoutRef.current.textContent = String(Math.round(progress * 100)).padStart(3, '0');
-						render();
+						requestRender();
 					},
 				});
 
@@ -3547,7 +3598,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							autoplay: false,
 							onUpdate: () => {
 								updateBrickExit(Number(exitState.progress));
-								render();
+								requestRender();
 							},
 						});
 						exitTimeline.add(
@@ -3589,13 +3640,17 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					}
 					pointerX = (event.clientX / Math.max(1, window.innerWidth)) * 2 - 1;
 					pointerY = -((event.clientY / Math.max(1, window.innerHeight)) * 2 - 1);
-					render();
+					requestRender();
 				};
 
-				const onPointerMove = (event: globalThis.PointerEvent) => {
+				let pointerInteractionFrame = 0;
+				let pendingPointerX = 0;
+				let pendingPointerY = 0;
+				const updatePointerInteraction = (time: number) => {
+					pointerInteractionFrame = 0;
 					const bounds = canvas.getBoundingClientRect();
-					pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
-					pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1;
+					pointer.x = ((pendingPointerX - bounds.left) / bounds.width) * 2 - 1;
+					pointer.y = -((pendingPointerY - bounds.top) / bounds.height) * 2 + 1;
 					raycaster.setFromCamera(pointer, camera);
 					const hit = raycaster.intersectObjects(blockMeshes, false)[0];
 					hoveredLayer = typeof hit?.object.userData.layer === 'number' ? hit.object.userData.layer : -1;
@@ -3604,14 +3659,25 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 						pointerX = pointer.x;
 						pointerY = pointer.y;
 					}
-					render();
+					if (!accessoryFrame) render(time);
+				};
+				const onPointerMove = (event: globalThis.PointerEvent) => {
+					pendingPointerX = event.clientX;
+					pendingPointerY = event.clientY;
+					if (!pointerInteractionFrame) {
+						pointerInteractionFrame = requestAnimationFrame(updatePointerInteraction);
+					}
 				};
 				const onPointerLeave = () => {
+					if (pointerInteractionFrame) {
+						cancelAnimationFrame(pointerInteractionFrame);
+						pointerInteractionFrame = 0;
+					}
 					hoveredLayer = -1;
 					pointerX = 0;
 					pointerY = 0;
 					canvas.dataset.interactive = 'false';
-					render();
+					requestRender();
 				};
 				const onPointerClick = () => {
 					if (hoveredLayer >= 0) selectLayer(hoveredLayer);
@@ -3630,7 +3696,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							rotateY: 0,
 							duration: 240,
 							ease: 'out(3)',
-							onUpdate: () => render(),
+							onUpdate: requestRender,
 						});
 					}
 				};
@@ -3691,6 +3757,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 
 				dispose = () => {
 					if (entryRevealFrame) cancelAnimationFrame(entryRevealFrame);
+					if (queuedRenderFrame) cancelAnimationFrame(queuedRenderFrame);
+					if (pointerInteractionFrame) cancelAnimationFrame(pointerInteractionFrame);
 					if (accessoryFrame) cancelAnimationFrame(accessoryFrame);
 					exitTransitionRef.current = null;
 					cancelExit();
@@ -3745,14 +3813,47 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 			}
 		};
 
-		void setup();
+		const removeSetupTriggers = () => {
+			window.removeEventListener('scroll', startSetup);
+			window.removeEventListener('pointerdown', startSetup);
+			window.removeEventListener('keydown', startSetup);
+		};
+		const startSetup = () => {
+			if (cancelled || setupStarted) return;
+			setupStarted = true;
+			if (idleSetupHandle !== null) {
+				window.cancelIdleCallback(idleSetupHandle);
+				idleSetupHandle = null;
+			}
+			if (setupTimer !== null) {
+				window.clearTimeout(setupTimer);
+				setupTimer = null;
+			}
+			removeSetupTriggers();
+			void setup();
+		};
+
+		root.dataset.renderState = 'loading';
+		window.addEventListener('scroll', startSetup, { passive: true, once: true });
+		window.addEventListener('pointerdown', startSetup, { passive: true, once: true });
+		window.addEventListener('keydown', startSetup, { once: true });
+		const requestIdleSetup = window.requestIdleCallback?.bind(window);
+		if (requestIdleSetup) {
+			idleSetupHandle = requestIdleSetup(startSetup, { timeout: 600 });
+		} else {
+			setupTimer = window.setTimeout(startSetup, 120);
+		}
+
 		return () => {
+			cancelled = true;
+			removeSetupTriggers();
+			if (idleSetupHandle !== null) window.cancelIdleCallback(idleSetupHandle);
+			if (setupTimer !== null) window.clearTimeout(setupTimer);
 			layerSelectionRef.current = null;
 			if (exitNavigationTimerRef.current !== null) {
 				window.clearTimeout(exitNavigationTimerRef.current);
 				exitNavigationTimerRef.current = null;
 			}
-			cancelled = true;
 			dispose();
 		};
 	}, []);
