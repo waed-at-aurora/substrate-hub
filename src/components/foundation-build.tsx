@@ -25,7 +25,8 @@ const LAYERS = [
 		key: 'tokens',
 		number: '01',
 		name: 'Tokens',
-		statement: 'Decisions beneath every product, made once.',
+		statement: 'Set the rules once.',
+		statementContinuation: 'Every build starts aligned.',
 		detail: 'Color · type · space · motion',
 		cameraY: 0.25,
 		targetY: -0.35,
@@ -35,7 +36,8 @@ const LAYERS = [
 		key: 'primitives',
 		number: '02',
 		name: 'Primitives',
-		statement: 'Shared building blocks mean no team starts from scratch.',
+		statement: 'Start with ready-made parts.',
+		statementContinuation: 'Move faster.',
 		detail: '',
 		cameraY: 0.85,
 		targetY: 0.08,
@@ -45,7 +47,8 @@ const LAYERS = [
 		key: 'composites',
 		number: '03',
 		name: 'Composites',
-		statement: 'Ready-made components save development time.',
+		statement: 'Combine once.',
+		statementContinuation: 'Adapt across regions.',
 		detail: '',
 		cameraY: 1.45,
 		targetY: 0.52,
@@ -55,7 +58,8 @@ const LAYERS = [
 		key: 'products',
 		number: '04',
 		name: 'Products',
-		statement: 'Every product feels unmistakably EOS.',
+		statement: 'Every product feels',
+		statementContinuation: 'unmistakably EOS.',
 		detail: 'Chronos · Amun · Origin · Solaris · Lumus',
 		cameraY: 2.05,
 		targetY: 1.02,
@@ -3768,7 +3772,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				<header className="foundation-copy">
 					<p className="foundation-caption">Fig. 02 · system architecture</p>
 					<h2 id="foundation-title">See what one shared system unlocks.</h2>
-					<p>Fewer repeated decisions, faster delivery, and one consistent EOS experience.</p>
+					<p>Decide once. Build faster. Stay aligned.</p>
 				</header>
 
 				<div className="foundation-model" ref={modelRef}>
@@ -3793,12 +3797,16 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 							<p className="foundation-layer-name">
 								<span>{layer.number}</span> {layer.name}
 							</p>
-							<h3>{layer.statement}</h3>
+							<h3>
+								{layer.statement}
+								<br />
+								{layer.statementContinuation}
+							</h3>
 							<p>
 								{index === 1
-									? `${primitives} shared building blocks`
+									? `${primitives} primitives — like batteries, wind turbines and solar panels`
 									: index === 2
-										? `${composites} ready-made components`
+										? `${composites} ready-made composites — like modular microgrids`
 										: layer.detail}
 							</p>
 						</article>
