@@ -6,6 +6,7 @@
  * ruled placeholder holding its space.
  */
 import dynamic from 'next/dynamic';
+import { useEffect, useRef, useState } from 'react';
 
 const Loading = ({ minHeight, label }: { minHeight: string; label: string }) => (
 	<div
@@ -26,10 +27,42 @@ const Loading = ({ minHeight, label }: { minHeight: string; label: string }) => 
 	</div>
 );
 
-export const Playground = dynamic(() => import('./playground').then((m) => m.Playground), {
+const PlaygroundContent = dynamic(() => import('./playground').then((m) => m.Playground), {
 	ssr: false,
 	loading: () => <Loading minHeight="21rem" label="loading live figure…" />,
 });
+
+export function Playground() {
+	const boundaryRef = useRef<HTMLDivElement | null>(null);
+	const [shouldLoad, setShouldLoad] = useState(false);
+
+	useEffect(() => {
+		const boundary = boundaryRef.current;
+		if (!boundary) return;
+		if (!('IntersectionObserver' in window)) {
+			setShouldLoad(true);
+			return;
+		}
+
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (!entry?.isIntersecting) return;
+				setShouldLoad(true);
+				observer.disconnect();
+			},
+			{ rootMargin: '800px 0px', threshold: 0.01 },
+		);
+		observer.observe(boundary);
+		return () => observer.disconnect();
+	}, []);
+
+	if (shouldLoad) return <PlaygroundContent />;
+	return (
+		<div ref={boundaryRef}>
+			<Loading minHeight="21rem" label="loading live figure…" />
+		</div>
+	);
+}
 
 export const Catalog = dynamic(() => import('./catalog').then((m) => m.Catalog), {
 	ssr: false,
