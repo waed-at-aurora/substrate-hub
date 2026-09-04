@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { PyramidAnalogy } from '@/components/pyramid-analogy';
 import type { JSAnimation } from 'animejs';
 import { useRouter } from 'next/navigation';
 import { type MouseEvent, useEffect, useRef, useState } from 'react';
@@ -3875,6 +3876,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					<h2 id="foundation-title">See what one shared system unlocks.</h2>
 					<p>Decide once. Build faster. Stay aligned.</p>
 				</header>
+
+				<PyramidAnalogy />
 
 				<div className="foundation-model" ref={modelRef}>
 					<canvas ref={canvasRef} aria-hidden="true" />
