@@ -948,8 +948,7 @@ button {
 		.foundation-narrative,
 		.foundation-stages,
 		.foundation-ending,
-		.foundation-progress,
-		.foundation-inspect-hint
+		.foundation-progress
 	) {
 	opacity: 0;
 	pointer-events: none;
@@ -1186,10 +1185,79 @@ button {
 	cursor: pointer;
 }
 
+.foundation-loader {
+	position: absolute;
+	inset: 0;
+	z-index: 3;
+	display: none;
+	place-content: center;
+	justify-items: center;
+	gap: 0.9rem;
+	pointer-events: none;
+}
+
+.foundation-scroll[data-render-state='loading'] .foundation-loader {
+	display: grid;
+}
+
+.foundation-loader > span:last-child {
+	font-family: var(--font-mono), monospace;
+	font-size: 0.6rem;
+	letter-spacing: 0.13em;
+	text-transform: uppercase;
+	color: var(--muted);
+}
+
+.foundation-loader-mark {
+	position: relative;
+	width: 3.4rem;
+	height: 3.4rem;
+	animation: foundation-loader-turn 1100ms linear infinite;
+}
+
+.foundation-loader-mark > span {
+	position: absolute;
+	width: 1.05rem;
+	height: 0.58rem;
+	border: 1px solid var(--muted);
+	border-radius: 2px;
+	background: var(--paper-raised);
+}
+
+.foundation-loader-mark > span:nth-child(1) {
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.foundation-loader-mark > span:nth-child(2) {
+	top: 50%;
+	right: 0;
+	transform: translateY(-50%) rotate(90deg);
+}
+
+.foundation-loader-mark > span:nth-child(3) {
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.foundation-loader-mark > span:nth-child(4) {
+	top: 50%;
+	left: 0;
+	transform: translateY(-50%) rotate(90deg);
+}
+
+@keyframes foundation-loader-turn {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
 .foundation-fallback {
 	position: absolute;
 	inset: 12% 8%;
-	display: flex;
+	display: none;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
@@ -1198,8 +1266,8 @@ button {
 	transition: opacity 180ms linear;
 }
 
-.foundation-scroll[data-three-ready='true'] .foundation-fallback {
-	display: none;
+.foundation-scroll[data-render-state='fallback'] .foundation-fallback {
+	display: flex;
 }
 
 .foundation-fallback span {
@@ -1243,30 +1311,6 @@ button {
 	color: var(--ink);
 }
 
-.foundation-inspect-hint {
-	position: absolute;
-	right: 0;
-	bottom: 7%;
-	max-width: none;
-	font-family: var(--font-mono), monospace;
-	font-size: 0.58rem;
-	letter-spacing: 0.13em;
-	text-transform: uppercase;
-	color: var(--muted);
-	opacity: 0;
-	transition: opacity 220ms var(--ease-out);
-}
-
-.foundation-scroll[data-three-ready='true'] .foundation-inspect-hint {
-	opacity: 0.72;
-}
-
-/* The exit blackout must not inherit the ready-state hint opacity. */
-.foundation-scroll[data-exiting='true'] .foundation-inspect-hint {
-	visibility: hidden;
-	opacity: 0;
-	transition: none;
-}
 
 .foundation-narrative {
 	position: relative;
@@ -1549,9 +1593,6 @@ button {
 		min-width: 3.55rem;
 		font-size: 0.54rem;
 	}
-	.foundation-inspect-hint {
-		display: none;
-	}
 	.foundation-narrative {
 		grid-column: 1;
 		grid-row: 2;
@@ -1624,11 +1665,6 @@ button {
 	}
 }
 
-@media (hover: none) {
-	.foundation-inspect-hint {
-		display: none;
-	}
-}
 /* ── page covers (inner sections) ───────────────────────────── */
 
 .cover {
@@ -3203,6 +3239,10 @@ input[data-slot='input'],
 	.roadmap-duck {
 		transition: none;
 	}
+	.foundation-loader-mark {
+		animation: none;
+		transform: rotate(45deg);
+	}
 	.foundation-scroll {
 		height: auto;
 		margin-top: 0;
@@ -3230,9 +3270,6 @@ input[data-slot='input'],
 		min-height: 30rem;
 		--pyramid-model-opacity: 1;
 		transform: none;
-	}
-	.foundation-inspect-hint {
-		display: none;
 	}
 	.foundation-narrative {
 		grid-column: 1 / -1;
