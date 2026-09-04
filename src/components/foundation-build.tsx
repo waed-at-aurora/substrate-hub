@@ -158,7 +158,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 	const [activeStage, setActiveStage] = useState(-1);
 	const [isInspecting, setIsInspecting] = useState(false);
 	const [isExiting, setIsExiting] = useState(false);
-	const [threeReady, setThreeReady] = useState(false);
+	const [renderState, setRenderState] = useState<'loading' | 'ready' | 'fallback'>('loading');
 
 	const exitToOverview = (event: MouseEvent<HTMLAnchorElement>) => {
 		if (
@@ -215,7 +215,6 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 		let cancelExit = () => {};
 
 		const setup = async () => {
-			root.dataset.renderState = 'loading';
 			try {
 				const [THREE, anime] = await Promise.all([
 					import('three'),
@@ -3684,8 +3683,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				};
 				const onContextLost = (event: Event) => {
 					event.preventDefault();
-					root.dataset.renderState = 'fallback';
-					setThreeReady(false);
+					setRenderState('fallback');
 				};
 
 				const clearManualSelection = () => {
@@ -3751,8 +3749,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 					reportInspecting(false);
 				}
 
-				root.dataset.renderState = 'ready';
-				setThreeReady(true);
+				setRenderState('ready');
 				resize();
 
 				dispose = () => {
@@ -3808,8 +3805,7 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 				};
 			} catch (error) {
 				console.error('Unable to initialise the foundation model.', error);
-				root.dataset.renderState = 'fallback';
-				setThreeReady(false);
+				setRenderState('fallback');
 			}
 		};
 
@@ -3833,7 +3829,6 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 			void setup();
 		};
 
-		root.dataset.renderState = 'loading';
 		window.addEventListener('scroll', startSetup, { passive: true, once: true });
 		window.addEventListener('pointerdown', startSetup, { passive: true, once: true });
 		window.addEventListener('keydown', startSetup, { once: true });
@@ -3867,7 +3862,8 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 			data-inspecting={isInspecting}
 			data-exiting={isExiting}
 			aria-busy={isExiting}
-			data-three-ready={threeReady}
+			data-render-state={renderState}
+			data-three-ready={renderState === 'ready'}
 		>
 			<div className="foundation-sticky">
 				<header className="foundation-copy">
@@ -3878,13 +3874,21 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 
 				<div className="foundation-model" ref={modelRef}>
 					<canvas ref={canvasRef} aria-hidden="true" />
+					<div className="foundation-loader" role="status" aria-live="polite">
+						<span className="foundation-loader-mark" aria-hidden="true">
+							<span />
+							<span />
+							<span />
+							<span />
+						</span>
+						<span>Assembling system model</span>
+					</div>
 					<div className="foundation-fallback" aria-hidden="true">
 						<span>Products</span>
 						<span>Composites</span>
 						<span>Primitives</span>
 						<span>Tokens</span>
 					</div>
-					<p className="foundation-inspect-hint">Move to orbit · select a tier to inspect</p>
 				</div>
 
 				<div className="foundation-narrative" aria-live="polite">
