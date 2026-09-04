@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { animate } from 'motion';
 import { type KeyboardEvent as ReactKeyboardEvent, useEffect, useRef, useState } from 'react';
 import { ExtArrow } from '@/components/marks';
 import { storybookHref } from '@/config/site';
@@ -195,15 +194,22 @@ export function PersonaOverview({ primitives, composites }: { primitives: number
 		const panel = panelRef.current;
 		if (!panel || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-		const animation = animate(
-			panel,
-			{
-				clipPath: ['inset(0 0 7% 0)', 'inset(0)'],
-				filter: ['blur(3px)', 'blur(0px)'],
-				opacity: [0.72, 1],
-				transform: ['translate3d(0, 0.75rem, 0)', 'translate3d(0, 0, 0)'],
-			},
-			{ duration: 0.42, ease: [0.16, 1, 0.3, 1] },
+		const animation = panel.animate(
+			[
+				{
+					clipPath: 'inset(0 0 7% 0)',
+					filter: 'blur(3px)',
+					opacity: 0.72,
+					transform: 'translate3d(0, 0.75rem, 0)',
+				},
+				{
+					clipPath: 'inset(0)',
+					filter: 'blur(0px)',
+					opacity: 1,
+					transform: 'translate3d(0, 0, 0)',
+				},
+			],
+			{ duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'both' },
 		);
 
 		return () => animation.cancel();

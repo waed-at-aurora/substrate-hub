@@ -39,7 +39,13 @@ export function ContentsRail() {
 			<ol className="rail-list">
 				{sections.map((s) => (
 					<li className="rail-item" key={s.href}>
-						<Link href={s.href} aria-current={isActive(s.href) ? 'page' : undefined}>
+						<Link
+							href={s.href}
+							prefetch={false}
+							aria-current={isActive(s.href) ? 'page' : undefined}
+							onMouseEnter={() => router.prefetch(s.href)}
+							onFocus={() => router.prefetch(s.href)}
+						>
 							<span className="rail-num">{s.num}</span>
 							<span>{s.title}</span>
 						</Link>

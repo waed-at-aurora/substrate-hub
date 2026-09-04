@@ -9,7 +9,7 @@ export default function HubLayout({ children }: { children: React.ReactNode }) {
 		<>
 			<header className="masthead">
 				<div className="masthead-inner">
-					<Link href="/" className="masthead-title">
+					<Link href="/" className="masthead-title" prefetch={false}>
 						Substrate
 					</Link>
 					<span className="masthead-sub">

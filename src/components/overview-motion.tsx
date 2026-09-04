@@ -1,7 +1,5 @@
 'use client';
 
-import { animate as animeAnimate, onScroll, stagger } from 'animejs';
-import { animate as motionAnimate, scroll } from 'motion';
 import { useEffect } from 'react';
 
 /**
@@ -15,11 +13,20 @@ export function OverviewMotion() {
 		if (!stage || !page) return;
 
 		const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+		let cancelled = false;
+		let setupStarted = false;
+		let setupGeneration = 0;
+		let idleSetupHandle: number | null = null;
+		let setupTimer: number | null = null;
 		let disposeAnimations = () => {};
 
-		const setupAnimations = () => {
+		const setupAnimations = async () => {
+			const generation = ++setupGeneration;
 			disposeAnimations();
 			if (motionPreference.matches) return;
+
+			const [anime, motion] = await Promise.all([import('animejs'), import('motion')]);
+			if (cancelled || motionPreference.matches || generation !== setupGeneration) return;
 
 			const cleanups: Array<() => void> = [];
 			const word = stage.querySelector<HTMLElement>('.stage-word');
@@ -27,7 +34,7 @@ export function OverviewMotion() {
 
 			if (word) {
 				word.style.willChange = 'transform, opacity, filter';
-				const animation = motionAnimate(
+				const animation = motion.animate(
 					word,
 					{
 						transform: ['translate3d(0, 0, 0) scale(1)', 'translate3d(5vw, -1.5rem, 0) scale(0.94)'],
@@ -36,7 +43,7 @@ export function OverviewMotion() {
 					},
 					{ ease: 'linear' },
 				);
-				cleanups.push(scroll(animation, { target: stage, offset: ['start start', 'end start'] }));
+				cleanups.push(motion.scroll(animation, { target: stage, offset: ['start start', 'end start'] }));
 				cleanups.push(() => {
 					animation.cancel();
 					word.style.removeProperty('will-change');
@@ -45,12 +52,12 @@ export function OverviewMotion() {
 
 			if (body) {
 				body.style.willChange = 'transform, opacity';
-				const animation = motionAnimate(
+				const animation = motion.animate(
 					body,
 					{ transform: ['translate3d(0, 0, 0)', 'translate3d(0, -1.25rem, 0)'], opacity: [1, 0.4] },
 					{ ease: 'linear' },
 				);
-				cleanups.push(scroll(animation, { target: stage, offset: ['start start', 'end start'] }));
+				cleanups.push(motion.scroll(animation, { target: stage, offset: ['start start', 'end start'] }));
 				cleanups.push(() => {
 					animation.cancel();
 					body.style.removeProperty('will-change');
@@ -62,14 +69,14 @@ export function OverviewMotion() {
 				const parts = Array.from(caption.children);
 				if (!exhibit || parts.length === 0) return;
 
-				const animation = animeAnimate(parts, {
+				const animation = anime.animate(parts, {
 					opacity: { from: 0.35 },
 					x: { from: '-0.7rem' },
 					letterSpacing: { from: '0.18em' },
-					delay: stagger(55),
+					delay: anime.stagger(55),
 					duration: 620,
 					ease: 'outExpo',
-					autoplay: onScroll({ target: exhibit, enter: 'bottom top', repeat: false }),
+					autoplay: anime.onScroll({ target: exhibit, enter: 'bottom top', repeat: false }),
 				});
 				cleanups.push(() => animation.revert());
 			});
@@ -87,13 +94,13 @@ export function OverviewMotion() {
 				const target = items[0]?.parentElement;
 				if (!target || items.length === 0) continue;
 
-				const animation = animeAnimate(items, {
+				const animation = anime.animate(items, {
 					opacity: { from: 0.5 },
 					y: { from: '0.65rem' },
-					delay: stagger(45),
+					delay: anime.stagger(45),
 					duration: 560,
 					ease: 'outExpo',
-					autoplay: onScroll({ target, enter: 'bottom top', repeat: false }),
+					autoplay: anime.onScroll({ target, enter: 'bottom top', repeat: false }),
 				});
 				cleanups.push(() => animation.revert());
 			}
@@ -104,11 +111,49 @@ export function OverviewMotion() {
 			};
 		};
 
-		setupAnimations();
-		motionPreference.addEventListener('change', setupAnimations);
+		const removeSetupTriggers = () => {
+			window.removeEventListener('scroll', startSetup);
+			window.removeEventListener('pointerdown', startSetup);
+			window.removeEventListener('keydown', startSetup);
+		};
+		const startSetup = () => {
+			if (cancelled || setupStarted) return;
+			setupStarted = true;
+			if (idleSetupHandle !== null) {
+				window.cancelIdleCallback(idleSetupHandle);
+				idleSetupHandle = null;
+			}
+			if (setupTimer !== null) {
+				window.clearTimeout(setupTimer);
+				setupTimer = null;
+			}
+			removeSetupTriggers();
+			void setupAnimations();
+		};
+		const onPreferenceChange = () => {
+			setupGeneration += 1;
+			disposeAnimations();
+			if (!motionPreference.matches) void setupAnimations();
+		};
+
+		window.addEventListener('scroll', startSetup, { passive: true, once: true });
+		window.addEventListener('pointerdown', startSetup, { passive: true, once: true });
+		window.addEventListener('keydown', startSetup, { once: true });
+		const requestIdleSetup = window.requestIdleCallback?.bind(window);
+		if (requestIdleSetup) {
+			idleSetupHandle = requestIdleSetup(startSetup, { timeout: 500 });
+		} else {
+			setupTimer = window.setTimeout(startSetup, 100);
+		}
+		motionPreference.addEventListener('change', onPreferenceChange);
 
 		return () => {
-			motionPreference.removeEventListener('change', setupAnimations);
+			cancelled = true;
+			setupGeneration += 1;
+			removeSetupTriggers();
+			if (idleSetupHandle !== null) window.cancelIdleCallback(idleSetupHandle);
+			if (setupTimer !== null) window.clearTimeout(setupTimer);
+			motionPreference.removeEventListener('change', onPreferenceChange);
 			disposeAnimations();
 		};
 	}, []);
