@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Archivo, Bricolage_Grotesque, Spline_Sans_Mono } from 'next/font/google';
 import '@aurora-ui/substrate/style.css';
 import './globals.css';
-import '../instrumentation-client';
+import { AnalyticsProvider } from '@/components/analytics-provider';
 
 const archivo = Archivo({ subsets: ['latin'], variable: '--font-archivo' });
 const display = Bricolage_Grotesque({ subsets: ['latin'], variable: '--font-display' });
@@ -23,13 +23,12 @@ FIRST VIEWPORT: the landing at / is the stage grown to the whole viewport: curso
 FORM: user-pinned direction (dark editorial-experimental portal); no roll — a brief-pinned direction beats the roll.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 `;
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en" className={`dark ${archivo.variable} ${display.variable} ${mono.variable}`}>
 			<body>
 				<div hidden aria-hidden="true" dangerouslySetInnerHTML={{ __html: `<!--${CONTRACT}-->` }} />
-				{children}
+				<AnalyticsProvider>{children}</AnalyticsProvider>
 			</body>
 		</html>
 	);
