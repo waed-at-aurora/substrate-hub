@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
+import posthog from 'posthog-js';
 import {
 	Accordion,
 	AccordionContent,
@@ -344,6 +345,12 @@ export function Catalog({ entries }: { entries: CatalogEntry[] }) {
 		[entries]
 	);
 
+	const selectLayer = (nextLayer: (typeof LAYERS)[number]) => {
+		if (nextLayer === layer) return;
+		posthog.capture('component_catalog_filter_selected', { layer: nextLayer });
+		setLayer(nextLayer);
+	};
+
 	const visibleEntries = useMemo(() => {
 		const needle = q.trim().toLowerCase();
 		return galleryEntries.filter(
@@ -365,7 +372,7 @@ export function Catalog({ entries }: { entries: CatalogEntry[] }) {
 				/>
 				<div className="filter-group" role="group" aria-label="Filter by layer">
 					{LAYERS.map((option) => (
-						<button key={option} type="button" aria-pressed={layer === option} onClick={() => setLayer(option)}>
+						<button key={option} type="button" aria-pressed={layer === option} onClick={() => selectLayer(option)}>
 							{option === 'all' ? 'All' : `${option}s`}
 						</button>
 					))}

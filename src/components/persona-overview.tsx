@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { type KeyboardEvent as ReactKeyboardEvent, useEffect, useRef, useState } from 'react';
+import posthog from 'posthog-js';
 import { ExtArrow } from '@/components/marks';
 import { storybookHref } from '@/config/site';
 import styles from './persona-overview.module.css';
@@ -215,6 +216,12 @@ export function PersonaOverview({ primitives, composites }: { primitives: number
 		return () => animation.cancel();
 	}, [activeId]);
 
+	const selectPersona = (personaId: Persona['id']) => {
+		if (personaId === activeId) return;
+		posthog.capture('persona_selected', { persona_id: personaId });
+		setActiveId(personaId);
+	};
+
 	const handleTabKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>, index: number) => {
 		let nextIndex: number | null = null;
 		if (event.key === 'ArrowRight') nextIndex = (index + 1) % PERSONAS.length;
@@ -224,7 +231,7 @@ export function PersonaOverview({ primitives, composites }: { primitives: number
 		if (nextIndex === null) return;
 
 		event.preventDefault();
-		setActiveId(PERSONAS[nextIndex].id);
+		selectPersona(PERSONAS[nextIndex].id);
 		tabRefs.current[nextIndex]?.focus();
 	};
 
@@ -257,7 +264,7 @@ export function PersonaOverview({ primitives, composites }: { primitives: number
 								tabIndex={isActive ? 0 : -1}
 								className={styles.trigger}
 								data-persona-trigger
-								onClick={() => setActiveId(persona.id)}
+								onClick={() => selectPersona(persona.id)}
 								onKeyDown={(event) => handleTabKeyDown(event, index)}
 							>
 								<span>{persona.name}</span>

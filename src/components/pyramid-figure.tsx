@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import posthog from 'posthog-js';
 
 type Layer = 'products' | 'substrate' | 'foundation';
 
@@ -14,6 +15,8 @@ export function PyramidFigure({ composites, primitives }: { composites: number; 
 
 	const pick = (layer: Layer) => (e: React.MouseEvent) => {
 		e.preventDefault();
+		if (layer === open) return;
+		posthog.capture('system_pyramid_layer_selected', { layer });
 		setOpen(layer);
 	};
 
