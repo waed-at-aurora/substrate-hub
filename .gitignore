@@ -4,3 +4,6 @@ out/
 *.tsbuildinfo
 next-env.d.ts
 .impeccable/config.local.json
+.env
+.env.*
+!.env.example

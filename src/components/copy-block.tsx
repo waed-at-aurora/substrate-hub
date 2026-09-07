@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import posthog from 'posthog-js';
 
 export function CopyBlock({
 	label,
@@ -21,6 +22,10 @@ export function CopyBlock({
 	const copy = async () => {
 		try {
 			await navigator.clipboard.writeText(code);
+			posthog.capture('documentation_code_copied', {
+				copy_surface: prompt ? 'agent_prompt' : 'code_block',
+				has_preview: Boolean(preview),
+			});
 			setCopied(true);
 			if (timer.current) clearTimeout(timer.current);
 			timer.current = setTimeout(() => setCopied(false), 1600);
