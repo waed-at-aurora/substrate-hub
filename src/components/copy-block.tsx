@@ -22,15 +22,24 @@ export function CopyBlock({
 	const copy = async () => {
 		try {
 			await navigator.clipboard.writeText(code);
+		} catch {
+			/* clipboard unavailable: leave the text selectable */
+			return;
+		}
+		setCopied(true);
+		if (timer.current) {
+			clearTimeout(timer.current);
+			timer.current = null;
+		}
+		timer.current = setTimeout(() => setCopied(false), 1600);
+
+		try {
 			posthog.capture('documentation_code_copied', {
 				copy_surface: prompt ? 'agent_prompt' : 'code_block',
 				has_preview: Boolean(preview),
 			});
-			setCopied(true);
-			if (timer.current) clearTimeout(timer.current);
-			timer.current = setTimeout(() => setCopied(false), 1600);
 		} catch {
-			/* clipboard unavailable: leave the text selectable */
+			/* telemetry must not affect the copy interaction */
 		}
 	};
 

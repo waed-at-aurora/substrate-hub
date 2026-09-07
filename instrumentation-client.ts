@@ -19,6 +19,9 @@ if (!projectToken) {
 	posthog.init(projectToken, {
 		api_host: host,
 		defaults: '2026-01-30',
+		capture_performance: {
+			web_vitals: false,
+		},
 		capture_exceptions: {
 			capture_unhandled_errors: true,
 			capture_unhandled_rejections: true,
