@@ -175,196 +175,62 @@
 }
 
 .pathBlock {
-	padding: clamp(1.35rem, 2.8vw, 2.3rem) 0 clamp(1.45rem, 2.6vw, 2.2rem) clamp(1rem, 2.4vw, 2.2rem);
-}
-
-.pathTitle {
-	margin: 0;
-	color: var(--ink);
-	font-family: var(--font-display), var(--font-archivo), sans-serif;
-	font-size: clamp(1.02rem, 1.6vw, 1.22rem);
-	font-variation-settings: 'wght' 660;
-	letter-spacing: -0.014em;
-	line-height: 1.14;
-	text-wrap: balance;
-}
-
-.pathPurpose {
-	max-width: 56ch;
-	margin: 0.42rem 0 0;
-	color: var(--ink-2);
-	font-size: 0.82rem;
-	line-height: 1.48;
+	padding: clamp(2rem, 4vw, 3.5rem) 0 clamp(1.8rem, 3vw, 2.8rem) clamp(1.4rem, 3vw, 3.2rem);
 }
 
 .pathLabel {
-	margin: 0.7rem 0 0.7rem;
-	color: color-mix(in srgb, var(--muted) 82%, var(--yellow));
+	margin: 0 0 1.3rem;
+	color: var(--muted);
 	font-family: var(--font-mono), monospace;
-	font-size: 0.62rem;
+	font-size: 0.7rem;
 	font-weight: 500;
 	letter-spacing: 0.12em;
 	text-transform: uppercase;
 }
 
 .path {
-	--timeline-head-travel-x: calc(100% - 1.18rem);
-	--timeline-head-travel-y: 0px;
-	--timeline-head-step-2-x: calc(var(--timeline-head-travel-x) * 0.3333);
-	--timeline-head-step-3-x: calc(var(--timeline-head-travel-x) * 0.6666);
-	--timeline-head-step-4-x: var(--timeline-head-travel-x);
-	--timeline-head-step-2-y: calc(var(--timeline-head-travel-y) * 0.3333);
-	--timeline-head-step-3-y: calc(var(--timeline-head-travel-y) * 0.6666);
-	--timeline-head-step-4-y: var(--timeline-head-travel-y);
 	position: relative;
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 0.55rem;
+	gap: 0;
 	margin: 0;
-	padding: 1rem 0 0;
+	padding: 0;
 	list-style: none;
-	counter-reset: step;
 }
 
 .path::before {
 	content: '';
 	position: absolute;
-	left: 0.38rem;
-	right: 0.38rem;
-	top: 0.28rem;
+	top: 0.3rem;
+	left: 0.28rem;
+	right: 0.28rem;
 	height: 1px;
-	background: color-mix(in srgb, var(--rule) 80%, var(--yellow));
-}
-
-.path::after {
-	content: '';
-	position: absolute;
-	left: 0.38rem;
-	top: 0.07rem;
-	width: 0.42rem;
-	height: 0.42rem;
-	border-radius: 50%;
-	background: color-mix(in srgb, var(--yellow) 92%, white);
-	box-shadow: 0 0 0.5rem color-mix(in srgb, var(--yellow) 26%, transparent);
-	opacity: 0;
-	transform: translateX(0);
-	z-index: 2;
+	background: var(--rule);
 }
 
 .path li {
 	position: relative;
-	counter-increment: step;
-	padding: 0.9rem 0.45rem 0 0;
-	color: var(--ink);
-	font-size: 0.8rem;
+	padding: 1.15rem 0.75rem 0 0;
+	color: var(--ink-2);
+	font-size: 0.9rem;
 	font-weight: 600;
-	line-height: 1.2;
 }
 
 .path li::before {
 	content: '';
 	position: absolute;
-	left: 0;
 	top: 0;
-	width: 0.56rem;
-	height: 0.56rem;
-	border: 1px solid color-mix(in srgb, var(--rule) 58%, var(--yellow));
-	background: var(--paper-raised);
-	border-radius: 50%;
-	transform: scale(1);
-	transform-origin: center;
-	z-index: 1;
+	left: 0;
+	width: 0.58rem;
+	height: 0.58rem;
+	border: 1px solid var(--ink-2);
+	background: var(--paper);
 }
 
-.pathStep {
-	display: block;
-	font-family: var(--font-display), var(--font-archivo), sans-serif;
-	font-size: 0.88rem;
-	font-variation-settings: 'wght' 640;
-	letter-spacing: -0.01em;
-	line-height: 1.16;
+.path li:last-child::before {
+	background: var(--ink);
 }
 
-.pathStep::before {
-	content: '0' counter(step);
-	display: block;
-	margin-bottom: 0.18rem;
-	color: color-mix(in srgb, var(--muted) 80%, var(--yellow));
-	font-family: var(--font-mono), monospace;
-	font-size: 0.54rem;
-	font-weight: 520;
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
-}
-
-.pathSub {
-	display: block;
-	margin-top: 0.18rem;
-	color: color-mix(in srgb, var(--ink-2) 90%, var(--muted));
-	font-size: 0.68rem;
-	font-weight: 500;
-	line-height: 1.28;
-	text-wrap: balance;
-	max-width: 20ch;
-}
-
-@keyframes path-head-run {
-	0%,
-	5% {
-		opacity: 0;
-		transform: translate3d(0, 0, 0);
-	}
-	11% {
-		opacity: 0.92;
-		transform: translate3d(0, 0, 0);
-	}
-	36% {
-		opacity: 0.92;
-		transform: translate3d(var(--timeline-head-step-2-x), var(--timeline-head-step-2-y), 0);
-	}
-	60% {
-		opacity: 0.92;
-		transform: translate3d(var(--timeline-head-step-3-x), var(--timeline-head-step-3-y), 0);
-	}
-	82% {
-		opacity: 0.92;
-		transform: translate3d(var(--timeline-head-step-4-x), var(--timeline-head-step-4-y), 0);
-	}
-	87% {
-		opacity: 0;
-		transform: translate3d(var(--timeline-head-step-4-x), var(--timeline-head-step-4-y), 0);
-	}
-	88%,
-	100% {
-		opacity: 0;
-		transform: translate3d(0, 0, 0);
-	}
-}
-
-@keyframes path-node-pulse {
-	0%,
-	100% {
-		transform: scale(1);
-		border-color: color-mix(in srgb, var(--rule) 58%, var(--yellow));
-		background: var(--paper-raised);
-	}
-	22%,
-	40% {
-		transform: scale(1.1);
-		border-color: color-mix(in srgb, var(--rule) 32%, var(--yellow));
-		background: color-mix(in srgb, var(--yellow) 22%, var(--paper-raised));
-	}
-}
-
-.path[data-looping='true']::after {
-	will-change: transform, opacity;
-	animation: path-head-run 3600ms linear infinite;
-}
-
-.path[data-looping='true'] li::before {
-	animation: path-node-pulse 3600ms var(--ease-out) infinite;
-	animation-delay: var(--path-delay, 0ms);
-}
 .outcomes {
 	display: grid;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -498,46 +364,23 @@
 	}
 
 	.path {
-		--timeline-head-travel-x: 0px;
-		--timeline-head-travel-y: calc(100% - 0.76rem);
-		grid-template-columns: minmax(0, 1fr);
-		gap: 0.55rem;
-		padding-top: 0.25rem;
-		padding-left: 1.25rem;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.8rem 1.2rem;
 	}
 
 	.path::before {
-		left: 0.26rem;
-		right: auto;
-		top: 0.34rem;
-		bottom: 0.42rem;
-		width: 1px;
-		height: auto;
-	}
-
-	.path::after {
-		left: 0.05rem;
-		top: 0.13rem;
+		display: none;
 	}
 
 	.path li {
-		padding: 0.08rem 0 0.12rem 0.72rem;
-		border-top: 0;
+		padding: 0.8rem 0 0.7rem 1.1rem;
+		border-top: 1px solid var(--rule-soft);
 	}
 
 	.path li::before {
-		left: -1.2rem;
-		top: 0.23rem;
-		width: 0.5rem;
-		height: 0.5rem;
-	}
-
-	.pathSub {
-		max-width: none;
-	}
-
-	.path[data-looping='true']::after {
-		animation-name: path-head-run;
+		top: 1.05rem;
+		width: 0.48rem;
+		height: 0.48rem;
 	}
 
 	.outcomes {
@@ -578,8 +421,6 @@
 		transition: none;
 	}
 
-	.path[data-looping='true']::after,
-	.path[data-looping='true'] li::before,
 	.trigger[aria-selected='true'] {
 		animation: none;
 	}
