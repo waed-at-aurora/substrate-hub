@@ -248,7 +248,6 @@ export function PersonaOverview({ primitives, composites }: { primitives: number
 			setIsPathLooping(false);
 		};
 	}, [activeId]);
-
 	const selectPersona = (personaId: Persona['id']) => {
 		if (personaId === activeId) return;
 		posthog.capture('persona_selected', { persona_id: personaId });

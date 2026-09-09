@@ -22,6 +22,7 @@ export function CopyBlock({
 	const copy = async () => {
 		try {
 			await navigator.clipboard.writeText(code);
+
 		} catch {
 			/* clipboard unavailable: leave the text selectable */
 			return;
