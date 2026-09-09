@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { type KeyboardEvent as ReactKeyboardEvent, useEffect, useRef, useState } from 'react';
+import { type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, useEffect, useRef, useState } from 'react';
 import posthog from 'posthog-js';
 import { ExtArrow } from '@/components/marks';
 import { storybookHref } from '@/config/site';
@@ -142,6 +142,13 @@ const PERSONAS: readonly Persona[] = [
 	},
 ];
 
+const VALUE_PATH_NOTES = [
+	'Set the foundation once.',
+	'Find the right building blocks.',
+	'Assemble production-ready behavior.',
+	'Deliver consistent outcomes.',
+] as const;
+
 function ForwardArrow() {
 	return (
 		<svg width="13" height="12" viewBox="0 0 13 12" fill="none" aria-hidden="true">
@@ -183,7 +190,9 @@ function PersonaLink({ action }: { action: PersonaAction }) {
 
 export function PersonaOverview({ primitives, composites }: { primitives: number; composites: number }) {
 	const [activeId, setActiveId] = useState(PERSONAS[0].id);
+	const [isPathLooping, setIsPathLooping] = useState(false);
 	const panelRef = useRef<HTMLDivElement | null>(null);
+	const pathRef = useRef<HTMLOListElement | null>(null);
 	const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 	const activeIndex = Math.max(
 		0,
@@ -216,6 +225,29 @@ export function PersonaOverview({ primitives, composites }: { primitives: number
 		return () => animation.cancel();
 	}, [activeId]);
 
+	useEffect(() => {
+		const path = pathRef.current;
+		if (!path || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+		let isIntersecting = false;
+		const syncLooping = () => setIsPathLooping(isIntersecting && !document.hidden);
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				isIntersecting = entry ? entry.isIntersecting && entry.intersectionRatio >= 0.35 : false;
+				syncLooping();
+			},
+			{ threshold: [0, 0.35, 0.7] },
+		);
+
+		observer.observe(path);
+		document.addEventListener('visibilitychange', syncLooping);
+
+		return () => {
+			observer.disconnect();
+			document.removeEventListener('visibilitychange', syncLooping);
+			setIsPathLooping(false);
+		};
+	}, [activeId]);
 	const selectPersona = (personaId: Persona['id']) => {
 		if (personaId === activeId) return;
 		posthog.capture('persona_selected', { persona_id: personaId });
@@ -293,10 +325,25 @@ export function PersonaOverview({ primitives, composites }: { primitives: number
 
 						<div className={styles.panelBody}>
 							<div className={styles.pathBlock}>
-								<p className={styles.pathLabel}>How value moves</p>
-								<ol className={styles.path} aria-label={`${activePersona.name} value path`}>
-									{activePersona.path.map((step) => (
-										<li key={step}>{step}</li>
+								<p className={styles.pathTitle}>How value is created</p>
+								<p className={styles.pathPurpose}>
+									{activePersona.name} moves from first action to aligned outcomes through four
+									repeatable steps.
+								</p>
+								<p className={styles.pathLabel}>Value timeline</p>
+								<ol
+									ref={pathRef}
+									className={styles.path}
+									data-looping={isPathLooping}
+									aria-label={`${activePersona.name} value path`}
+								>
+									{activePersona.path.map((step, index) => (
+										<li key={step} style={{ '--path-delay': `${index * 180}ms` } as CSSProperties}>
+											<span className={styles.pathStep}>{step}</span>
+											<span className={styles.pathSub}>
+												{VALUE_PATH_NOTES[index]}
+											</span>
+										</li>
 									))}
 								</ol>
 							</div>
