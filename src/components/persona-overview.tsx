@@ -60,9 +60,9 @@ const PERSONAS: readonly Persona[] = [
 		id: 'product',
 		name: 'Product teams',
 		promise: 'Prototype earlier',
-		headline: 'Make the possibility tangible before the roadmap hardens.',
+		headline: 'Make ideas real before committing to the roadmap.',
 		summary:
-			'Explore patterns and ready-made components, combine them into early concepts, and check platform guidance before committing delivery effort.',
+			'Explore common design solutions and ready-made components, combine them into early concepts, and experiment with different approaches before committing time and effort to a full solution.',
 		path: ['Explore', 'Combine', 'Prototype', 'Align'],
 		outcomes: [
 			{
@@ -240,9 +240,7 @@ export function PersonaOverview({ primitives, composites }: { primitives: number
 			<div className={styles.intro}>
 				<h2>One system. Four reasons to care.</h2>
 				<p>
-					Choose the outcome you are responsible for. Substrate stays the same; the value becomes specific.
-					Across every view, {primitives} shared building blocks and {composites} ready-made components turn
-					repeated decisions into reusable progress.
+					Start with the outcome you want to achieve. Substrate gives every team the same shared foundation, which they can apply to their own product needs.
 				</p>
 			</div>
 

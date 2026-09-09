@@ -19,13 +19,6 @@ export function Exhibit({
 }) {
 	return (
 		<section className="exhibit" id={id}>
-			<div className="exhibit-caption">
-				<strong>
-					{live ? <span className="live-dot">● </span> : null}
-					{label}
-				</strong>
-				{meta ? <span>{meta}</span> : null}
-			</div>
 			{children}
 		</section>
 	);

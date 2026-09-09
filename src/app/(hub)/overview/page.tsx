@@ -59,11 +59,11 @@ export default function Home() {
 			>
 				<div className="overview-definition">
 					<div className="overview-definition-lead">
-						<h2 className="statement">A common way to solve recurring product interactions.</h2>
+						<h2 className="statement">A common way to solve common product interactions.</h2>
 						<p className="lede">
-							Substrate sits between low-level UI foundations and complete EOS experiences. It
-							packages shared decisions into reusable composite components and documented patterns,
-							so teams start from established behavior instead of recreating the same interaction.
+							Substrate sits between UI foundations and EOS products. Bringing shared decisions
+							together into reusable components and documented patterns, helping teams build from a
+							common starting point instead of solving the same customer needs again and again.
 						</p>
 					</div>
 					<dl className="overview-boundary" aria-label="Substrate ownership boundary">
@@ -74,7 +74,7 @@ export default function Home() {
 						<div>
 							<dt>Owned by each product</dt>
 							<dd>
-								Domain workflows, data, content, and the decisions that make an experience distinct.
+								Giving each product the freedom to customise for its own needs, while saving time.
 							</dd>
 						</div>
 					</dl>

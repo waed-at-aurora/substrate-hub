@@ -29,10 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			<body>
 				<div hidden aria-hidden="true" dangerouslySetInnerHTML={{ __html: `<!--${CONTRACT}-->` }} />
 				<AnalyticsProvider>{children}</AnalyticsProvider>
-			{/* impeccable-live-start */}
-<script src="http://localhost:8400/live.js?token=7850aa67-6064-4aef-b3ac-bdc25b358768"></script>
-{/* impeccable-live-end */}
-</body>
+			</body>
 		</html>
 	);
 }
