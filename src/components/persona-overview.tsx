@@ -32,9 +32,9 @@ const PERSONAS: readonly Persona[] = [
 		id: 'developers',
 		name: 'Dev teams',
 		promise: 'Build sooner',
-		headline: 'Go from setup to a working product flow, fast.',
+		headline: 'Go from setup to a working feature, fast.',
 		summary:
-			'Install once, find the right component, and plug proven interactions into the workflows your team already uses.',
+			'Install once, find the right component, and tailor it with your product’s data, states and features.',
 		path: ['Install', 'Discover', 'Compose', 'Ship'],
 		outcomes: [
 			{
@@ -67,7 +67,7 @@ const PERSONAS: readonly Persona[] = [
 		outcomes: [
 			{
 				title: 'See what is possible',
-				body: 'Working components and patterns reveal credible solution shapes at the start of discovery.',
+				body: 'Working components and patterns reveal credible solution at the start of discovery.',
 			},
 			{
 				title: 'Prototype with real parts',
@@ -238,7 +238,7 @@ export function PersonaOverview({ primitives, composites }: { primitives: number
 	return (
 		<div className={styles.root}>
 			<div className={styles.intro}>
-				<h2>One system. Four reasons to care.</h2>
+				<h2>Together, through one system.</h2>
 				<p>
 					Start with the outcome you want to achieve. Substrate gives every team the same shared foundation, which they can apply to their own product needs.
 				</p>
