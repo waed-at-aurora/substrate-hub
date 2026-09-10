@@ -17,11 +17,11 @@ export default function GetStarted() {
 					<span>02 · Get started</span>
 					<span>{data.source.package} v{latestReleaseVersion}</span>
 				</p>
-				<h1 style={{ fontSize: 'clamp(2rem, 3.6vw, 3.2rem)' }}>From zero to a rendered component.</h1>
+				<h1 style={{ fontSize: 'clamp(2rem, 3.6vw, 3.2rem)' }}>From zero to a complete component in minutes.</h1>
 				<p className="cover-standfirst">
 					Start with your coding agent, then use the remaining steps to understand or complete the
 					same setup yourself: check the environment, install the package, wire styles and theme,
-					render a component, and verify. Component-level detail stays in Storybook.
+					render a component, and verify.
 				</p>
 			</div>
 
@@ -31,7 +31,7 @@ export default function GetStarted() {
 						<div>
 							<h3>Ask your agent to set up Substrate</h3>
 							<p className="agent-lede">
-								Paste this into Claude Code or opencode. Your agent will inspect the project first,
+								Paste this into your coding agent. Your agent will inspect the project first,
 								then follow the guided CLI path detailed below.
 							</p>
 							<CopyBlock
@@ -41,7 +41,7 @@ export default function GetStarted() {
 								code={SETUP_SUBSTRATE_PROMPT}
 							/>
 							<p className="note agent-skill-note">
-								For repeat use, install the CLI&rsquo;s agent skill once. Claude-compatible agents
+								For repeat use, install the CLI&rsquo;s agent skill once. Coding agents
 								then discover Substrate automatically in any project.
 							</p>
 							<CopyBlock
