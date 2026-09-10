@@ -138,7 +138,7 @@ export default function Home() {
 					</thead>
 					<tbody>
 						<tr>
-							<td>Composite components &amp; patterns</td>
+							<td>Complete components &amp; UI patterns</td>
 							<td className="num">{data.counts.composites}</td>
 							<td className="dim">stable</td>
 							<td rowSpan={3}>
@@ -149,24 +149,18 @@ export default function Home() {
 							</td>
 						</tr>
 						<tr>
-							<td>UI primitives</td>
+							<td>Basic UI elements</td>
 							<td className="num">{data.counts.primitives}</td>
 							<td className="dim">stable</td>
 						</tr>
 						<tr>
-							<td>Experimental (ux-intent track)</td>
+							<td>Experimental</td>
 							<td className="num">{data.counts.experimental}</td>
 							<td className="dim">alpha</td>
 						</tr>
 					</tbody>
 				</table>
-				<p className="note" style={{ marginTop: '0.8rem' }}>
-					One documented interaction pattern — <Link href="/patterns/forms">Forms</Link> — with{' '}
-					{data.forms.examples.length} worked examples across {data.forms.chapters.length} chapters.
-				</p>
 			</Exhibit>
-
-
 		</>
 	);
 }
