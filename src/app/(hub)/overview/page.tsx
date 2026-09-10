@@ -69,7 +69,7 @@ export default function Home() {
 					<dl className="overview-boundary" aria-label="Substrate ownership boundary">
 						<div>
 							<dt>Shared through Substrate</dt>
-							<dd>Interaction behavior, UI foundations, reusable components, and recurring patterns.</dd>
+							<dd>Interaction behaviour, UI foundations, reusable components, and repeated patterns.</dd>
 						</div>
 						<div>
 							<dt>Owned by each product</dt>
