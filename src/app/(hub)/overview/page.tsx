@@ -96,14 +96,17 @@ export default function Home() {
 				<CopyBlock
 					label="Guided — the Substrate CLI checks your environment, then runs the real install"
 					code={`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 doctor\nnpx --yes github:AuroraEnergyResearch/substrate-cli-v2 install`}
+					lang="bash"
 				/>
 				<CopyBlock
 					label="Manual, inside the aurora-ui monorepo — package.json"
 					code={`"dependencies": {\n\t"@aurora-ui/substrate": "workspace:packages/substrate"\n}`}
+					lang="json"
 				/>
 				<CopyBlock
 					label="First import"
 					code={`import { Button } from '@aurora-ui/substrate';\nimport '@aurora-ui/substrate/style.css';`}
+					lang="tsx"
 				/>
 				<p className="note" style={{ marginTop: '0.9rem' }}>
 					The <a href={site.cliUrl} target="_blank" rel="noreferrer">Substrate CLI</a> also

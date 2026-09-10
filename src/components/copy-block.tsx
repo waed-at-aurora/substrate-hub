@@ -2,16 +2,19 @@
 
 import { useState, useRef } from 'react';
 import posthog from 'posthog-js';
+import { highlightLines, type CodeLang } from '@/lib/code-highlight';
 
 export function CopyBlock({
 	label,
 	code,
+	lang,
 	prompt = false,
 	preview,
 	copyLabel = 'copy',
 }: {
 	label?: string;
 	code: string;
+	lang?: CodeLang;
 	prompt?: boolean;
 	preview?: string;
 	copyLabel?: string;
@@ -48,7 +51,20 @@ export function CopyBlock({
 		<div className={`codeblock${prompt ? ' codeblock--prompt' : ''}${preview ? ' codeblock--compact' : ''}`}>
 			{label ? <span className="codeblock-label">{label}</span> : null}
 			<pre>
-				<code>{preview ?? code}</code>
+				<code>
+					{preview
+						? preview
+						: lang
+							? highlightLines(code, lang).map((lineNodes, i) => (
+									<span className="code-row" key={i}>
+										<span className="ln" aria-hidden="true">
+											{i + 1}
+										</span>
+										<span className="ln-content">{lineNodes}</span>
+									</span>
+								))
+							: code}
+				</code>
 			</pre>
 			<button
 				type="button"

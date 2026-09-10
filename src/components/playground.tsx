@@ -15,6 +15,7 @@ import {
 	SelectValue,
 } from '@aurora-ui/substrate/components';
 import type { InvestmentCaseSelectionCardState } from '@aurora-ui/substrate/components';
+import { highlightLines } from '@/lib/code-highlight';
 
 /** Real option surface of packages/substrate/src/components/investment-case-selection-card.tsx. */
 const STATES: readonly InvestmentCaseSelectionCardState[] = ['active', 'selected', 'default'];
@@ -125,7 +126,16 @@ function PlaygroundControls({
 					Import
 				</span>
 				<pre>
-					<code>{snippet}</code>
+					<code>
+						{highlightLines(snippet, 'tsx').map((lineNodes, i) => (
+							<span className="code-row" key={i}>
+								<span className="ln" aria-hidden="true">
+									{i + 1}
+								</span>
+								<span className="ln-content">{lineNodes}</span>
+							</span>
+						))}
+					</code>
 				</pre>
 			</div>
 		</div>

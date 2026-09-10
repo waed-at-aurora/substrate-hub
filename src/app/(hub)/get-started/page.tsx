@@ -47,6 +47,7 @@ export default function GetStarted() {
 							<CopyBlock
 								label="Install the Substrate agent skill"
 								code={`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 skill install`}
+								lang="bash"
 							/>
 							<p className="note" style={{ marginTop: '0.7rem' }}>
 								The private CLI repository requires <code>gh auth login</code>. Prefer to drive the
@@ -82,10 +83,12 @@ export default function GetStarted() {
 							<CopyBlock
 								label="Guided — check, preview, then install"
 								code={`npx --yes github:AuroraEnergyResearch/substrate-cli-v2 doctor\nnpx --yes github:AuroraEnergyResearch/substrate-cli-v2 install --dry-run\nnpx --yes github:AuroraEnergyResearch/substrate-cli-v2 install`}
+								lang="bash"
 							/>
 							<CopyBlock
 								label="Manual — inside the monorepo, package.json"
 								code={`"dependencies": {\n\t"@aurora-ui/substrate": "workspace:packages/substrate"\n}`}
+								lang="json"
 							/>
 							<p className="note" style={{ marginTop: '0.7rem' }}>
 								Outside the monorepo, use the guided CLI install — it handles the private-registry
@@ -105,6 +108,7 @@ export default function GetStarted() {
 							<CopyBlock
 								label="Root of your app"
 								code={`import '@aurora-ui/substrate/style.css';\n\n<html className="dark"> … </html>`}
+								lang="tsx"
 							/>
 						</div>
 					</li>
@@ -114,6 +118,7 @@ export default function GetStarted() {
 							<CopyBlock
 								label="Anywhere in your tree"
 								code={`import { Button } from '@aurora-ui/substrate';\n\n<Button variant="eos">Run scenario</Button>`}
+								lang="tsx"
 							/>
 							<p className="note" style={{ marginTop: '0.7rem' }}>
 								Steer it live in <Link href="/#live">Fig. 2 on the overview</Link> — every option

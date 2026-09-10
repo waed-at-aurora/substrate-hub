@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { highlightCode } from '@/lib/code-highlight';
 
 /** Compact one-line install command with copy — the stage's quiet workhorse. */
 export function InstallLine({ command }: { command: string }) {
@@ -43,7 +44,7 @@ export function InstallLine({ command }: { command: string }) {
 			<span className="prompt" aria-hidden="true">
 				$
 			</span>
-			<code ref={code}>{command}</code>
+			<code ref={code}>{highlightCode(command, 'bash')}</code>
 			<button
 				type="button"
 				className="copy-btn copy-btn--inline"
