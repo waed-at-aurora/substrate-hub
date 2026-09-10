@@ -85,41 +85,13 @@ const PERSONAS: readonly Persona[] = [
 		],
 	},
 	{
-		id: 'stakeholders',
-		name: 'Senior stakeholders',
-		promise: 'Deliver more value',
-		headline: 'Repeat fewer decisions. Deliver more client value.',
-		summary:
-			'See how a shared system removes duplicate work, keeps experiences consistent, and concentrates investment on what makes each product valuable.',
-		path: ['Standardize', 'Reuse', 'Accelerate', 'Differentiate'],
-		outcomes: [
-			{
-				title: 'Move faster',
-				body: 'Established foundations shorten the distance between an approved idea and working software.',
-			},
-			{
-				title: 'Reduce duplicate effort',
-				body: 'Recurring decisions are made once and improved centrally instead of repeated by every team.',
-			},
-			{
-				title: 'Focus on differentiation',
-				body: 'Teams spend more of their time on the workflows and outcomes clients actually notice.',
-			},
-		],
-		actions: [
-			{ label: 'See system leverage', href: '#fits' },
-			{ label: 'Review coverage', href: '#coverage' },
-			{ label: 'Review the roadmap', href: '/roadmap' },
-		],
-	},
-	{
 		id: 'commercial',
 		name: 'Commercial',
-		promise: 'Strengthen the story',
-		headline: 'Turn platform progress into a stronger client story.',
+		promise: 'Beat the competition',
+		headline: 'Deliver modern features faster.',
 		summary:
-			'See what is polished today, what is coming next, and which capabilities can strengthen demos, pitches, and expansion conversations.',
-		path: ['Discover', 'Demonstrate', 'Position', 'Grow'],
+			'With Substrate in place, teams spend less time rebuilding the basics and more time creating valuable product features. This helps us respond to customer needs faster, bring modern experiences to market sooner and stay ahead of the competition.',
+		path: ['Discover', 'Build', 'Launch', 'Grow'],
 		outcomes: [
 			{
 				title: 'Show what is ready',
