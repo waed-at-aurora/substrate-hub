@@ -17,20 +17,19 @@ export default function Patterns() {
 						1 established pattern · {data.forms.examples.length} tested examples
 					</span>
 				</p>
-				<h1>Forms, from first field to final action.</h1>
+				<h1>UI patterns. Forms are first.</h1>
 				<p className="cover-standfirst">
-					Substrate currently documents one interaction pattern: Forms. The live package example below
-					mirrors Storybook’s structure-and-grouping example; Storybook remains the source for complete
-					guidance, edge cases, accessibility, and tested states.
+					A pattern is a recommended way to build a feature. For example, the Forms pattern 
+					shows how to organise fields, reveal fields based on previous answers, 
+					handle validation and guide people through the final action.
 				</p>
 			</div>
 
 			<Exhibit label="Established pattern · live package render" meta="@aurora-ui/substrate" id="forms">
 				<div className="forms-intro">
-					<h2 className="statement">One task. One reading order.</h2>
+					<h2 className="statement">A clear path from start to submit.</h2>
 					<p className="lede">
-						Keep context visible, group related fields, and place the action after the information
-						required to take it.
+						Keep the information people need close by, group similar fields together, and make the next action clear.
 					</p>
 				</div>
 
@@ -42,8 +41,8 @@ export default function Patterns() {
 					<div>
 						<h2>Continue with the complete pattern.</h2>
 						<p className="lede">
-							Storybook maintains all {data.forms.chapters.length} chapters and{' '}
-							{data.forms.examples.length} worked examples, including validation, recovery,
+							Storybook will continue to host more patterns and examples. Visit Storybook to explore 
+							the latest guidance, including worked examples, validation, recovery,
 							submission, sensitive actions, responsive behavior, accessibility, and testing.
 						</p>
 					</div>
