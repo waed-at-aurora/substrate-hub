@@ -138,25 +138,6 @@ export function Playground() {
 	const [year, setYear] = useState('2027');
 	const [title, setTitle] = useState('Case 27 - Solar DC');
 	const [disabled, setDisabled] = useState(false);
-	const [tick, setTick] = useState<string | null>(null);
-	const [flash, setFlash] = useState(false);
-	const first = useRef(true);
-
-	// The recalc tick: every option change re-renders the live figure and
-	// stamps the readout like a chart refresh.
-	useEffect(() => {
-		if (first.current) {
-			first.current = false;
-			return;
-		}
-		const now = new Date();
-		setTick(
-			`${now.toLocaleTimeString('en-GB', { hour12: false })}.${String(now.getMilliseconds()).padStart(3, '0')}`
-		);
-		setFlash(true);
-		const t = setTimeout(() => setFlash(false), 700);
-		return () => clearTimeout(t);
-	}, [state, duration, year, title, disabled]);
 
 	const rootProps = [state !== 'default' && `selectionState="${state}"`, disabled && 'disabled']
 		.filter(Boolean)
@@ -206,10 +187,7 @@ export function Playground() {
 					</div>
 				</div>
 				<div className="playground-readout">
-					<span>rendered from @aurora-ui/substrate · dist</span>
-					<span className="tick" data-flash={flash}>
-						{tick ? `recalc ${tick}` : 'awaiting input'}
-					</span>
+					<span>rendered from @aurora-ui/substrate</span>
 				</div>
 			</div>
 

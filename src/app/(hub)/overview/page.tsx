@@ -106,8 +106,8 @@ export default function Home() {
 					code={`import { Button } from '@aurora-ui/substrate';\nimport '@aurora-ui/substrate/style.css';`}
 				/>
 				<p className="note" style={{ marginTop: '0.9rem' }}>
-					The <a href={site.cliUrl} target="_blank" rel="noreferrer">Substrate CLI</a> (prototype) also
-					checks environments, files feedback issues, and reads component docs offline — full setup in{' '}
+					The <a href={site.cliUrl} target="_blank" rel="noreferrer">Substrate CLI</a> also
+					checks environments, reads component docs and makes it easy to raise gaps, bugs and enhancement requests. Full setup in{' '}
 					<Link href="/get-started">get started → 02</Link>.
 				</p>
 			</Exhibit>
@@ -118,10 +118,9 @@ export default function Home() {
 				meta="rendered by the installed package, not a screenshot"
 				id="live"
 			>
-				<h2>See how a component adapts before you build.</h2>
+				<h2>See how a component behaves before you build.</h2>
 				<p className="lede live-demo-copy">
-					Change the state and content to see how this composite flexes for your product. Reusable
-					components make it quicker to scaffold consistent solutions without starting from scratch.
+					Here's an example. Change the state and content to see how the component fits your product. Reusable components help you create consistent solutions faster, without starting from scratch.
 				</p>
 				<Playground />
 			</Exhibit>
