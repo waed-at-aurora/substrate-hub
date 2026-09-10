@@ -13,19 +13,16 @@ export default function Components() {
 			<div className="cover components-cover">
 				<p className="cover-issue">
 					<span>03 · Components</span>
-					<span>
-						{data.counts.composites} stable composites · {data.counts.primitives} supporting primitives
-					</span>
 				</p>
-				<h1>Start with the task, not the atom.</h1>
+				<h1>Find the right component for the job.</h1>
 				<p className="cover-standfirst">
-					Browse the live package to choose a component, inspect its real states and interactions, and
-					continue into Storybook for complete API documentation. Substrate’s documented Forms pattern
-					shows how those components come together for data-entry work.
+					Explore the available components, see how they work in different states, 
+					and open Storybook for full details. The Forms pattern shows how to combine 
+					them to build a form.
 				</p>
 				<div className="cover-actions">
 					<a className="action action-primary" href="#live-gallery">
-						Explore live specimens
+						Explore live components
 					</a>
 					<Link className="action" href="/patterns">
 						View Forms pattern
@@ -40,13 +37,12 @@ export default function Components() {
 			<section className="component-gallery-section" id="live-gallery" aria-labelledby="live-gallery-title">
 				<header className="component-gallery-header">
 					<div>
-						<h2 id="live-gallery-title">Representative live specimens.</h2>
+						<h2 id="live-gallery-title">Components ready to be used</h2>
 						<p>
-							The composite selection card leads; supporting primitives follow. Search or filter this
-							working cross-section, then continue to Storybook for the complete package.
+							Start with the selection card, then explore the basic elements that support it. Search or filter the 
+							working examples. Open Storybook to explore the full component library.
 						</p>
 					</div>
-					<span>{catalog.length} components in the package</span>
 				</header>
 				<Catalog entries={catalog} />
 				<p className="note component-gallery-note">
