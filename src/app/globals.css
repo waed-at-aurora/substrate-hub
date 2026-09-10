@@ -2759,6 +2759,7 @@ input[data-slot='input'],
 }
 .component-specimen-stage {
 	display: grid;
+	grid-template-columns: minmax(0, 1fr);
 	min-width: 0;
 	place-items: center;
 	overflow: hidden;
@@ -2961,6 +2962,58 @@ input[data-slot='input'],
 .gallery-avatar-row > span {
 	color: var(--ink-2);
 	font-size: 0.84rem;
+}
+.gallery-chart {
+	width: 100%;
+}
+.gallery-chart [data-highcharts-chart] {
+	font-family: var(--font-archivo), system-ui, sans-serif;
+}
+.gallery-table {
+	width: 100%;
+	font-size: 0.86rem;
+}
+.gallery-table [data-slot='table-container'] {
+	overscroll-behavior-x: contain;
+}
+.gallery-table-num {
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+.gallery-time-range {
+	display: flex;
+	justify-content: center;
+}
+.gallery-timeline {
+	width: 100%;
+}
+.gallery-toolbar {
+	width: 100%;
+}
+.gallery-panel {
+	width: min(20rem, 100%);
+}
+.gallery-panel-stats {
+	display: grid;
+	gap: 0.6rem;
+}
+.gallery-panel-stat {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	color: var(--ink-2);
+	font-size: 0.88rem;
+}
+.gallery-panel-stat strong {
+	color: var(--ink);
+	font-family: var(--font-display), sans-serif;
+	font-size: 1.15rem;
+	font-variation-settings: 'wght' 700;
+}
+.gallery-mode-switch {
+	display: grid;
+	gap: 0.8rem;
+	width: min(22rem, 100%);
 }
 .component-gallery-empty {
 	display: grid;

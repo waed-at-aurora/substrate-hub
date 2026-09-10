@@ -117,6 +117,29 @@ const composites = readdirSync(join(DS, 'src', 'components'))
 		};
 	});
 
+/* ---- Charts: src/charts/* — a separate export subpath (@aurora-ui/substrate/charts),
+   so this is a short explicit list rather than a directory scan: most files under
+   src/charts/highcharts are tooltip/state/util helpers, not standalone composites. */
+const CHART_COMPOSITES = [{ name: 'ChartHC', dir: 'highcharts' }];
+const chartsDir = join(DS, 'src', 'charts');
+const charts = existsSync(chartsDir)
+	? CHART_COMPOSITES.filter((c) => existsSync(join(chartsDir, c.dir))).map(({ name, dir }) => {
+			const story = storyByName.get(name.toLowerCase());
+			return {
+				name,
+				layer: 'composite',
+				source: `packages/substrate/src/charts/${dir}`,
+				importName: name,
+				importPath: '@aurora-ui/substrate/charts',
+				status: story ? statusFromTags(story.tags) : 'stable',
+				storybook: story ? storyDocsPath(story.title) : null,
+				storyTitle: story?.title ?? null,
+				dir: true,
+			};
+		})
+	: [];
+composites.push(...charts);
+
 /* ---- Experimental track ---- */
 let experimental = [];
 const expDir = join(DS, 'src', 'experimental');

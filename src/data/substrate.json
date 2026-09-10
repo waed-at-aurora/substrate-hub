@@ -541,6 +541,17 @@
 			"storybook": null,
 			"storyTitle": null,
 			"dir": true
+		},
+		{
+			"name": "ChartHC",
+			"layer": "composite",
+			"source": "packages/substrate/src/charts/highcharts",
+			"importName": "ChartHC",
+			"importPath": "@aurora-ui/substrate/charts",
+			"status": "stable",
+			"storybook": "/?path=/docs/data-visualization-charthc--docs",
+			"storyTitle": "Data Visualization/ChartHC",
+			"dir": true
 		}
 	],
 	"experimental": [
@@ -610,9 +621,9 @@
 	],
 	"counts": {
 		"primitives": 49,
-		"composites": 9,
+		"composites": 10,
 		"experimental": 3,
-		"stable": 58,
+		"stable": 59,
 		"proposed": 0
 	}
 }

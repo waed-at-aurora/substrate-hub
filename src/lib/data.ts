@@ -8,6 +8,8 @@ export interface CatalogEntry {
 	layer: 'primitive' | 'composite';
 	source: string;
 	importName: string;
+	/** Export subpath when it differs from the default `@aurora-ui/substrate/components` (e.g. the charts family, exported from `@aurora-ui/substrate/charts`). */
+	importPath?: string;
 	status: CatalogStatus;
 	storybook: string | null;
 	storyTitle: string | null;

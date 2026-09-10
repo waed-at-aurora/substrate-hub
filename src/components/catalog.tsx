@@ -22,25 +22,42 @@ import {
 	CardDescription,
 	CardHeader,
 	CardTitle,
+	ChartToolbar,
 	Checkbox,
+	DataTable,
+	DataTableColumnHeader,
 	Input,
 	InvestmentCaseSelectionCard,
 	Label,
+	ModeActivatorToggleGroup,
+	ModeActivatorToggleGroupItem,
 	Progress,
 	ProgressLabel,
 	ProgressValue,
 	RadioGroup,
 	RadioGroupItem,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
 	Slider,
+	SurfacePanel,
+	SurfaceToolbar,
 	Switch,
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
 	Textarea,
+	TimeRangeSelector,
+	TimelineScrubber,
 	ToggleGroup,
 	ToggleGroupItem,
 } from '@aurora-ui/substrate/components';
+import type { ColumnDef, Row } from '@aurora-ui/substrate/components';
+import { ChartHC } from '@aurora-ui/substrate/charts';
+import type { Highcharts } from '@aurora-ui/substrate/charts';
 import type { CatalogEntry } from '@/lib/data';
 import { ExtArrow } from '@/components/marks';
 import { storybookHref } from '@/config/site';
@@ -48,6 +65,14 @@ import { storybookHref } from '@/config/site';
 const LAYERS = ['all', 'composite', 'primitive'] as const;
 const FEATURED = [
 	{ name: 'InvestmentCaseSelectionCard', size: 'hero' },
+	{ name: 'TimelineScrubber', size: 'wide' },
+	{ name: 'ChartHC', size: 'wide' },
+	{ name: 'DataTable', size: 'wide' },
+	{ name: 'ChartToolbar', size: 'wide' },
+	{ name: 'TimeRangeSelector', size: 'standard' },
+	{ name: 'SurfaceToolbar', size: 'standard' },
+	{ name: 'SurfacePanel', size: 'standard' },
+	{ name: 'ModeActivatorToggleGroup', size: 'standard' },
 	{ name: 'Button', size: 'wide' },
 	{ name: 'Input', size: 'standard' },
 	{ name: 'Tabs', size: 'wide' },
@@ -63,6 +88,7 @@ const FEATURED = [
 	{ name: 'Textarea', size: 'standard' },
 	{ name: 'ToggleGroup', size: 'standard' },
 ] as const;
+
 
 function CaseMark() {
 	return (
@@ -140,6 +166,205 @@ function SliderPreview() {
 				<span>Conservative</span>
 				<span>Aggressive</span>
 			</div>
+		</div>
+	);
+}
+
+type GalleryAsset = {
+	id: string;
+	name: string;
+	technology: string;
+	market: string;
+	capacityMw: number;
+};
+
+/** Trimmed from the real Storybook DataTable fixture (primitives/data-display/DataTable.stories.tsx). */
+const GALLERY_ASSETS: GalleryAsset[] = [
+	{ id: 'GB-SOL-0421', name: 'Cleve Hill Solar Park', technology: 'Solar PV', market: 'GB', capacityMw: 373 },
+	{ id: 'GB-OFW-0118', name: 'Dogger Bank A', technology: 'Offshore Wind', market: 'GB', capacityMw: 1200 },
+	{ id: 'DE-BAT-2207', name: 'Bollingstedt Battery', technology: 'Battery Storage', market: 'DE', capacityMw: 50 },
+	{ id: 'GB-NUC-0003', name: 'Hinkley Point C', technology: 'Nuclear', market: 'GB', capacityMw: 3260 },
+];
+
+const GALLERY_ASSET_COLUMNS: ColumnDef<GalleryAsset>[] = [
+	{ accessorKey: 'name', header: 'Asset' },
+	{
+		accessorKey: 'technology',
+		header: 'Technology',
+		cell: ({ row }: { row: Row<GalleryAsset> }) => <Badge variant="outline">{row.getValue('technology')}</Badge>,
+	},
+	{ accessorKey: 'market', header: 'Market' },
+	{
+		accessorKey: 'capacityMw',
+		header: () => <div className="gallery-table-num">Capacity</div>,
+		cell: ({ row }: { row: Row<GalleryAsset> }) => (
+			<div className="gallery-table-num">
+				{new Intl.NumberFormat('en-GB').format(row.getValue<number>('capacityMw'))} MW
+			</div>
+		),
+	},
+];
+
+function DataTablePreview() {
+	return (
+		<div className="gallery-table">
+			<DataTable columns={GALLERY_ASSET_COLUMNS} data={GALLERY_ASSETS} showViewOptions={false} showPagination={false} />
+		</div>
+	);
+}
+
+/** Mirrors STACKED_GENERATION_CHART_OPTIONS from the real Storybook ChartHC fixture (data-visualization/chart-examples.ts). */
+const GENERATION_CHART_OPTIONS = {
+	chart: { type: 'column' },
+	title: { text: 'Energy Generation by Source' },
+	subtitle: { text: 'Annual output (GWh)' },
+	xAxis: { categories: ['2021', '2022', '2023', '2024', '2025'] },
+	yAxis: { title: { text: 'Generation (GWh)' } },
+	plotOptions: { column: { stacking: 'normal' } },
+	series: [
+		{ type: 'column', name: 'Solar', data: [1200, 1400, 1600, 1800, 2000] },
+		{ type: 'column', name: 'Wind', data: [2000, 2200, 2400, 2600, 2800] },
+		{ type: 'column', name: 'Gas', data: [3000, 2800, 2600, 2400, 2200] },
+	],
+} satisfies Highcharts;
+
+function ChartPreview() {
+	return (
+		<div className="gallery-chart">
+			<ChartHC options={GENERATION_CHART_OPTIONS} minHeight={220} />
+		</div>
+	);
+}
+
+const TIME_DOMAIN_MIN = new Date(Date.UTC(2024, 0, 1));
+const TIME_DOMAIN_MAX = new Date(Date.UTC(2026, 11, 31));
+
+function TimeRangeSelectorPreview() {
+	return (
+		<div className="gallery-time-range">
+			<TimeRangeSelector min={TIME_DOMAIN_MIN} max={TIME_DOMAIN_MAX} />
+		</div>
+	);
+}
+
+function TimelineScrubberPreview() {
+	return (
+		<div className="gallery-timeline">
+			<TimelineScrubber min={TIME_DOMAIN_MIN} max={TIME_DOMAIN_MAX} defaultValue={{ granularity: 'month' }} />
+		</div>
+	);
+}
+
+function ChartToolbarPreview() {
+	const [granularity, setGranularity] = useState('annual');
+	const [series, setSeries] = useState(['generation']);
+	const [valueMode, setValueMode] = useState(['delta']);
+
+	return (
+		<ChartToolbar.Root className="gallery-toolbar">
+			<ChartToolbar.Group>
+				<Select value={granularity} onValueChange={(value: string) => value && setGranularity(value)}>
+					<SelectTrigger aria-label="Granularity" style={{ minWidth: '7rem' }}>
+						<SelectValue />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value="annual">Annual</SelectItem>
+						<SelectItem value="monthly">Monthly</SelectItem>
+					</SelectContent>
+				</Select>
+				<ToggleGroup
+					value={series}
+					onValueChange={(value: string[]) => value.length > 0 && setSeries(value)}
+					aria-label="Chart series"
+				>
+					<ToggleGroupItem value="generation">Generation</ToggleGroupItem>
+					<ToggleGroupItem value="capacity">Capacity</ToggleGroupItem>
+				</ToggleGroup>
+			</ChartToolbar.Group>
+			<ChartToolbar.Trailing>
+				<ToggleGroup
+					value={valueMode}
+					onValueChange={(value: string[]) => value.length > 0 && setValueMode(value)}
+					aria-label="Value mode"
+				>
+					<ToggleGroupItem value="actual">Actual</ToggleGroupItem>
+					<ToggleGroupItem value="delta">Delta</ToggleGroupItem>
+				</ToggleGroup>
+			</ChartToolbar.Trailing>
+		</ChartToolbar.Root>
+	);
+}
+
+function SurfaceToolbarPreview() {
+	const [view, setView] = useState(['bar']);
+
+	return (
+		<SurfaceToolbar.Root className="gallery-toolbar">
+			<SurfaceToolbar.Section>
+				<SurfaceToolbar.Fields>
+					<SurfaceToolbar.Field>
+						<SurfaceToolbar.FieldLabel>Benchmark</SurfaceToolbar.FieldLabel>
+						<Select defaultValue="2hr">
+							<SelectTrigger aria-label="Benchmark duration" style={{ minWidth: '6rem' }}>
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="1hr">1hr</SelectItem>
+								<SelectItem value="2hr">2hr</SelectItem>
+								<SelectItem value="4hr">4hr</SelectItem>
+							</SelectContent>
+						</Select>
+					</SurfaceToolbar.Field>
+					<SurfaceToolbar.Field>
+						<SurfaceToolbar.FieldLabel>View</SurfaceToolbar.FieldLabel>
+						<ToggleGroup
+							value={view}
+							onValueChange={(value: string[]) => value.length > 0 && setView(value)}
+							aria-label="Chart view"
+						>
+							<ToggleGroupItem value="bar">Bar</ToggleGroupItem>
+							<ToggleGroupItem value="line">Line</ToggleGroupItem>
+						</ToggleGroup>
+					</SurfaceToolbar.Field>
+				</SurfaceToolbar.Fields>
+			</SurfaceToolbar.Section>
+		</SurfaceToolbar.Root>
+	);
+}
+
+function SurfacePanelPreview() {
+	return (
+		<SurfacePanel variant="elevated" className="gallery-panel">
+			<CardHeader>
+				<CardTitle>Portfolio exposure</CardTitle>
+				<CardDescription>Weighted by installed capacity</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<div className="gallery-panel-stats">
+					<div className="gallery-panel-stat">
+						<span>Renewables</span>
+						<strong>64%</strong>
+					</div>
+					<div className="gallery-panel-stat">
+						<span>Thermal</span>
+						<strong>36%</strong>
+					</div>
+				</div>
+			</CardContent>
+		</SurfacePanel>
+	);
+}
+
+function ModeActivatorPreview() {
+	const [mode, setMode] = useState<string | null>('investment-case');
+
+	return (
+		<div className="gallery-mode-switch">
+			<ModeActivatorToggleGroup ariaLabel="Comparison mode" onValueChange={setMode} value={mode}>
+				<ModeActivatorToggleGroupItem value="investment-case">Investment case</ModeActivatorToggleGroupItem>
+				<ModeActivatorToggleGroupItem value="prev-cycle">Previous cycle</ModeActivatorToggleGroupItem>
+			</ModeActivatorToggleGroup>
+			<span className="gallery-field-note">Active: {mode ?? 'none'}</span>
 		</div>
 	);
 }
@@ -301,6 +526,22 @@ function ComponentPreview({ name }: { name: string }) {
 					<ToggleGroupItem value="annual">Annual</ToggleGroupItem>
 				</ToggleGroup>
 			);
+		case 'TimelineScrubber':
+			return <TimelineScrubberPreview />;
+		case 'ChartHC':
+			return <ChartPreview />;
+		case 'DataTable':
+			return <DataTablePreview />;
+		case 'ChartToolbar':
+			return <ChartToolbarPreview />;
+		case 'TimeRangeSelector':
+			return <TimeRangeSelectorPreview />;
+		case 'SurfaceToolbar':
+			return <SurfaceToolbarPreview />;
+		case 'SurfacePanel':
+			return <SurfacePanelPreview />;
+		case 'ModeActivatorToggleGroup':
+			return <ModeActivatorPreview />;
 		default:
 			return null;
 	}
