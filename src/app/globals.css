@@ -729,6 +729,10 @@ button {
 	max-width: 100%;
 }
 
+.landing-open-overview {
+	margin-top: 1.1rem;
+}
+
 .landing-position {
 	font-family: var(--font-display), sans-serif;
 	font-size: clamp(1.4rem, 2.4vw, 2.1rem);
@@ -948,7 +952,8 @@ button {
 		.foundation-narrative,
 		.foundation-stages,
 		.foundation-ending,
-		.foundation-progress
+		.foundation-progress,
+		.foundation-skip
 	) {
 	opacity: 0;
 	pointer-events: none;
@@ -1497,6 +1502,39 @@ button {
 	background: var(--ink);
 }
 
+.foundation-skip {
+	position: absolute;
+	z-index: 9;
+	top: clamp(1.2rem, 3vh, 2rem);
+	right: var(--gutter);
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3rem;
+	font-family: var(--font-mono), monospace;
+	font-size: 0.66rem;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--muted);
+	text-decoration: none;
+	transition: color 150ms var(--ease-out);
+}
+.foundation-skip:hover,
+.foundation-skip:focus-visible {
+	color: var(--ink);
+}
+.foundation-skip span {
+	transition: transform 150ms var(--ease-out);
+}
+.foundation-skip:hover span,
+.foundation-skip:focus-visible span {
+	transform: translateX(2px);
+}
+.foundation-scroll[data-ending='true'] .foundation-skip {
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 240ms var(--ease-out);
+}
+
 @media (min-width: 52.0625rem) and (prefers-reduced-motion: no-preference) {
 	.foundation-model {
 		position: absolute;
@@ -1527,7 +1565,7 @@ button {
 	}
 }
 
-@media (min-width: 52.0625rem) and (max-width: 72rem), (min-width: 52.0625rem) and (max-height: 56rem) {
+@media (min-width: 52.0625rem) {
 	.foundation-copy {
 		grid-column: 1 / -1;
 	}
@@ -3325,6 +3363,9 @@ input[data-slot='input'],
 		right: auto;
 		bottom: auto;
 		margin-top: 3rem;
+	}
+	.foundation-skip {
+		display: none;
 	}
 	* {
 		transition-duration: 0.01ms !important;

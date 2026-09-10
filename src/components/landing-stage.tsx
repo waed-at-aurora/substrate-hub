@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { CopyBlock } from '@/components/copy-block';
 import StarBurst from '@/components/star-burst';
 import { SETUP_SUBSTRATE_PROMPT, SETUP_SUBSTRATE_PROMPT_PREVIEW } from '@/lib/prompts';
@@ -235,6 +236,9 @@ export function LandingStage({
 						preview={SETUP_SUBSTRATE_PROMPT_PREVIEW}
 						code={SETUP_SUBSTRATE_PROMPT}
 					/>
+					<Link href="/overview" className="action action-primary landing-open-overview">
+						Open overview
+					</Link>
 				</div>
 				<LandingScrollCue />
 				<p className="landing-readout mono" aria-hidden="true">

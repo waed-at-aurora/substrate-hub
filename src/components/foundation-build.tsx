@@ -3866,6 +3866,14 @@ export function FoundationBuild({ primitives, composites }: { primitives: number
 			data-three-ready={renderState === 'ready'}
 		>
 			<div className="foundation-sticky">
+				<Link
+					href="/overview"
+					className="foundation-skip"
+					onClick={exitToOverview}
+					aria-disabled={isExiting || undefined}
+				>
+					Skip tour <span aria-hidden="true">→</span>
+				</Link>
 				<header className="foundation-copy">
 					<p className="foundation-caption">Fig. 02 · system architecture</p>
 					<h2 id="foundation-title">See what one shared system unlocks.</h2>
